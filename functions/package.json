@@ -1,0 +1,26 @@
+{
+  "name": "functions",
+  "description": "Cloud Functions for Firebase",
+  "scripts": {
+    "serve": "firebase serve --only functions",
+    "shell": "firebase functions:shell",
+    "start": "npm run shell",
+    "deploy": "firebase deploy --only functions",
+    "logs": "firebase functions:log"
+  },
+  "dependencies": {
+    "@google-cloud/storage": "^2.4.2",
+    "algoliasearch": "^3.30.0",
+    "bluebird": "^3.5.2",
+    "child-process-promise": "^2.2.1",
+    "cors": "^2.8.4",
+    "es6-promise-pool": "^2.5.0",
+    "express": "^4.16.3",
+    "firebase-admin": "~5.12.1",
+    "firebase-functions": "^1.0.3",
+    "fs-extra": "^7.0.1",
+    "secure-compare": "^3.0.1",
+    "sharp": "^0.21.3"
+  },
+  "private": true
+}

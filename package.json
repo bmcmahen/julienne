@@ -5,24 +5,32 @@
   "dependencies": {
     "@emotion/core": "^10.0.9",
     "@emotion/css": "^10.0.9",
+    "@types/algoliasearch": "^3.30.7",
+    "@types/debug": "^4.1.2",
     "@types/jest": "24.0.11",
     "@types/node": "11.11.3",
     "@types/react": "16.8.8",
     "@types/react-dom": "16.8.2",
+    "@types/react-filepond": "^5.0.2",
     "@types/react-helmet": "^5.0.8",
     "@types/react-router-dom": "^4.3.1",
+    "@types/shortid": "^0.0.29",
     "algoliasearch": "^3.32.1",
     "debug": "^4.1.1",
+    "filepond-plugin-image-exif-orientation": "^1.0.4",
+    "filepond-plugin-image-preview": "^4.0.3",
     "firebase": "^5.9.0",
     "is-hotkey": "^0.1.4",
     "react": "^16.8.4",
     "react-dom": "^16.8.4",
+    "react-filepond": "^7.0.1",
     "react-firebase-hooks": "^1.1.0",
     "react-helmet": "^5.2.0",
     "react-router": "^4.4.0",
     "react-router-dom": "^4.4.0",
     "react-scripts": "2.1.8",
     "sancho": "^1.0.0-beta.4",
+    "shortid": "^2.2.14",
     "typescript": "3.3.3333"
   },
   "scripts": {
@@ -39,5 +47,8 @@
     "not dead",
     "not ie <= 11",
     "not op_mini all"
+  ],
+  "workspaces": [
+    "functions/*"
   ]
 }

@@ -51,8 +51,8 @@ export const Login: React.FunctionComponent<LoginProps> = ({ location }) => {
       <Helmet title="allofmy.recipes - Your recipes in one place" />
       <Global
         styles={{
-          body: {
-            background: theme.colors.background.tint1
+          html: {
+            backgroundColor: theme.colors.background.tint1
           }
         }}
       />
@@ -92,10 +92,9 @@ export const Login: React.FunctionComponent<LoginProps> = ({ location }) => {
             flexDirection: "column",
             overflow: "hidden",
             position: "relative",
-            backgroundAttachment: "fixed",
+            // backgroundAttachment: "fixed",
             backgroundSize: "cover",
-            backgroundColor: theme.colors.background.tint1,
-            backgroundImage: `url(https://images.unsplash.com/photo-1495195134817-aeb325a55b65?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1055&q=80)`
+            backgroundImage: `url(${require("./images/cutting-board-knife.jpg")})`
           },
           responsiveBodyPadding
         ]}
@@ -110,7 +109,7 @@ export const Login: React.FunctionComponent<LoginProps> = ({ location }) => {
           }}
           variant="h1"
         >
-          Build a database of shared recipes with family and friends.
+          Build a database of shared recipes with family and friends
         </Text>
 
         <div
@@ -259,100 +258,101 @@ export const Login: React.FunctionComponent<LoginProps> = ({ location }) => {
           />
         </svg>
       </div>
-
-      <Container
+      <div
         css={{
-          marginTop: `${theme.spaces.xl}`,
-          marginBottom: theme.spaces.xl
+          background: theme.colors.background.tint1,
+          paddingTop: `${theme.spaces.xl}`,
+          paddingBottom: theme.spaces.xl,
+          width: "100%",
+          overflow: "hidden"
         }}
       >
-        <div
-          css={{
-            display: "block",
-            textAlign: "center",
-            "& > div": {
-              marginBottom: theme.spaces.xl,
-              maxWidth: "20rem",
-              marginLeft: "auto",
-              marginRight: "auto"
-            },
-            [theme.breakpoints.lg]: {
-              display: "flex",
-              justifyContent: "space-between",
+        <Container css={{}}>
+          <div
+            css={{
+              display: "block",
+              textAlign: "center",
               "& > div": {
-                margin: theme.spaces.lg,
-                maxWidth: "20rem"
+                marginBottom: theme.spaces.xl,
+                maxWidth: "20rem",
+                marginLeft: "auto",
+                marginRight: "auto"
+              },
+              [theme.breakpoints.lg]: {
+                display: "flex",
+                justifyContent: "space-between",
+                "& > div": {
+                  margin: theme.spaces.lg,
+                  maxWidth: "20rem"
+                }
               }
-            }
-          }}
-        >
-          <div>
-            <svg
-              css={{ marginBottom: theme.spaces.md }}
-              xmlns="http://www.w3.org/2000/svg"
-              width="34"
-              height="34"
-              viewBox="0 0 24 24"
-            >
-              <path d="M22 2v22h-20v-22h3c1.23 0 2.181-1.084 3-2h8c.82.916 1.771 2 3 2h3zm-11 1c0 .552.448 1 1 1 .553 0 1-.448 1-1s-.447-1-1-1c-.552 0-1 .448-1 1zm9 1h-4l-2 2h-3.897l-2.103-2h-4v18h16v-18zm-13 9.729l.855-.791c1 .484 1.635.852 2.76 1.654 2.113-2.399 3.511-3.616 6.106-5.231l.279.64c-2.141 1.869-3.709 3.949-5.967 7.999-1.393-1.64-2.322-2.686-4.033-4.271z" />
-            </svg>
-            <Text variant="h4">Save</Text>
-            <Text>
-              Write out your recipes and access them from anywhere. Find your
-              recipes on the road, at a friend's place, or in the comfort of
-              your own kitchen.
-            </Text>
-          </div>
+            }}
+          >
+            <div>
+              <svg
+                css={{ marginBottom: theme.spaces.md }}
+                xmlns="http://www.w3.org/2000/svg"
+                width="34"
+                height="34"
+                viewBox="0 0 24 24"
+              >
+                <path d="M22 2v22h-20v-22h3c1.23 0 2.181-1.084 3-2h8c.82.916 1.771 2 3 2h3zm-11 1c0 .552.448 1 1 1 .553 0 1-.448 1-1s-.447-1-1-1c-.552 0-1 .448-1 1zm9 1h-4l-2 2h-3.897l-2.103-2h-4v18h16v-18zm-13 9.729l.855-.791c1 .484 1.635.852 2.76 1.654 2.113-2.399 3.511-3.616 6.106-5.231l.279.64c-2.141 1.869-3.709 3.949-5.967 7.999-1.393-1.64-2.322-2.686-4.033-4.271z" />
+              </svg>
+              <Text variant="h4">Save</Text>
+              <Text>
+                Write out your recipes and access them from anywhere. Find your
+                recipes on the road, at a friend's place, or in the comfort of
+                your own kitchen.
+              </Text>
+            </div>
 
-          <div>
-            <svg
-              css={{ marginBottom: theme.spaces.md }}
-              xmlns="http://www.w3.org/2000/svg"
-              width="34"
-              height="34"
-              viewBox="0 0 24 24"
-            >
-              <path d="M20 3c0-1.657-1.344-3-3-3s-3 1.343-3 3c0 .312.061.606.149.889l-4.21 3.157c.473.471.878 1.01 1.201 1.599l4.197-3.148c.477.316 1.048.503 1.663.503 1.656 0 3-1.343 3-3zm-2 0c0 .551-.448 1-1 1s-1-.449-1-1 .448-1 1-1 1 .449 1 1zm3 12.062c1.656 0 3-1.343 3-3s-1.344-3-3-3c-1.281 0-2.367.807-2.797 1.938h-6.283c.047.328.08.66.08 1s-.033.672-.08 1h6.244c.396 1.195 1.509 2.062 2.836 2.062zm-1-3c0-.551.448-1 1-1s1 .449 1 1-.448 1-1 1-1-.448-1-1zm-20-.062c0 2.761 2.238 5 5 5s5-2.239 5-5-2.238-5-5-5-5 2.239-5 5zm2 0c0-1.654 1.346-3 3-3s3 1.346 3 3-1.346 3-3 3-3-1.346-3-3zm7.939 4.955l4.21 3.157c-.088.282-.149.576-.149.888 0 1.657 1.344 3 3 3s3-1.343 3-3-1.344-3-3-3c-.615 0-1.186.187-1.662.504l-4.197-3.148c-.324.589-.729 1.127-1.202 1.599zm6.061 4.045c0-.551.448-1 1-1s1 .449 1 1-.448 1-1 1-1-.449-1-1z" />
-            </svg>
-            <Text variant="h4">Share</Text>
-            <Text>
-              Easily share recipes with family and friends by creating a shared
-              recipe collection. Trust me, it beats emailing recipes. And it's
-              super easy to find them again later.
-            </Text>
-          </div>
+            <div>
+              <svg
+                css={{ marginBottom: theme.spaces.md }}
+                xmlns="http://www.w3.org/2000/svg"
+                width="34"
+                height="34"
+                viewBox="0 0 24 24"
+              >
+                <path d="M20 3c0-1.657-1.344-3-3-3s-3 1.343-3 3c0 .312.061.606.149.889l-4.21 3.157c.473.471.878 1.01 1.201 1.599l4.197-3.148c.477.316 1.048.503 1.663.503 1.656 0 3-1.343 3-3zm-2 0c0 .551-.448 1-1 1s-1-.449-1-1 .448-1 1-1 1 .449 1 1zm3 12.062c1.656 0 3-1.343 3-3s-1.344-3-3-3c-1.281 0-2.367.807-2.797 1.938h-6.283c.047.328.08.66.08 1s-.033.672-.08 1h6.244c.396 1.195 1.509 2.062 2.836 2.062zm-1-3c0-.551.448-1 1-1s1 .449 1 1-.448 1-1 1-1-.448-1-1zm-20-.062c0 2.761 2.238 5 5 5s5-2.239 5-5-2.238-5-5-5-5 2.239-5 5zm2 0c0-1.654 1.346-3 3-3s3 1.346 3 3-1.346 3-3 3-3-1.346-3-3zm7.939 4.955l4.21 3.157c-.088.282-.149.576-.149.888 0 1.657 1.344 3 3 3s3-1.343 3-3-1.344-3-3-3c-.615 0-1.186.187-1.662.504l-4.197-3.148c-.324.589-.729 1.127-1.202 1.599zm6.061 4.045c0-.551.448-1 1-1s1 .449 1 1-.448 1-1 1-1-.449-1-1z" />
+              </svg>
+              <Text variant="h4">Share</Text>
+              <Text>
+                Easily share recipes with family and friends by creating a
+                shared recipe collection. Trust me, it beats emailing recipes.
+                And it's super easy to find them again later.
+              </Text>
+            </div>
 
-          <div>
-            <svg
-              css={{ marginBottom: theme.spaces.md }}
-              xmlns="http://www.w3.org/2000/svg"
-              width="34"
-              height="34"
-              viewBox="0 0 24 24"
-            >
-              <path d="M23.111 20.058l-4.977-4.977c.965-1.52 1.523-3.322 1.523-5.251 0-5.42-4.409-9.83-9.829-9.83-5.42 0-9.828 4.41-9.828 9.83s4.408 9.83 9.829 9.83c1.834 0 3.552-.505 5.022-1.383l5.021 5.021c2.144 2.141 5.384-1.096 3.239-3.24zm-20.064-10.228c0-3.739 3.043-6.782 6.782-6.782s6.782 3.042 6.782 6.782-3.043 6.782-6.782 6.782-6.782-3.043-6.782-6.782zm2.01-1.764c1.984-4.599 8.664-4.066 9.922.749-2.534-2.974-6.993-3.294-9.922-.749z" />
-            </svg>
-            <Text variant="h4">Search</Text>
-            <Text>
-              Search for recipes by ingredient, name, or author. It's really,
-              really fast - at least a tad faster than flipping through your
-              overflowing recipe box.
-            </Text>
+            <div>
+              <svg
+                css={{ marginBottom: theme.spaces.md }}
+                xmlns="http://www.w3.org/2000/svg"
+                width="34"
+                height="34"
+                viewBox="0 0 24 24"
+              >
+                <path d="M23.111 20.058l-4.977-4.977c.965-1.52 1.523-3.322 1.523-5.251 0-5.42-4.409-9.83-9.829-9.83-5.42 0-9.828 4.41-9.828 9.83s4.408 9.83 9.829 9.83c1.834 0 3.552-.505 5.022-1.383l5.021 5.021c2.144 2.141 5.384-1.096 3.239-3.24zm-20.064-10.228c0-3.739 3.043-6.782 6.782-6.782s6.782 3.042 6.782 6.782-3.043 6.782-6.782 6.782-6.782-3.043-6.782-6.782zm2.01-1.764c1.984-4.599 8.664-4.066 9.922.749-2.534-2.974-6.993-3.294-9.922-.749z" />
+              </svg>
+              <Text variant="h4">Search</Text>
+              <Text>
+                Search for recipes by ingredient, name, or author. It's really,
+                really fast - at least a tad faster than flipping through your
+                overflowing recipe box.
+              </Text>
+            </div>
           </div>
-        </div>
-      </Container>
-
+        </Container>
+      </div>
       <div
         css={{
           textAlign: "center",
           position: "relative",
           paddingBottom: theme.spaces.lg,
           paddingTop: "4rem",
-          backgroundSize: "cover",
-          backgroundPositionY: "100%",
-          backgroundAttachment: "fixed",
-          backgroundColor: theme.colors.background.tint1,
-          backgroundImage: `url(https://images.unsplash.com/photo-1495195134817-aeb325a55b65?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1055&q=80)`
+          background: theme.colors.background.tint2,
+          width: "100%",
+          overflow: "hidden"
         }}
       >
         <svg
@@ -397,8 +397,10 @@ export const Login: React.FunctionComponent<LoginProps> = ({ location }) => {
           />
         </svg>
         <Text css={{ fontSize: theme.sizes[0] }}>
-          Made by <Link href="http://www.benmcmahen.com">Ben McMahen</Link>.{" "}
-          Questions? <Link href="mailto:ben.mcmahen@gmail.com">Email me</Link>.
+          Made with by <Link href="http://www.benmcmahen.com">Ben McMahen</Link>
+          <br />
+          <Link href="mailto:ben.mcmahen@gmail.com">Email me</Link> with
+          questions or whatevs!
         </Text>
       </div>
     </main>

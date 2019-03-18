@@ -1,0 +1,10 @@
+{
+  "algolia": {
+    "search_key": "2d204990920e16c31b7c1b379e58f05e",
+    "app_id": "M12SEKQ4BY",
+    "api_key": "a20b247e582a76b80b49f8afc4a6b482"
+  },
+  "cron": {
+    "key": "020fb5203558067089b0dbb4e1e47855c2cae52b"
+  }
+}
