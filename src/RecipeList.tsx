@@ -49,8 +49,7 @@ export type ActionType =
   | Action<"LOAD-MORE">
   | Action<"QUERY", { value: string }>
   | Action<"LOADED", { value: firebase.firestore.QueryDocumentSnapshot[] }>
-  | Action<"SEARCH", { value: algoliasearch.Response }>
-  | Action<"LOAD-OTHER-USER-RECIPES", { value: Recipe[] }>;
+  | Action<"SEARCH", { value: algoliasearch.Response }>;
 
 interface StateType {
   hasMore: boolean;
@@ -63,14 +62,12 @@ interface StateType {
   loading: boolean;
   loadingError: null | Error;
   query: string;
-  otherRecipes: Recipe[];
 }
 
 const initialState = {
   hasMore: false,
   after: null,
   recipes: [],
-  otherRecipes: [],
   lastLoaded: null,
   searchResponse: null,
   loadingMore: false,
@@ -124,12 +121,6 @@ function reducer(state: StateType, action: ActionType) {
         ...state,
         loadingMore: true,
         after: state.lastLoaded
-      };
-
-    case "LOAD-OTHER-USER-RECIPES":
-      return {
-        ...state,
-        otherRecipes: action.value
       };
   }
 }
@@ -189,16 +180,6 @@ export const RecipeList: React.FunctionComponent<RecipeListProps> = ({
     return () => unsubscribe();
   }, [state.after, user]);
 
-  // Load following recipe list
-  React.useEffect(() => {
-    following.search("").then(results => {
-      dispatch({
-        type: "LOAD-OTHER-USER-RECIPES",
-        value: results.hits
-      });
-    });
-  }, []);
-
   return (
     <div>
       {query && state.searchResponse ? (
@@ -250,19 +231,6 @@ export const RecipeList: React.FunctionComponent<RecipeListProps> = ({
               >
                 Load more
               </Button>
-            </div>
-          )}
-
-          {state.otherRecipes.length > 0 && (
-            <div>
-              {state.otherRecipes.map(recipe => (
-                <RecipeListItem
-                  id={recipe.id}
-                  key={recipe.id}
-                  editable
-                  recipe={recipe}
-                />
-              ))}
             </div>
           )}
         </div>

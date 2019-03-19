@@ -27,29 +27,28 @@ export const FollowersList: React.FunctionComponent<
     return <Spinner center css={{ marginTop: theme.spaces.lg }} />;
   }
 
-  if (!userList) {
+  if (!userList || (userList && userList.length === 0)) {
     return (
-      <Text muted css={{ display: "block", margin: theme.spaces.lg }}>
-        You currently have no followers.
-      </Text>
-    );
-  }
-
-  if (userList && Object.keys(userList).length === 0) {
-    return (
-      <Text muted css={{ margin: theme.spaces.lg }}>
-        None currently listed.
+      <Text
+        muted
+        css={{
+          fontSize: theme.sizes[0],
+          display: "block",
+          margin: theme.spaces.lg
+        }}
+      >
+        You currently have no followers. Users will appear here once they start
+        following you.
       </Text>
     );
   }
 
   return (
     <List>
-      {Object.keys(userList).map(key => {
-        const item = userList[key];
+      {userList.map(item => {
         return (
           <ListItem
-            key={key}
+            key={item.id}
             contentBefore={
               <Avatar
                 size="sm"

@@ -23,6 +23,7 @@
     "firebase": "^5.9.0",
     "immutable": "^4.0.0-rc.12",
     "is-hotkey": "^0.1.4",
+    "lodash.find": "^4.6.0",
     "react": "^16.8.4",
     "react-dom": "^16.8.4",
     "react-filepond": "^7.0.1",

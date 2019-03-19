@@ -2,6 +2,8 @@ import * as React from "react";
 import { useSession } from "../auth";
 import { useCollection } from "react-firebase-hooks/firestore";
 import * as firebase from "firebase/app";
+import debug from "debug";
+const log = debug("app:with-follow-requests");
 
 export function useFollowRequests() {
   const user = useSession();
@@ -23,56 +25,47 @@ export function useFollowRequests() {
 
 // honestly, this is where firebase drives me mad. Would
 // be so easy with postgres
+// we should just denormalize this stuff
 export function useFollowers(toUser = true) {
   const user = useSession();
 
   const [loading, setLoading] = React.useState(true);
-  const [userList, setUserList] = React.useState({});
+  const [userList, setUserList] = React.useState([]);
 
   const key = toUser ? "toUserId" : "fromUserId";
-  const docKey = toUser ? "fromUserId" : "toUserId";
 
   React.useEffect(() => {
-    firebase
+    setLoading(true);
+
+    const unsubcribe = firebase
       .firestore()
       .collection("relations")
       .where(key, "==", user.uid)
       .orderBy("confirmed")
-      .limit(50)
-      .get()
-      .then(value => {
-        const promises = [];
+      .limit(100) // todo: support pagination
+      .onSnapshot(value => {
+        const userList = [];
 
         value.docs.forEach(doc => {
-          if (userList[doc.id]) {
+          const data = doc.data();
+
+          if (!data.fromUser) {
             return;
           }
 
-          const request = {
-            ...doc.data()
-          };
-
-          promises.push(
-            firebase
-              .firestore()
-              .collection("users")
-              .doc(doc.get(docKey))
-              .get()
-              .then(user => {
-                request.user = user.data();
-                setUserList({
-                  ...userList,
-                  [doc.id]: request
-                });
-              })
-          );
+          userList.push({
+            id: doc.id,
+            ...data
+          });
         });
 
-        setLoading(true);
-        Promise.all(promises).then(() => {
-          setLoading(false);
-        });
+        log("setting user list: %o", userList);
+
+        setUserList(userList);
+        setLoading(false);
       });
+
+    return () => unsubcribe();
   }, []);
 
   return { loading, userList };

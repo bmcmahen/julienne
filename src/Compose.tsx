@@ -221,6 +221,15 @@ export const Compose: React.FunctionComponent<ComposeProps> = ({
             )}
 
             <div css={{ marginTop: theme.spaces.lg }}>
+              <Text variant="h5">Instructions</Text>
+              <div>
+                <Editor
+                  initialValue={defaultDescription ? defaultDescription : null}
+                  readOnly={!editing}
+                />
+              </div>
+            </div>
+            <div css={{ marginTop: theme.spaces.lg }}>
               {editing ? (
                 <>
                   <Text variant="h5">Original author</Text>
@@ -238,16 +247,6 @@ export const Compose: React.FunctionComponent<ComposeProps> = ({
                   <Text>{credit}</Text>
                 </>
               )}
-            </div>
-
-            <div css={{ marginTop: theme.spaces.lg }}>
-              <Text variant="h5">Instructions</Text>
-              <div>
-                <Editor
-                  initialValue={defaultDescription ? defaultDescription : null}
-                  readOnly={!editing}
-                />
-              </div>
             </div>
           </div>
         </div>

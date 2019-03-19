@@ -29,6 +29,7 @@ import { Compose } from "./Compose";
 import { Recipe } from "./Recipe";
 import useReactRouter from "use-react-router";
 import { useTransition, animated, config } from "react-spring";
+import { SearchBox } from "./SearchBox";
 
 export interface MainProps {}
 
@@ -128,6 +129,7 @@ export const Main: React.FunctionComponent<MainProps> = props => {
             variant="evenly-spaced"
           >
             <Tab id="recipes">Recipes</Tab>
+            <Tab id="following">Following</Tab>
             <Tab
               badge={
                 followRequests && followRequests.docs.length
@@ -138,7 +140,6 @@ export const Main: React.FunctionComponent<MainProps> = props => {
             >
               Followers
             </Tab>
-            <Tab id="following">Following</Tab>
           </Tabs>
         </div>
 
@@ -159,52 +160,7 @@ export const Main: React.FunctionComponent<MainProps> = props => {
                 borderColor: theme.colors.border.default
               }}
             >
-              <form
-                css={{ position: "relative" }}
-                onSubmit={e => e.preventDefault()}
-              >
-                <InputGroup
-                  css={{ margin: 0, position: "relative" }}
-                  hideLabel
-                  label="Search all recipes"
-                >
-                  <Input
-                    type="search"
-                    inputSize="md"
-                    css={{
-                      padding: theme.spaces.md,
-                      paddingLeft: theme.spaces.lg,
-                      paddingRight: theme.spaces.lg,
-                      textAlign: "left",
-                      border: "none",
-                      background: "transparent",
-                      boxShadow: "none",
-                      ":focus": {
-                        boxShadow: "none",
-                        backgroundColor: theme.colors.background.tint1
-                      }
-                    }}
-                    value={query}
-                    onChange={e => setQuery(e.target.value)}
-                    placeholder="Search all recipes..."
-                  />
-                </InputGroup>
-                <VisuallyHidden>
-                  <Button type="submit">Search</Button>
-                </VisuallyHidden>
-                <Icon
-                  icon="search"
-                  aria-hidden
-                  color={theme.colors.scales.gray[6]}
-                  css={{
-                    position: "absolute",
-                    right: theme.spaces.lg,
-                    top: "50%",
-                    transform: "translateY(-50%)",
-                    zIndex: 10
-                  }}
-                />
-              </form>
+              <SearchBox query={query} setQuery={setQuery} />
             </div>
 
             <div
@@ -217,15 +173,16 @@ export const Main: React.FunctionComponent<MainProps> = props => {
             </div>
           </TabPanel>
         )}
+
         {activeTab === 1 && (
-          <TabPanel id="followers">
-            <FollowersList />
+          <TabPanel id="following">
+            <FollowingList />
           </TabPanel>
         )}
 
         {activeTab === 2 && (
-          <TabPanel id="following">
-            <FollowingList />
+          <TabPanel id="followers">
+            <FollowersList />
           </TabPanel>
         )}
       </Layer>
@@ -248,7 +205,7 @@ export const Main: React.FunctionComponent<MainProps> = props => {
               right: 0,
               bottom: 0,
               padding: `${theme.spaces.lg} 0`,
-              paddingRight: theme.spaces.lg,
+              paddingRight: theme.spaces.xl,
               display: "flex",
               alignItems: "center",
               overflowY: "scroll",
