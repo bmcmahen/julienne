@@ -1,9 +1,11 @@
 /** @jsx jsx */
-import { jsx } from "@emotion/core";
+import { jsx, Global } from "@emotion/core";
 import * as React from "react";
 import Editor from "./Editor";
 import { ImageUpload } from "./ImageUpload";
 import { Image } from "./Image";
+import debug from "debug";
+import useReactRouter from "use-react-router";
 import { Ingredient } from "./RecipeList";
 import {
   Navbar,
@@ -15,10 +17,17 @@ import {
   Popover,
   MenuList,
   MenuItem,
-  theme
+  theme,
+  InputBaseProps,
+  toast
 } from "sancho";
+import { getUserFields, createEntry, deleteEntry, updateEntry } from "./db";
+import { useSession } from "./auth";
+
+const log = debug("app:Compose");
 
 export interface ComposeProps {
+  id?: string;
   defaultTitle?: string;
   defaultImage?: string;
   defaultDescription?: string;
@@ -30,6 +39,7 @@ export interface ComposeProps {
 
 export const Compose: React.FunctionComponent<ComposeProps> = ({
   readOnly,
+  id,
   editable,
   defaultCredit,
   defaultDescription,
@@ -37,47 +47,192 @@ export const Compose: React.FunctionComponent<ComposeProps> = ({
   defaultIngredients,
   defaultTitle
 }) => {
+  const ref = React.useRef(null);
+  const user = useSession();
+  const { history } = useReactRouter();
   const [editing, setEditing] = React.useState(!readOnly);
   const [image, setImage] = React.useState(defaultImage);
   const [title, setTitle] = React.useState(defaultTitle);
   const [credit, setCredit] = React.useState(defaultCredit);
-  const [description, setDescription] = React.useState(defaultDescription);
   const [ingredients, setIngredients] = React.useState<Ingredient[]>(
-    defaultIngredients || []
+    defaultIngredients || [
+      {
+        name: "",
+        amount: ""
+      }
+    ]
   );
 
   function onIngredientChange(i: number, value: Ingredient) {
     ingredients[i] = value;
-    setIngredients(ingredients);
+    log("on ingredient change: %o", ingredients);
+    setIngredients([...ingredients]);
   }
 
   function addNewIngredient() {
     ingredients.push({ name: "", amount: "" });
-    setIngredients(ingredients);
+    setIngredients([...ingredients]);
   }
 
-  function requestDelete() {
-    console.log("delete");
+  function removeIngredient(i: number) {
+    ingredients.splice(i, 1);
+    setIngredients([...ingredients]);
+  }
+
+  async function saveRecipe({
+    title,
+    plain,
+    ingredients,
+    description,
+    author,
+    image
+  }: {
+    title: string;
+    plain: string;
+    ingredients: Ingredient[];
+    description: string;
+    author: string;
+    image: string;
+  }) {
+    try {
+      const entry = await createEntry({
+        title,
+        plain,
+        userId: user.uid,
+        description,
+        createdBy: getUserFields(user),
+        ingredients: ingredients.filter(ing => ing.name),
+        image,
+        author
+      });
+      history.replace("/" + entry.id);
+    } catch (err) {
+      console.error(err);
+      toast({
+        title: "An error occurred. Please try again",
+        subtitle: err.message,
+        intent: "danger"
+      });
+    }
+  }
+
+  async function updateRecipe(
+    id: string,
+    {
+      title,
+      plain,
+      ingredients,
+      description,
+      author,
+      image
+    }: {
+      title: string;
+      plain: string;
+      ingredients: Ingredient[];
+      description: string;
+      author: string;
+      image: string;
+    }
+  ) {
+    try {
+      await updateEntry(id, {
+        title,
+        plain,
+        description,
+        createdBy: getUserFields(user),
+        ingredients: ingredients.filter(ing => ing.name),
+        image,
+        author
+      });
+      setEditing(false);
+    } catch (err) {
+      console.error(err);
+      toast({
+        title: "An error occurred. Please try again",
+        subtitle: err.message,
+        intent: "danger"
+      });
+    }
+  }
+
+  async function handleDelete(id: string) {
+    try {
+      await deleteEntry(id);
+      history.replace("/");
+    } catch (err) {
+      console.error(err);
+      toast({
+        title: "An error occurred. Please try again",
+        subtitle: err.message,
+        intent: "danger"
+      });
+    }
   }
 
   return (
     <div>
+      <Global
+        styles={{
+          ".Editor": {
+            fontFamily: theme.fonts.base,
+            color: theme.colors.text.default,
+            lineHeight: theme.lineHeight
+          },
+          ".filepond--wrapper": {
+            padding: theme.spaces.lg,
+            paddingBottom: 0
+          },
+          ".filepond--root": {
+            marginBottom: 0
+          },
+          ".filepond--label-action": {
+            display: "flex",
+            alignItems: "center",
+            textDecoration: "none"
+          },
+          ".filepond--label-action > svg": {
+            width: "40px",
+            height: "40px",
+            fill: theme.colors.text.default
+          },
+          ".filepond--label-action > span": {
+            border: 0,
+            clip: "rect(0 0 0 0)",
+            height: "1px",
+            width: "1px",
+            margin: "-1px",
+            padding: 0,
+            overflow: "hidden",
+            position: "absolute"
+          },
+          ".filepond--panel-root": {
+            backgroundColor: theme.colors.background.tint1
+          },
+          '.Editor [contenteditable="false"]': {
+            opacity: "1 !important" as any,
+            color: theme.colors.scales.gray[6]
+          }
+        }}
+      />
       <Navbar
         css={{ backgroundColor: "white", boxShadow: theme.shadows.sm }}
         position="static"
       >
         <Toolbar css={{ display: "flex", justifyContent: "space-between" }}>
           {editing ? (
-            <Input
-              autoComplete="off"
-              autoFocus
-              value={title}
-              placeholder="Recipe title"
-              aria-label="Recipe title"
-              onChange={e => {
-                setTitle(e.target.value);
-              }}
-            />
+            <div css={{ marginLeft: "-0.75rem", flex: 1 }}>
+              <TransparentInput
+                autoComplete="off"
+                autoFocus
+                inputSize="lg"
+                value={title}
+                placeholder="Recipe title"
+                aria-label="Recipe title"
+                onChange={e => {
+                  setTitle(e.target.value);
+                }}
+              />
+            </div>
           ) : (
             <Text variant="h5" gutter={false}>
               {title}
@@ -95,7 +250,9 @@ export const Compose: React.FunctionComponent<ComposeProps> = ({
                     >
                       Edit
                     </MenuItem>
-                    <MenuItem onSelect={requestDelete}>Delete</MenuItem>
+                    <MenuItem onSelect={() => handleDelete(id)}>
+                      Delete
+                    </MenuItem>
                   </MenuList>
                 }
               >
@@ -106,8 +263,20 @@ export const Compose: React.FunctionComponent<ComposeProps> = ({
               <Button
                 intent="primary"
                 disabled={!title}
+                css={{ marginLeft: theme.spaces.sm }}
                 onClick={() => {
-                  // save
+                  const current = ref.current as any;
+                  const { text, content } = current.serialize();
+                  const toSave = {
+                    title,
+                    description: content,
+                    plain: text,
+                    ingredients,
+                    author: credit,
+                    image
+                  };
+
+                  id ? saveRecipe(toSave) : updateRecipe(id, toSave);
                 }}
               >
                 Save
@@ -149,31 +318,53 @@ export const Compose: React.FunctionComponent<ComposeProps> = ({
                   return (
                     <div key={i}>
                       {editing ? (
-                        <>
-                          <Input
-                            autoFocus={!readOnly && ingredients.length > 1}
-                            readOnly={readOnly}
-                            placeholder="Name"
-                            value={ingredient.name}
-                            onChange={e => {
-                              onIngredientChange(i, {
-                                ...ingredient,
-                                name: e.target.value
-                              });
+                        <Contain>
+                          <div
+                            css={{
+                              display: "flex",
+                              maxWidth: "400px"
                             }}
-                          />
-                          <Input
-                            readOnly={readOnly}
-                            placeholder="Amount"
-                            value={ingredient.amount}
-                            onChange={e => {
-                              onIngredientChange(i, {
-                                ...ingredient,
-                                amount: e.target.value
-                              });
-                            }}
-                          />
-                        </>
+                          >
+                            <TransparentInput
+                              autoFocus={!readOnly && ingredients.length > 1}
+                              readOnly={readOnly}
+                              placeholder="Name"
+                              value={ingredient.name}
+                              onChange={e => {
+                                onIngredientChange(i, {
+                                  ...ingredient,
+                                  name: e.target.value
+                                });
+                              }}
+                            />
+                            <TransparentInput
+                              readOnly={readOnly}
+                              placeholder="Amount"
+                              value={ingredient.amount}
+                              onChange={e => {
+                                onIngredientChange(i, {
+                                  ...ingredient,
+                                  amount: e.target.value
+                                });
+                              }}
+                            />
+                            <div
+                              css={{
+                                marginLeft: theme.spaces.sm,
+                                flex: "0 0 40px"
+                              }}
+                            >
+                              {i > 0 && (
+                                <IconButton
+                                  variant="ghost"
+                                  icon="cross"
+                                  label="Delete ingredient"
+                                  onClick={() => removeIngredient(i)}
+                                />
+                              )}
+                            </div>
+                          </div>
+                        </Contain>
                       ) : (
                         <div
                           css={{
@@ -215,7 +406,11 @@ export const Compose: React.FunctionComponent<ComposeProps> = ({
             )}
 
             {editing && (
-              <Button intent="primary" size="sm" onClick={addNewIngredient}>
+              <Button
+                css={{ marginTop: theme.spaces.sm }}
+                size="sm"
+                onClick={addNewIngredient}
+              >
                 Add another
               </Button>
             )}
@@ -224,6 +419,7 @@ export const Compose: React.FunctionComponent<ComposeProps> = ({
               <Text variant="h5">Instructions</Text>
               <div>
                 <Editor
+                  ref={ref}
                   initialValue={defaultDescription ? defaultDescription : null}
                   readOnly={!editing}
                 />
@@ -233,13 +429,15 @@ export const Compose: React.FunctionComponent<ComposeProps> = ({
               {editing ? (
                 <>
                   <Text variant="h5">Original author</Text>
-                  <Input
-                    placeholder="Author and source..."
-                    value={credit}
-                    onChange={e => {
-                      setCredit(e.target.value);
-                    }}
-                  />
+                  <Contain>
+                    <TransparentInput
+                      placeholder="Author and source..."
+                      value={credit}
+                      onChange={e => {
+                        setCredit(e.target.value);
+                      }}
+                    />
+                  </Contain>
                 </>
               ) : (
                 <>
@@ -252,5 +450,40 @@ export const Compose: React.FunctionComponent<ComposeProps> = ({
         </div>
       </div>
     </div>
+  );
+};
+
+interface TransparentInputProps extends InputBaseProps {}
+
+const TransparentInput = (props: TransparentInputProps) => {
+  return (
+    <Input
+      css={{
+        background: "none",
+        border: "none",
+        boxShadow: "none",
+        paddingTop: theme.spaces.xs,
+        paddingBottom: theme.spaces.xs,
+        ":focus": {
+          outline: "none",
+          boxShadow: "none",
+          background: "none"
+        }
+      }}
+      {...props}
+    />
+  );
+};
+
+const Contain = props => {
+  return (
+    <div
+      css={{
+        marginTop: "-0.25rem",
+        marginLeft: "-0.75rem",
+        marginRight: "-0.75rem"
+      }}
+      {...props}
+    />
   );
 };

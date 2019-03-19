@@ -3,6 +3,9 @@ import "firebase/firestore";
 import "firebase/auth";
 import config from "./firebase-config";
 import debug from "debug";
+import omitBy from "lodash.omitby";
+import isNil from "lodash.isnil";
+import { Ingredient } from "./RecipeList";
 
 const log = debug("app:db");
 
@@ -21,7 +24,7 @@ db.enablePersistence().catch(function(err) {
   console.error(err);
 });
 
-function getUserFields(user: UserType) {
+export function getUserFields(user: UserType) {
   return {
     uid: user.uid,
     displayName: user.displayName,
@@ -60,4 +63,54 @@ export const confirmFollow = (id: string) => {
     .collection("relations")
     .doc(id)
     .update({ confirmed: true });
+};
+
+export interface RecipeOptions {
+  title: string;
+  plain: string;
+  userId: string;
+  description: string;
+  image?: string;
+  createdBy?: {
+    email: string;
+    photoURL: string;
+  };
+  author: string;
+  ingredients: Ingredient[];
+}
+
+export const createEntry = (options: RecipeOptions) => {
+  log("save recipe: %o", options);
+  return db.collection("recipes").add({
+    ...omitBy(options, isNil),
+    updatedAt: new Date()
+  });
+};
+
+interface RecipeUpdateOptions {
+  title: string;
+  author: string;
+  description: string;
+  image?: string;
+  createdBy?: {
+    email: string;
+    photoURL: string;
+  };
+  plain: string;
+  ingredients: Ingredient[];
+}
+
+export const updateEntry = (id: string, options: RecipeUpdateOptions) => {
+  return db
+    .collection("recipes")
+    .doc(id)
+    .update(omitBy(options, isNil));
+};
+
+export const deleteEntry = (id: string) => {
+  log("delete: %s", id);
+  return db
+    .collection("recipes")
+    .doc(id)
+    .delete();
 };

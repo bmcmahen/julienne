@@ -24,6 +24,7 @@ export const Recipe: React.FunctionComponent<RecipeProps> = ({ match }) => {
     return (
       <Compose
         readOnly
+        id={match.params.id}
         editable={value.get("userId") === user.uid}
         defaultCredit={value.get("author")}
         defaultDescription={value.get("description")}

@@ -18,7 +18,8 @@ import {
   InputGroup,
   VisuallyHidden,
   Icon,
-  Badge
+  Badge,
+  Tooltip
 } from "sancho";
 import { RecipeList } from "./RecipeList";
 import { useFollowRequests } from "./hooks/with-follow-request-count";
@@ -31,6 +32,7 @@ import { Recipe } from "./Recipe";
 import useReactRouter from "use-react-router";
 import { useTransition, animated, config } from "react-spring";
 import { SearchBox } from "./SearchBox";
+import { Link } from "react-router-dom";
 
 export interface MainProps {}
 
@@ -84,7 +86,7 @@ export const Main: React.FunctionComponent<MainProps> = props => {
       >
         <Navbar
           position="static"
-          css={{ background: theme.colors.palette.gray.dark, color: "white" }}
+          css={{ background: theme.colors.palette.gray.base, color: "white" }}
         >
           <Toolbar
             css={{
@@ -109,20 +111,26 @@ export const Main: React.FunctionComponent<MainProps> = props => {
                 {user.displayName || user.email}
               </Button>
             </Popover>
-            <IconButton
-              variant="ghost"
-              label="Add recipe"
-              size="lg"
-              color="white"
-              icon="plus"
-              intent="primary"
-            />
+            <Tooltip content="Add a new recipe">
+              <div>
+                <IconButton
+                  component={Link}
+                  to="/new"
+                  variant="ghost"
+                  label="Add recipe"
+                  size="lg"
+                  color="white"
+                  icon="plus"
+                  intent="primary"
+                />
+              </div>
+            </Tooltip>
           </Toolbar>
         </Navbar>
         <div css={{ zIndex: 2 }}>
           <Tabs
             css={{
-              background: theme.colors.palette.gray.dark
+              background: theme.colors.palette.gray.base
             }}
             onChange={i => setActiveTab(i)}
             value={activeTab}

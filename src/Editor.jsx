@@ -3,7 +3,6 @@ import { Value } from "slate";
 import React from "react";
 import initialValue from "./value.json";
 import Plain from "slate-plain-serializer";
-// import "./Editor.css";
 import { isKeyHotkey } from "is-hotkey";
 import { IconButton } from "sancho";
 
@@ -111,7 +110,7 @@ class RichTextExample extends React.Component {
 
   render() {
     return (
-      <div className="Editor">
+      <div className={"Editor" + (this.state.focus ? " focus" : "")}>
         <Editor
           spellCheck
           placeholder="Steps to reproduce this recipe..."
@@ -126,6 +125,14 @@ class RichTextExample extends React.Component {
       </div>
     );
   }
+
+  onFocus = () => {
+    this.setState({ focus: true });
+  };
+
+  onBlur = () => {
+    this.setState({ focus: false });
+  };
 
   /**
    * Render a mark-toggling toolbar button.
