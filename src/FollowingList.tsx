@@ -24,6 +24,7 @@ import config from "./firebase-config";
 import { useSession } from "./auth";
 import find from "lodash.find";
 import { deleteRequestFollow, requestFollow } from "./db";
+import SwipeableViews from "react-swipeable-views";
 
 const client = algoliasearch(
   config.ALGOLIA_APP_ID,
@@ -66,7 +67,7 @@ export const FollowingList: React.FunctionComponent<
             return false;
           }
 
-          return !find(userList, { toUserId: hit.objectID, confirmed: true });
+          return !find(userList, { toUserId: hit.objectID });
         })
         .map(hit => {
           const relation = find(userList, { toUserId: hit.objectID });
@@ -88,14 +89,13 @@ export const FollowingList: React.FunctionComponent<
 
   async function inviteUser(otherUser: any) {
     try {
-      log(otherUser.requested ? "delete request" : "add request");
       log("otherUser: %o", otherUser);
-      otherUser.requested
-        ? await deleteRequestFollow(otherUser.requested)
-        : await requestFollow(user, otherUser);
-
-      if (!otherUser.requested) {
-      }
+      await requestFollow(user, otherUser);
+      toast({
+        title: `A request has been sent to ${otherUser.displayName ||
+          otherUser.email}`,
+        intent: "success"
+      });
     } catch (err) {
       console.error(err);
       toast({
@@ -109,7 +109,7 @@ export const FollowingList: React.FunctionComponent<
   async function deleteRequest(id: string) {
     try {
       log("delete request: %s", id);
-      await deleteRequest(id);
+      await deleteRequestFollow(id);
     } catch (err) {
       console.error(err);
       toast({
@@ -120,101 +120,117 @@ export const FollowingList: React.FunctionComponent<
     }
   }
 
-  const noUsers = !userList || (userList && userList.length === 0);
+  const noUsers = !query && (!userList || (userList && userList.length === 0));
+
+  const [index, setIndex] = React.useState(0);
 
   return (
     <div>
-      <div css={{ borderBottom: `1px solid ${theme.colors.border.default}` }}>
-        <SearchBox
-          label="Search for users to follow"
-          query={query}
-          setQuery={setQuery}
-        />
-      </div>
-      {loading && <Spinner center css={{ marginTop: theme.spaces.lg }} />}
-      {noUsers && (
-        <Text
-          muted
-          css={{
-            fontSize: theme.sizes[0],
-            display: "block",
-            margin: theme.spaces.lg
-          }}
-        >
-          You currently aren't following anyone. Start following someone by
-          searching for their email in the box above.
-        </Text>
-      )}
-      <List>
-        {query &&
-          queryResults &&
-          queryResults.hits.map(hit => (
-            <ListItem
-              key={hit.objectID}
-              onClick={() => inviteUser(hit)}
-              contentBefore={
-                <Avatar
-                  size="sm"
-                  src={hit.photoURL}
-                  name={hit.displayName || hit.email}
-                />
-              }
-              primary={hit.displayName || hit.email}
-              contentAfter={
-                <Icon
-                  color={theme.colors.text.muted}
-                  icon="plus"
-                  aria-hidden
-                  size="lg"
-                />
-              }
+      <SwipeableViews index={index} disabled>
+        <div>
+          <div
+            css={{ borderBottom: `1px solid ${theme.colors.border.default}` }}
+          >
+            <SearchBox
+              label="Search for users to follow"
+              query={query}
+              setQuery={setQuery}
             />
-          ))}
-        {userList.map(relation => {
-          return (
-            <ListItem
-              key={user.uid}
-              contentBefore={
-                <Avatar
-                  size="sm"
-                  src={relation.toUser.photoURL}
-                  name={relation.toUser.displayName || relation.toUser.email}
-                />
-              }
-              primary={relation.toUser.displayName || relation.toUser.email}
-              contentAfter={
-                relation.confirmed ? (
-                  <Popover
-                    content={
-                      <MenuList>
-                        <MenuItem>Remove user</MenuItem>
-                      </MenuList>
-                    }
-                  >
-                    <IconButton
-                      onClick={e => e.stopPropagation()}
-                      variant="ghost"
-                      icon="more"
-                      label="Options"
+          </div>
+          {loading && <Spinner center css={{ marginTop: theme.spaces.lg }} />}
+          {!loading && noUsers && (
+            <Text
+              muted
+              css={{
+                fontSize: theme.sizes[0],
+                display: "block",
+                margin: theme.spaces.lg
+              }}
+            >
+              You currently aren't following anyone. Start following someone by
+              searching for their email in the box above.
+            </Text>
+          )}
+
+          <List>
+            {query &&
+              queryResults &&
+              queryResults.hits.map(hit => (
+                <ListItem
+                  key={hit.objectID}
+                  onClick={() => inviteUser(hit)}
+                  contentBefore={
+                    <Avatar
+                      size="sm"
+                      src={hit.photoURL}
+                      name={hit.displayName || hit.email}
                     />
-                  </Popover>
-                ) : (
-                  <Button
-                    onClick={e => {
-                      e.stopPropagation();
-                      e.preventDefault();
-                      deleteRequest(relation.id);
-                    }}
-                    size="sm"
-                  >
-                    Cancel request
-                  </Button>
-                )
-              }
-            />
-          );
-        })}
-      </List>
+                  }
+                  primary={hit.displayName || hit.email}
+                  contentAfter={
+                    <Icon
+                      color={theme.colors.text.muted}
+                      icon="plus"
+                      aria-hidden
+                      size="lg"
+                    />
+                  }
+                />
+              ))}
+            {userList.map(relation => {
+              return (
+                <ListItem
+                  key={user.uid}
+                  interactive={false}
+                  contentBefore={
+                    <Avatar
+                      size="sm"
+                      src={relation.toUser.photoURL}
+                      name={
+                        relation.toUser.displayName || relation.toUser.email
+                      }
+                    />
+                  }
+                  primary={relation.toUser.displayName || relation.toUser.email}
+                  contentAfter={
+                    relation.confirmed ? (
+                      <Popover
+                        content={
+                          <MenuList>
+                            <MenuItem>Remove user</MenuItem>
+                          </MenuList>
+                        }
+                      >
+                        <IconButton
+                          onClick={e => e.stopPropagation()}
+                          variant="ghost"
+                          icon="more"
+                          label="Options"
+                        />
+                      </Popover>
+                    ) : (
+                      <Button
+                        onClick={e => {
+                          e.stopPropagation();
+                          e.preventDefault();
+                          deleteRequest(relation.id);
+                        }}
+                        size="sm"
+                      >
+                        Cancel request
+                      </Button>
+                    )
+                  }
+                />
+              );
+            })}
+          </List>
+        </div>
+        <div>
+          <div>Provide back button</div>
+          <div>Show individual user's recipes</div>
+        </div>
+      </SwipeableViews>
     </div>
   );
 };

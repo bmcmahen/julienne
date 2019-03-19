@@ -13,8 +13,10 @@ import {
   MenuItem,
   Spinner,
   Text,
-  theme
+  theme,
+  toast
 } from "sancho";
+import { confirmFollow, deleteRequestFollow } from "./db";
 
 export interface FollowersListProps {}
 
@@ -43,26 +45,60 @@ export const FollowersList: React.FunctionComponent<
     );
   }
 
+  async function deleteRelation(relation) {
+    try {
+      await deleteRequestFollow(relation.id);
+    } catch (err) {
+      console.error(err);
+      toast({
+        title: "An error occurred. Please try again.",
+        subtitle: err.message,
+        intent: "danger"
+      });
+    }
+  }
+
+  async function acceptRequest(relation) {
+    try {
+      await confirmFollow(relation.id);
+      toast({
+        title: `Right on! ${relation.fromUser.displayName ||
+          relation.fromUser.email} is now following you.`,
+        subtitle: "They can now view your recipes.",
+        intent: "success"
+      });
+    } catch (err) {
+      console.error(err);
+      toast({
+        title: "An error occurred. Please try again.",
+        subtitle: err.message,
+        intent: "danger"
+      });
+    }
+  }
+
   return (
     <List>
-      {userList.map(item => {
+      {userList.map(relation => {
         return (
           <ListItem
-            key={item.id}
+            key={relation.id}
             contentBefore={
               <Avatar
                 size="sm"
-                src={item.user.photoURL}
-                name={item.user.displayName || item.user.email}
+                src={relation.fromUser.photoURL}
+                name={relation.fromUser.displayName || relation.fromUser.email}
               />
             }
-            primary={item.user.displayName || item.user.email}
+            primary={relation.fromUser.displayName || relation.fromUser.email}
             contentAfter={
-              item.confirmed ? (
+              relation.confirmed ? (
                 <Popover
                   content={
                     <MenuList>
-                      <MenuItem>Remove user</MenuItem>
+                      <MenuItem onSelect={() => deleteRelation(relation)}>
+                        Remove user
+                      </MenuItem>
                     </MenuList>
                   }
                 >
@@ -74,7 +110,11 @@ export const FollowersList: React.FunctionComponent<
                   />
                 </Popover>
               ) : (
-                <Button intent="primary" size="sm">
+                <Button
+                  onClick={() => acceptRequest(relation)}
+                  intent="primary"
+                  size="sm"
+                >
                   Accept request
                 </Button>
               )

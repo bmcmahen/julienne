@@ -17,7 +17,8 @@ import {
   MenuItem,
   InputGroup,
   VisuallyHidden,
-  Icon
+  Icon,
+  Badge
 } from "sancho";
 import { RecipeList } from "./RecipeList";
 import { useFollowRequests } from "./hooks/with-follow-request-count";
@@ -132,9 +133,17 @@ export const Main: React.FunctionComponent<MainProps> = props => {
             <Tab id="following">Following</Tab>
             <Tab
               badge={
-                followRequests && followRequests.docs.length
-                  ? followRequests.docs.length
-                  : null
+                <Badge
+                  css={{
+                    fontSize: "0.7rem",
+                    padding: "0 0.3rem",
+                    minWidth: "17px"
+                  }}
+                >
+                  {followRequests && followRequests.docs.length
+                    ? followRequests.docs.length
+                    : null}
+                </Badge>
               }
               id="followers"
             >

@@ -51,6 +51,7 @@ export const deleteRequestFollow = (id: string) => {
     })
     .catch(err => {
       log("failed to delete: %s", err);
+      throw err;
     });
 };
 

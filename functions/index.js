@@ -174,9 +174,18 @@ exports.api = functions.https.onRequest(app);
 
 exports.onUserCreated = functions.auth.user().onCreate(user => {
   const index = client.initIndex(ALGOLIA_USER_INDEX_NAME);
-  const userToSave = Object.assign({}, user, {
-    objectID: user.uid
-  });
+  const userToSave = Object.assign(
+    {},
+    {
+      email: user.email,
+      displayName: user.displayName,
+      photoURL: user.photoURL,
+      uid: user.uid
+    },
+    {
+      objectID: user.uid
+    }
+  );
 
   return Promise.all([
     index.saveObject(userToSave),
@@ -191,6 +200,7 @@ function createUserProfile(userId, user) {
     .doc(userId)
     .set({
       uid: userId,
+      displayName: user.displayName,
       email: user.email,
       photoURL: user.photoURL
     });
