@@ -8,11 +8,9 @@ import {
   Input,
   IconButton,
   Button,
-  Text,
   Tabs,
   Tab,
   Layer,
-  TabContent,
   TabPanel,
   Popover,
   MenuList,
@@ -29,6 +27,8 @@ import { useSession, signOut } from "./auth";
 import { Route, Switch } from "react-router";
 import { Compose } from "./Compose";
 import { Recipe } from "./Recipe";
+import useReactRouter from "use-react-router";
+import { useTransition, animated, config } from "react-spring";
 
 export interface MainProps {}
 
@@ -37,6 +37,13 @@ export const Main: React.FunctionComponent<MainProps> = props => {
   const [query, setQuery] = React.useState("");
   const [activeTab, setActiveTab] = React.useState(0);
   const { value: followRequests } = useFollowRequests();
+  const { location } = useReactRouter();
+
+  const transitions = useTransition(location, location => location.pathname, {
+    from: { opacity: 0, transform: "scale(0.95)" },
+    enter: { opacity: 1, transform: "scale(1)" },
+    leave: { opacity: 0, transform: "scale(1.1)" }
+  });
 
   return (
     <div
@@ -45,10 +52,8 @@ export const Main: React.FunctionComponent<MainProps> = props => {
         overflow: hidden;
         width: 100vw;
         display: grid;
-        padding: ${theme.spaces.lg};
         box-sizing: border-box;
-
-        grid-template-columns: 400px auto;
+        grid-template-columns: 500px auto;
         grid-template-areas: "list main";
       `}
     >
@@ -56,18 +61,19 @@ export const Main: React.FunctionComponent<MainProps> = props => {
         styles={{
           html: {
             backgroundSize: "cover",
-            background: `url(${require("./images/green.jpg")})`
+            backgroundImage: `url(${require("./images/cutting-board-knife.jpg")})`
           }
         }}
       />
       <Layer
+        elevation="xl"
         css={{
           oveflow: "hidden",
           display: "flex",
-          height: `calc(100vh - ${theme.spaces.lg} - ${theme.spaces.lg})`,
+          margin: theme.spaces.xl,
+          height: `calc(100vh - ${theme.spaces.xl} - ${theme.spaces.xl})`,
           boxSizing: "border-box",
           overflow: "hidden",
-          width: "100%",
           flexDirection: "column",
           gridArea: "list",
           background: "white",
@@ -227,22 +233,45 @@ export const Main: React.FunctionComponent<MainProps> = props => {
       <div
         css={{
           gridArea: "main",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center"
+          position: "relative",
+          maxHeight: "100vh"
         }}
       >
-        <Layer
-          css={{
-            width: "700px",
-            overflow: "hidden"
-          }}
-        >
-          <Switch>
-            <Route path="/new" component={Compose} />
-            <Route path="/:id" component={Recipe} />
-          </Switch>
-        </Layer>
+        {transitions.map(({ item, props, key }) => (
+          <animated.div
+            key={key}
+            style={props}
+            css={{
+              position: "absolute",
+              top: 0,
+              left: 0,
+              right: 0,
+              bottom: 0,
+              padding: `${theme.spaces.lg} 0`,
+              paddingRight: theme.spaces.lg,
+              display: "flex",
+              alignItems: "center",
+              overflowY: "scroll",
+              justifyContent: "center"
+            }}
+          >
+            <Layer
+              elevation="xl"
+              key={key}
+              css={{
+                width: "700px",
+                overflow: "hidden",
+                marginTop: "auto",
+                marginBottom: "auto"
+              }}
+            >
+              <Switch location={item}>
+                <Route path="/new" component={Compose} />
+                <Route path="/:id" component={Recipe} />
+              </Switch>
+            </Layer>
+          </animated.div>
+        ))}
       </div>
     </div>
   );

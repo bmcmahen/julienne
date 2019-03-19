@@ -18,7 +18,7 @@ import {
   Embed
 } from "sancho";
 import { Image, useFirebaseImage } from "./Image";
-import { Link } from "react-router-dom";
+import { Link, NavLink } from "react-router-dom";
 
 const log = debug("app:RecipeList");
 
@@ -288,7 +288,10 @@ function RecipeListItem({
 
   return (
     <ListItem
-      component={Link}
+      activeStyle={{
+        backgroundColor: theme.colors.background.tint1
+      }}
+      component={NavLink}
       to={`/${recipe.id}`}
       css={{
         "& em": {
@@ -305,13 +308,12 @@ function RecipeListItem({
               <div css={{ background: theme.colors.background.tint1 }} />
             )}
           </Embed>
-        ) : (
-          <Icon
-            icon="chevron-right"
-            aria-hidden
-            color={theme.colors.text.muted}
-          />
-        )
+        ) : null
+        // <Icon
+        //   icon="chevron-right"
+        //   aria-hidden
+        //   color={theme.colors.text.muted}
+        // />
       }
       secondary={
         highlight ? (

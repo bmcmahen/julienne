@@ -14,7 +14,8 @@ import {
   IconButton,
   Popover,
   MenuList,
-  MenuItem
+  MenuItem,
+  theme
 } from "sancho";
 
 export interface ComposeProps {
@@ -61,7 +62,10 @@ export const Compose: React.FunctionComponent<ComposeProps> = ({
 
   return (
     <div>
-      <Navbar position="static">
+      <Navbar
+        css={{ backgroundColor: "white", boxShadow: theme.shadows.sm }}
+        position="static"
+      >
         <Toolbar css={{ display: "flex", justifyContent: "space-between" }}>
           {editing ? (
             <Input
@@ -75,7 +79,7 @@ export const Compose: React.FunctionComponent<ComposeProps> = ({
               }}
             />
           ) : (
-            <Text variant="h4" gutter={false}>
+            <Text variant="h5" gutter={false}>
               {title}
             </Text>
           )}
@@ -95,7 +99,7 @@ export const Compose: React.FunctionComponent<ComposeProps> = ({
                   </MenuList>
                 }
               >
-                <IconButton icon="more" label="Show options" />
+                <IconButton variant="ghost" icon="more" label="Show options" />
               </Popover>
             )}
             {editing && (
@@ -137,81 +141,115 @@ export const Compose: React.FunctionComponent<ComposeProps> = ({
             </div>
           ) : null}
 
-          {ingredients.length > 0 && (
-            <div>
-              {ingredients.map((ingredient, i) => {
-                return (
-                  <div key={i}>
-                    {editing ? (
-                      <>
-                        <Input
-                          autoFocus={!readOnly && ingredients.length > 1}
-                          readOnly={readOnly}
-                          placeholder="Name"
-                          value={ingredient.name}
-                          onChange={e => {
-                            onIngredientChange(i, {
-                              ...ingredient,
-                              name: e.target.value
-                            });
+          <div css={{ padding: theme.spaces.lg }}>
+            {ingredients.length > 0 && (
+              <div>
+                <Text variant="h5">Ingredients</Text>
+                {ingredients.map((ingredient, i) => {
+                  return (
+                    <div key={i}>
+                      {editing ? (
+                        <>
+                          <Input
+                            autoFocus={!readOnly && ingredients.length > 1}
+                            readOnly={readOnly}
+                            placeholder="Name"
+                            value={ingredient.name}
+                            onChange={e => {
+                              onIngredientChange(i, {
+                                ...ingredient,
+                                name: e.target.value
+                              });
+                            }}
+                          />
+                          <Input
+                            readOnly={readOnly}
+                            placeholder="Amount"
+                            value={ingredient.amount}
+                            onChange={e => {
+                              onIngredientChange(i, {
+                                ...ingredient,
+                                amount: e.target.value
+                              });
+                            }}
+                          />
+                        </>
+                      ) : (
+                        <div
+                          css={{
+                            width: "300px",
+                            display: "flex",
+                            marginBottom: theme.spaces.xs,
+                            justifyContent: "space-between"
                           }}
-                        />
-                        <Input
-                          readOnly={readOnly}
-                          placeholder="Amount"
-                          value={ingredient.amount}
-                          onChange={e => {
-                            onIngredientChange(i, {
-                              ...ingredient,
-                              amount: e.target.value
-                            });
-                          }}
-                        />
-                      </>
-                    ) : (
-                      <>
-                        <Text>{ingredient.name}</Text>
-                        <Text>{ingredient.amount}</Text>
-                      </>
-                    )}
-                  </div>
-                );
-              })}
+                        >
+                          <Text
+                            css={{
+                              paddingRight: theme.spaces.xs,
+                              background: "white"
+                            }}
+                          >
+                            {ingredient.name}
+                          </Text>
+                          <div
+                            css={{
+                              flex: 1,
+                              borderBottom: "1px dashed #eee",
+                              marginBottom: "6px"
+                            }}
+                          />
+                          <Text
+                            css={{
+                              paddingLeft: theme.spaces.xs,
+                              background: "white"
+                            }}
+                          >
+                            {ingredient.amount}
+                          </Text>
+                        </div>
+                      )}
+                    </div>
+                  );
+                })}
+              </div>
+            )}
+
+            {editing && (
+              <Button intent="primary" size="sm" onClick={addNewIngredient}>
+                Add another
+              </Button>
+            )}
+
+            <div css={{ marginTop: theme.spaces.lg }}>
+              {editing ? (
+                <>
+                  <Text variant="h5">Original author</Text>
+                  <Input
+                    placeholder="Author and source..."
+                    value={credit}
+                    onChange={e => {
+                      setCredit(e.target.value);
+                    }}
+                  />
+                </>
+              ) : (
+                <>
+                  <Text variant="h5">Original author</Text>
+                  <Text>{credit}</Text>
+                </>
+              )}
             </div>
-          )}
 
-          {editing && (
-            <Button intent="primary" size="sm" onClick={addNewIngredient}>
-              Add another
-            </Button>
-          )}
-
-          {editing ? (
-            <>
-              <Text>Original author</Text>
-              <Input
-                placeholder="Author and source..."
-                value={credit}
-                onChange={e => {
-                  setCredit(e.target.value);
-                }}
-              />
-            </>
-          ) : (
-            <>
-              <Text>Original author</Text>
-              <Text>{credit}</Text>
-            </>
-          )}
-        </div>
-      </div>
-      <div>
-        <Text>Instructions</Text>
-        <div>
-          <Editor
-            initialValue={defaultDescription ? defaultDescription : null}
-            readOnly={!editing}
-          />
+            <div css={{ marginTop: theme.spaces.lg }}>
+              <Text variant="h5">Instructions</Text>
+              <div>
+                <Editor
+                  initialValue={defaultDescription ? defaultDescription : null}
+                  readOnly={!editing}
+                />
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>

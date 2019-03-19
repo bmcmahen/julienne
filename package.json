@@ -29,14 +29,16 @@
     "react-firebase-hooks": "^1.1.0",
     "react-helmet": "^5.2.0",
     "react-router": "^4.4.0",
-    "react-router-dom": "^4.4.0",
+    "react-router-dom": "^4.4.0-beta.8",
     "react-scripts": "2.1.8",
+    "react-spring": "^8.0.15",
     "sancho": "^1.0.0-beta.4",
     "shortid": "^2.2.14",
     "slate": "^0.44.12",
     "slate-plain-serializer": "^0.6.36",
     "slate-react": "^0.21.18",
-    "typescript": "3.3.3333"
+    "typescript": "3.3.3333",
+    "use-react-router": "^1.0.4"
   },
   "scripts": {
     "start": "react-scripts start",
