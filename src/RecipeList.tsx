@@ -2,11 +2,23 @@
 import { jsx } from "@emotion/core";
 import * as React from "react";
 import algoliasearch from "algoliasearch";
-import algolia from "./Search";
+import algolia, { following } from "./Search";
 import debug from "debug";
 import { useSession } from "./auth";
 import firebase from "firebase/app";
-import { Text, List, ListItem, Spinner, Button, Icon, theme } from "sancho";
+import {
+  Text,
+  List,
+  ListItem,
+  Spinner,
+  Button,
+  Icon,
+  theme,
+  MenuLabel,
+  Embed
+} from "sancho";
+import { Image, useFirebaseImage } from "./Image";
+import { Link } from "react-router-dom";
 
 const log = debug("app:RecipeList");
 
@@ -37,7 +49,8 @@ export type ActionType =
   | Action<"LOAD-MORE">
   | Action<"QUERY", { value: string }>
   | Action<"LOADED", { value: firebase.firestore.QueryDocumentSnapshot[] }>
-  | Action<"SEARCH", { value: algoliasearch.Response }>;
+  | Action<"SEARCH", { value: algoliasearch.Response }>
+  | Action<"LOAD-OTHER-USER-RECIPES", { value: Recipe[] }>;
 
 interface StateType {
   hasMore: boolean;
@@ -50,12 +63,14 @@ interface StateType {
   loading: boolean;
   loadingError: null | Error;
   query: string;
+  otherRecipes: Recipe[];
 }
 
 const initialState = {
   hasMore: false,
   after: null,
   recipes: [],
+  otherRecipes: [],
   lastLoaded: null,
   searchResponse: null,
   loadingMore: false,
@@ -110,19 +125,30 @@ function reducer(state: StateType, action: ActionType) {
         loadingMore: true,
         after: state.lastLoaded
       };
+
+    case "LOAD-OTHER-USER-RECIPES":
+      return {
+        ...state,
+        otherRecipes: action.value
+      };
   }
 }
 
-export interface RecipeListProps {}
+export interface RecipeListProps {
+  query: string;
+}
 
-export const RecipeList: React.FunctionComponent<RecipeListProps> = () => {
+export const RecipeList: React.FunctionComponent<RecipeListProps> = ({
+  query
+}) => {
   const [state, dispatch] = React.useReducer(reducer, initialState);
   const user = useSession();
 
   // perform an algolia query when query changes
   React.useEffect(() => {
-    if (state.query) {
-      algolia.search(state.query).then(results => {
+    if (query) {
+      log("query: %s", query);
+      algolia.search(query).then(results => {
         log("results: %o", results);
         dispatch({
           type: "SEARCH",
@@ -130,7 +156,7 @@ export const RecipeList: React.FunctionComponent<RecipeListProps> = () => {
         });
       });
     }
-  }, [state.query]);
+  }, [query]);
 
   // retrieve our algolia search index on mount
   React.useEffect(() => {
@@ -163,13 +189,20 @@ export const RecipeList: React.FunctionComponent<RecipeListProps> = () => {
     return () => unsubscribe();
   }, [state.after, user]);
 
+  // Load following recipe list
+  React.useEffect(() => {
+    following.search("").then(results => {
+      dispatch({
+        type: "LOAD-OTHER-USER-RECIPES",
+        value: results.hits
+      });
+    });
+  }, []);
+
   return (
     <div>
-      {state.query && state.searchResponse ? (
+      {query && state.searchResponse ? (
         <div>
-          <Text>
-            Search results for <em>{state.query}</em>
-          </Text>
           <List>
             {state.searchResponse.hits.map(hit => (
               <RecipeListItem
@@ -219,6 +252,19 @@ export const RecipeList: React.FunctionComponent<RecipeListProps> = () => {
               </Button>
             </div>
           )}
+
+          {state.otherRecipes.length > 0 && (
+            <div>
+              {state.otherRecipes.map(recipe => (
+                <RecipeListItem
+                  id={recipe.id}
+                  key={recipe.id}
+                  editable
+                  recipe={recipe}
+                />
+              ))}
+            </div>
+          )}
         </div>
       )}
     </div>
@@ -238,13 +284,49 @@ function RecipeListItem({
   id,
   highlight
 }: RecipeListItemProps) {
+  const { src, error } = useFirebaseImage("thumb@", recipe.image);
+
   return (
     <ListItem
+      component={Link}
+      to={`/${recipe.id}`}
+      css={{
+        "& em": {
+          fontStyle: "normal",
+          color: theme.colors.text.selected
+        }
+      }}
       contentAfter={
-        <Icon color={theme.colors.palette.gray.light} icon="chevron-right" />
+        recipe.image ? (
+          <Embed css={{ width: "80px" }} width={16} height={9}>
+            {src ? (
+              <img src={src} aria-hidden />
+            ) : (
+              <div css={{ background: theme.colors.background.tint1 }} />
+            )}
+          </Embed>
+        ) : (
+          <Icon
+            icon="chevron-right"
+            aria-hidden
+            color={theme.colors.text.muted}
+          />
+        )
       }
-      secondary={recipe.author}
-      primary={recipe.title}
+      secondary={
+        highlight ? (
+          <span dangerouslySetInnerHTML={{ __html: highlight.author.value }} />
+        ) : (
+          recipe.author
+        )
+      }
+      primary={
+        highlight ? (
+          <span dangerouslySetInnerHTML={{ __html: highlight.title.value }} />
+        ) : (
+          recipe.title
+        )
+      }
     />
   );
 }

@@ -4,11 +4,12 @@ import shortid from "shortid";
 import * as React from "react";
 import { FilePond, registerPlugin } from "react-filepond";
 import "filepond/dist/filepond.min.css";
+import "./db";
 import FilePondPluginImageExifOrientation from "filepond-plugin-image-exif-orientation";
 import FilePondPluginImagePreview from "filepond-plugin-image-preview";
 import "filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css";
 import debug from "debug";
-import "./image.css";
+// import "./image.css";
 
 const log = debug("app:image");
 

@@ -17,9 +17,11 @@
     "@types/shortid": "^0.0.29",
     "algoliasearch": "^3.32.1",
     "debug": "^4.1.1",
+    "filepond": "^4.2.0",
     "filepond-plugin-image-exif-orientation": "^1.0.4",
     "filepond-plugin-image-preview": "^4.0.3",
     "firebase": "^5.9.0",
+    "immutable": "^4.0.0-rc.12",
     "is-hotkey": "^0.1.4",
     "react": "^16.8.4",
     "react-dom": "^16.8.4",
@@ -31,6 +33,9 @@
     "react-scripts": "2.1.8",
     "sancho": "^1.0.0-beta.4",
     "shortid": "^2.2.14",
+    "slate": "^0.44.12",
+    "slate-plain-serializer": "^0.6.36",
+    "slate-react": "^0.21.18",
     "typescript": "3.3.3333"
   },
   "scripts": {
