@@ -404,7 +404,7 @@ export const Login: React.FunctionComponent<LoginProps> = ({ location }) => {
           />
         </svg>
         <Text css={{ fontSize: theme.sizes[0] }}>
-          Made with by <Link href="http://www.benmcmahen.com">Ben McMahen</Link>
+          Made by <Link href="http://www.benmcmahen.com">Ben McMahen</Link>
           <br />
           <Link href="mailto:ben.mcmahen@gmail.com">Email me</Link> with
           questions or whatevs!
