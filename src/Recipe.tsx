@@ -26,19 +26,7 @@ export const Recipe: React.FunctionComponent<RecipeProps> = ({ match }) => {
   }
 
   if (!loading && !value.exists) {
-    return (
-      <Text
-        muted
-        css={{
-          display: "block",
-          padding: theme.spaces.lg,
-          textAlign: "center"
-        }}
-      >
-        We were unable to find this recipe. Are you sure you have the correct
-        URL?
-      </Text>
-    );
+    return null;
   }
 
   if (error) {

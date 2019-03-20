@@ -203,6 +203,7 @@ export function RecipeListItem({
 
   return (
     <ListItem
+      wrap={false}
       activeStyle={{
         backgroundColor: theme.colors.background.tint1
       }}

@@ -63,11 +63,11 @@ export const Main: React.FunctionComponent<MainProps> = props => {
 
         ${theme.breakpoints.md} {
           display: grid;
-          grid-template-columns: 400px auto;
+          grid-template-columns: 375px auto;
           grid-template-areas: "list main";
         }
         ${theme.breakpoints.lg} {
-          grid-template-columns: 500px auto;
+          grid-template-columns: 450px auto;
         }
       `}
     >
@@ -236,14 +236,16 @@ export const Main: React.FunctionComponent<MainProps> = props => {
       <div
         css={{
           transform: `translateX(${showingRecipe ? "0" : "100%"})`,
-          transition: "transform 0.35s ease",
+          transition: "transform 0.35s ease, opacity 0.35s ease",
+          opacity: showingRecipe ? 1 : 0,
           position: "relative",
           maxHeight: "100vh",
           height: "100vh",
           gridArea: "main",
           [theme.breakpoints.md]: {
+            opacity: 1,
             transitionProperty: "none",
-            transform: "translateX(0)",
+            transform: "none",
             transition: "none"
           }
         }}
