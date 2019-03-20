@@ -4,7 +4,7 @@ import * as React from "react";
 import { Location } from "history";
 import { loginWithGoogle } from "./auth";
 import { Redirect } from "react-router";
-import Helmet from "react-helmet";
+import food from "./images/food.svg";
 import {
   Navbar,
   Toolbar,
@@ -13,10 +13,7 @@ import {
   theme,
   responsiveBodyPadding,
   Container,
-  NegativeMarginsContainer,
-  Icon,
-  Link,
-  Divider
+  Link
 } from "sancho";
 
 export interface LoginProps {
@@ -27,8 +24,8 @@ export const Login: React.FunctionComponent<LoginProps> = ({ location }) => {
   const { from } = location.state || { from: "/" };
   const [loading, setLoading] = React.useState(false);
   const [redirect, setRedirect] = React.useState(false);
-  const [password, setPassword] = React.useState("");
-  const [email, setEmail] = React.useState("");
+  // const [password, setPassword] = React.useState("");
+  // const [email, setEmail] = React.useState("");
 
   const login = async () => {
     setLoading(true);
@@ -48,7 +45,6 @@ export const Login: React.FunctionComponent<LoginProps> = ({ location }) => {
 
   return (
     <main>
-      <Helmet title="allofmy.recipes - Your recipes in one place" />
       <Global
         styles={{
           html: {
@@ -67,10 +63,22 @@ export const Login: React.FunctionComponent<LoginProps> = ({ location }) => {
         <Toolbar>
           <Text
             variant="h5"
-            css={{ color: theme.colors.palette.blue.base }}
+            css={{
+              alignItems: "center",
+              display: "flex"
+            }}
             gutter={false}
           >
-            <span>allofmy</span>.recipes
+            <img
+              css={{
+                marginRight: theme.spaces.sm,
+                width: "30px",
+                height: "30px"
+              }}
+              src={food}
+              aria-hidden
+            />
+            <span>Julienne</span>
           </Text>
           <Button
             intent="primary"
@@ -92,7 +100,6 @@ export const Login: React.FunctionComponent<LoginProps> = ({ location }) => {
             flexDirection: "column",
             overflow: "hidden",
             position: "relative",
-            // backgroundAttachment: "fixed",
             backgroundSize: "cover",
             backgroundImage: `url(${require("./images/cutting-board-knife.jpg")})`
           },
@@ -401,6 +408,28 @@ export const Login: React.FunctionComponent<LoginProps> = ({ location }) => {
           <br />
           <Link href="mailto:ben.mcmahen@gmail.com">Email me</Link> with
           questions or whatevs!
+          <br />
+          <div>
+            Icons made by{" "}
+            <Link
+              href="https://www.flaticon.com/authors/smashicons"
+              title="Smashicons"
+            >
+              Smashicons
+            </Link>{" "}
+            from{" "}
+            <Link href="https://www.flaticon.com/" title="Flaticon">
+              www.flaticon.com
+            </Link>{" "}
+            is licensed by{" "}
+            <Link
+              href="http://creativecommons.org/licenses/by/3.0/"
+              title="Creative Commons BY 3.0"
+              target="_blank"
+            >
+              CC 3.0 BY
+            </Link>
+          </div>
         </Text>
       </div>
     </main>

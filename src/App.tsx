@@ -1,5 +1,5 @@
 /** @jsx jsx */
-import { jsx } from "@emotion/core";
+import { jsx, Global } from "@emotion/core";
 import * as firebase from "firebase/app";
 import { BrowserRouter, Switch, Redirect, Route } from "react-router-dom";
 import { Login } from "./Login";
@@ -7,6 +7,7 @@ import { Spinner } from "sancho";
 import { Main } from "./Main";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { userContext } from "./user-context";
+import Helmet from "react-helmet";
 
 interface PrivateRouteProps {
   component: any;
@@ -65,7 +66,16 @@ function App() {
         initialising
       }}
     >
+      <Global
+        styles={{
+          body: {
+            margin: 0,
+            padding: 0
+          }
+        }}
+      />
       <div className="App">
+        <Helmet titleTemplate="%s | Julienne" defaultTitle="Julienne" />
         <BrowserRouter>
           <Switch>
             <Route path="/login" component={Login} />
