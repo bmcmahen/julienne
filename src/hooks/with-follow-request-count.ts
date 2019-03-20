@@ -5,6 +5,11 @@ import * as firebase from "firebase/app";
 import debug from "debug";
 const log = debug("app:with-follow-requests");
 
+/**
+ * Get a list of unconfirmed follow requests,
+ * used to notify a user.
+ */
+
 export function useFollowRequests() {
   const user = useSession();
   const { error, loading, value } = useCollection(
@@ -23,9 +28,12 @@ export function useFollowRequests() {
   };
 }
 
-// honestly, this is where firebase drives me mad. Would
-// be so easy with postgres
-// we should just denormalize this stuff
+/**
+ * Get a list of followers, or users you
+ * are following.
+ * @param toUser boolean
+ */
+
 export function useFollowers(toUser = true) {
   const user = useSession();
 

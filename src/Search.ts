@@ -53,6 +53,10 @@ class Search {
 
   search = async (query: string) => {
     if (!this.index) {
+      // ideally, we can fetch the index only if
+      // the user is going to search something.
+      // But this causes a weird (and delayed) UI experience
+      // for now, so we need to call getIndex beforehand.
       await this.getIndex();
     }
 

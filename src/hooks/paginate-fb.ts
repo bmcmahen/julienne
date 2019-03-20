@@ -38,10 +38,14 @@ function reducer(state: StateType, action: ActionType): StateType {
     case "LOADED": {
       const hasMore = action.value.docs.length >= INITIAL_LOAD_SIZE;
 
-      // todo:
-      // maintain a key:value collection of recipes
-      // use docChanges() to determine if we should add,
-      // update, or delete entries
+      /**
+       * Maintain a key/value store of items to make
+       * handling changes a bit easier.
+       *
+       * Unfortunately, this necessitates that we convert our
+       * map into an array and sort it using the same criteria
+       * as the original query. Not the best solution...
+       */
 
       const items = new Map(state.items);
 
@@ -86,6 +90,7 @@ export function usePaginateQuery(
 ) {
   const [state, dispatch] = React.useReducer(reducer, initialState);
 
+  // when "after" changes, we update our query
   React.useEffect(() => {
     let fn = state.after ? query.startAfter(state.after) : query;
 
@@ -96,6 +101,7 @@ export function usePaginateQuery(
     return () => unsubscribe();
   }, [state.after]);
 
+  // trigger firebase to load more
   function loadMore() {
     dispatch({ type: "LOAD-MORE" });
   }
