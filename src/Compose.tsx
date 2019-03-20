@@ -20,10 +20,14 @@ import {
   theme,
   InputBaseProps,
   toast,
-  LayerLoading
+  LayerLoading,
+  Container,
+  ResponsivePopover
 } from "sancho";
 import { getUserFields, createEntry, deleteEntry, updateEntry } from "./db";
 import { useSession } from "./auth";
+import Helmet from "react-helmet";
+import { Link } from "react-router-dom";
 
 const log = debug("app:Compose");
 
@@ -180,7 +184,18 @@ export const Compose: React.FunctionComponent<ComposeProps> = ({
   }
 
   return (
-    <div>
+    <div
+      css={{
+        height: "100%",
+        display: "flex",
+        flexDirection: "column",
+        [theme.breakpoints.md]: {
+          height: "auto",
+          display: "block"
+        }
+      }}
+    >
+      <Helmet title={title ? title : "New Recipe"} />
       <Global
         styles={{
           ".Editor": {
@@ -225,10 +240,28 @@ export const Compose: React.FunctionComponent<ComposeProps> = ({
         }}
       />
       <Navbar
-        css={{ backgroundColor: "white", boxShadow: theme.shadows.sm }}
+        css={{
+          zIndex: theme.zIndex.sticky,
+          backgroundColor: "white",
+          boxShadow: theme.shadows.sm
+        }}
         position="static"
       >
         <Toolbar css={{ display: "flex", justifyContent: "space-between" }}>
+          <IconButton
+            icon="arrow-left"
+            component={Link}
+            to="/"
+            label="Go back"
+            variant="ghost"
+            css={{
+              display: "block",
+              marginRight: theme.spaces.sm,
+              [theme.breakpoints.md]: {
+                display: "none"
+              }
+            }}
+          />
           {editing ? (
             <div css={{ marginLeft: "-0.75rem", flex: 1 }}>
               <TransparentInput
@@ -244,13 +277,13 @@ export const Compose: React.FunctionComponent<ComposeProps> = ({
               />
             </div>
           ) : (
-            <Text variant="h5" gutter={false}>
+            <Text wrap={false} variant="h5" gutter={false}>
               {title}
             </Text>
           )}
           <div>
             {!editing && editable && (
-              <Popover
+              <ResponsivePopover
                 content={
                   <MenuList>
                     <MenuItem
@@ -266,8 +299,15 @@ export const Compose: React.FunctionComponent<ComposeProps> = ({
                   </MenuList>
                 }
               >
-                <IconButton variant="ghost" icon="more" label="Show options" />
-              </Popover>
+                <IconButton
+                  css={{
+                    marginLeft: theme.spaces.sm
+                  }}
+                  variant="ghost"
+                  icon="more"
+                  label="Show options"
+                />
+              </ResponsivePopover>
             )}
             {editing && (
               <Button
@@ -295,7 +335,17 @@ export const Compose: React.FunctionComponent<ComposeProps> = ({
           </div>
         </Toolbar>
       </Navbar>
-      <div>
+      <div
+        css={{
+          flex: 1,
+          overflowY: "scroll",
+          WebkitOverflowScrolling: "touch",
+          [theme.breakpoints.md]: {
+            overflowY: "visible",
+            flex: "none"
+          }
+        }}
+      >
         <div>
           {editing ? (
             <ImageUpload
@@ -320,145 +370,158 @@ export const Compose: React.FunctionComponent<ComposeProps> = ({
             </div>
           ) : null}
 
-          <div css={{ padding: theme.spaces.lg }}>
-            {ingredients.length > 0 && (
-              <div>
-                <Text variant="h5">Ingredients</Text>
-                {ingredients.map((ingredient, i) => {
-                  return (
-                    <div key={i}>
-                      {editing ? (
-                        <Contain>
+          <Container>
+            <div
+              css={{
+                paddingTop: theme.spaces.lg,
+                paddingBottom: theme.spaces.lg
+              }}
+            >
+              {ingredients.length > 0 && (
+                <div>
+                  <Text variant="h5">Ingredients</Text>
+                  {ingredients.map((ingredient, i) => {
+                    return (
+                      <div key={i}>
+                        {editing ? (
+                          <Contain>
+                            <div
+                              css={{
+                                display: "flex",
+                                [theme.breakpoints.md]: {
+                                  maxWidth: "400px"
+                                }
+                              }}
+                            >
+                              <TransparentInput
+                                autoFocus={!readOnly && ingredients.length > 1}
+                                placeholder="Name"
+                                value={ingredient.name}
+                                onChange={e => {
+                                  onIngredientChange(i, {
+                                    ...ingredient,
+                                    name: e.target.value
+                                  });
+                                }}
+                              />
+                              <TransparentInput
+                                placeholder="Amount"
+                                value={ingredient.amount}
+                                onChange={e => {
+                                  onIngredientChange(i, {
+                                    ...ingredient,
+                                    amount: e.target.value
+                                  });
+                                }}
+                              />
+                              <div
+                                css={{
+                                  marginLeft: theme.spaces.sm,
+                                  flex: "0 0 40px"
+                                }}
+                              >
+                                {i > 0 && (
+                                  <IconButton
+                                    variant="ghost"
+                                    icon="cross"
+                                    label="Delete ingredient"
+                                    onClick={() => removeIngredient(i)}
+                                  />
+                                )}
+                              </div>
+                            </div>
+                          </Contain>
+                        ) : (
                           <div
                             css={{
                               display: "flex",
-                              maxWidth: "400px"
+                              marginBottom: theme.spaces.xs,
+                              justifyContent: "space-between",
+                              [theme.breakpoints.md]: {
+                                width: "300px"
+                              }
                             }}
                           >
-                            <TransparentInput
-                              autoFocus={!readOnly && ingredients.length > 1}
-                              placeholder="Name"
-                              value={ingredient.name}
-                              onChange={e => {
-                                onIngredientChange(i, {
-                                  ...ingredient,
-                                  name: e.target.value
-                                });
-                              }}
-                            />
-                            <TransparentInput
-                              placeholder="Amount"
-                              value={ingredient.amount}
-                              onChange={e => {
-                                onIngredientChange(i, {
-                                  ...ingredient,
-                                  amount: e.target.value
-                                });
-                              }}
-                            />
-                            <div
+                            <Text
                               css={{
-                                marginLeft: theme.spaces.sm,
-                                flex: "0 0 40px"
+                                paddingRight: theme.spaces.xs,
+                                background: "white"
                               }}
                             >
-                              {i > 0 && (
-                                <IconButton
-                                  variant="ghost"
-                                  icon="cross"
-                                  label="Delete ingredient"
-                                  onClick={() => removeIngredient(i)}
-                                />
-                              )}
-                            </div>
+                              {ingredient.name}
+                            </Text>
+                            <div
+                              css={{
+                                flex: 1,
+                                borderBottom: "1px dashed #eee",
+                                marginBottom: "6px"
+                              }}
+                            />
+                            <Text
+                              css={{
+                                paddingLeft: theme.spaces.xs,
+                                background: "white"
+                              }}
+                            >
+                              {ingredient.amount}
+                            </Text>
                           </div>
-                        </Contain>
-                      ) : (
-                        <div
-                          css={{
-                            width: "300px",
-                            display: "flex",
-                            marginBottom: theme.spaces.xs,
-                            justifyContent: "space-between"
-                          }}
-                        >
-                          <Text
-                            css={{
-                              paddingRight: theme.spaces.xs,
-                              background: "white"
-                            }}
-                          >
-                            {ingredient.name}
-                          </Text>
-                          <div
-                            css={{
-                              flex: 1,
-                              borderBottom: "1px dashed #eee",
-                              marginBottom: "6px"
-                            }}
-                          />
-                          <Text
-                            css={{
-                              paddingLeft: theme.spaces.xs,
-                              background: "white"
-                            }}
-                          >
-                            {ingredient.amount}
-                          </Text>
-                        </div>
-                      )}
-                    </div>
-                  );
-                })}
-              </div>
-            )}
-
-            {editing && (
-              <Button
-                css={{ marginTop: theme.spaces.sm }}
-                size="sm"
-                onClick={addNewIngredient}
-              >
-                Add another
-              </Button>
-            )}
-
-            <div css={{ marginTop: theme.spaces.lg }}>
-              <Text variant="h5">Instructions</Text>
-              <div>
-                <Editor
-                  ref={ref}
-                  initialValue={defaultDescription ? defaultDescription : null}
-                  readOnly={!editing}
-                />
-              </div>
-            </div>
-            <div css={{ marginTop: theme.spaces.lg }}>
-              {editing ? (
-                <>
-                  <Text variant="h5">Original author</Text>
-                  <Contain>
-                    <TransparentInput
-                      placeholder="Author and source..."
-                      value={credit}
-                      onChange={e => {
-                        setCredit(e.target.value);
-                      }}
-                    />
-                  </Contain>
-                </>
-              ) : (
-                <>
-                  {credit && (
-                    <>
-                      <Text variant="h5">Original author</Text>
-                      <Text>{credit}</Text>
-                    </>
-                  )}
-                </>
+                        )}
+                      </div>
+                    );
+                  })}
+                </div>
               )}
+
+              {editing && (
+                <Button
+                  css={{ marginTop: theme.spaces.sm }}
+                  size="sm"
+                  onClick={addNewIngredient}
+                >
+                  Add another
+                </Button>
+              )}
+
+              <div css={{ marginTop: theme.spaces.lg }}>
+                <Text variant="h5">Instructions</Text>
+                <div>
+                  <Editor
+                    ref={ref}
+                    initialValue={
+                      defaultDescription ? defaultDescription : null
+                    }
+                    readOnly={!editing}
+                  />
+                </div>
+              </div>
+              <div css={{ marginTop: theme.spaces.lg }}>
+                {editing ? (
+                  <>
+                    <Text variant="h5">Original author</Text>
+                    <Contain>
+                      <TransparentInput
+                        placeholder="Author and source..."
+                        value={credit}
+                        onChange={e => {
+                          setCredit(e.target.value);
+                        }}
+                      />
+                    </Contain>
+                  </>
+                ) : (
+                  <>
+                    {credit && (
+                      <>
+                        <Text variant="h5">Original author</Text>
+                        <Text>{credit}</Text>
+                      </>
+                    )}
+                  </>
+                )}
+              </div>
             </div>
-          </div>
+          </Container>
         </div>
       </div>
       <LayerLoading loading={loading} />

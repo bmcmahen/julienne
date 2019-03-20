@@ -41,7 +41,7 @@ export const Main: React.FunctionComponent<MainProps> = props => {
   const [query, setQuery] = React.useState("");
   const [activeTab, setActiveTab] = React.useState(0);
   const { value: followRequests } = useFollowRequests();
-  const { location } = useReactRouter();
+  const { location, match } = useReactRouter();
 
   const transitions = useTransition(location, location => location.pathname, {
     from: { opacity: 0, transform: "scale(0.95)" },
@@ -49,39 +49,67 @@ export const Main: React.FunctionComponent<MainProps> = props => {
     leave: { opacity: 0, transform: "scale(1.1)" }
   });
 
+  const params = match.params as any;
+  const showingRecipe = params.id;
+
   return (
     <div
       css={css`
         height: 100vh;
         overflow: hidden;
         width: 100vw;
-        display: grid;
+        display: block;
         box-sizing: border-box;
-        grid-template-columns: 500px auto;
-        grid-template-areas: "list main";
+
+        ${theme.breakpoints.md} {
+          display: grid;
+          grid-template-columns: 400px auto;
+          grid-template-areas: "list main";
+        }
+        ${theme.breakpoints.lg} {
+          grid-template-columns: 500px auto;
+        }
       `}
     >
       <Global
         styles={{
           html: {
-            backgroundSize: "cover",
-            backgroundImage: `url(${require("./images/cutting-board-knife.jpg")})`
+            [theme.breakpoints.md]: {
+              backgroundSize: "cover",
+              backgroundImage: `url(${require("./images/cutting-board-knife.jpg")})`
+            }
           }
         }}
       />
       <Layer
         elevation="xl"
         css={{
-          oveflow: "hidden",
+          position: "absolute",
           display: "flex",
-          margin: theme.spaces.xl,
-          height: `calc(100vh - ${theme.spaces.xl} - ${theme.spaces.xl})`,
+          transform: `translateX(${showingRecipe ? "-100%" : 0})`,
+          transition: "transform 0.35s ease",
           boxSizing: "border-box",
           overflow: "hidden",
           flexDirection: "column",
+          height: "100vh",
+          width: "100vw",
           gridArea: "list",
           background: "white",
-          borderRadius: theme.radii.lg
+          borderRadius: 0,
+          [theme.breakpoints.md]: {
+            position: "static",
+            transform: "none",
+            width: "auto",
+            borderRadius: theme.radii.lg,
+            margin: theme.spaces.lg,
+            marginRight: 0,
+            height: `calc(100vh - ${theme.spaces.lg} - ${theme.spaces.lg})`
+          },
+          [theme.breakpoints.lg]: {
+            margin: theme.spaces.xl,
+            marginRight: 0,
+            height: `calc(100vh - ${theme.spaces.xl} - ${theme.spaces.xl})`
+          }
         }}
       >
         <Navbar
@@ -183,7 +211,8 @@ export const Main: React.FunctionComponent<MainProps> = props => {
             <div
               css={{
                 flex: 1,
-                overflowY: "scroll"
+                overflowY: "scroll",
+                WebkitOverflowScrolling: "touch"
               }}
             >
               <RecipeList query={query} />
@@ -206,9 +235,17 @@ export const Main: React.FunctionComponent<MainProps> = props => {
 
       <div
         css={{
-          gridArea: "main",
+          transform: `translateX(${showingRecipe ? "0" : "100%"})`,
+          transition: "transform 0.35s ease",
           position: "relative",
-          maxHeight: "100vh"
+          maxHeight: "100vh",
+          height: "100vh",
+          gridArea: "main",
+          [theme.breakpoints.md]: {
+            transitionProperty: "none",
+            transform: "translateX(0)",
+            transition: "none"
+          }
         }}
       >
         {transitions.map(({ item, props, key }) => (
@@ -221,23 +258,37 @@ export const Main: React.FunctionComponent<MainProps> = props => {
               left: 0,
               right: 0,
               bottom: 0,
-              padding: `${theme.spaces.lg} 0`,
-              paddingRight: theme.spaces.xl,
-              display: "flex",
-              alignItems: "center",
-              overflowY: "scroll",
-              justifyContent: "center"
+              [theme.breakpoints.md]: {
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+                padding: theme.spaces.lg,
+
+                overflowY: "scroll",
+                WebkitOverflowScrolling: "touch"
+              },
+              [theme.breakpoints.lg]: {
+                paddingLeft: theme.spaces.xl,
+                paddingRight: theme.spaces.xl
+              }
             }}
           >
             <Layer
               elevation="xl"
               key={key}
               css={{
+                borderRadius: 0,
                 position: "relative",
-                width: "700px",
+                width: "100%",
                 overflow: "hidden",
-                marginTop: "auto",
-                marginBottom: "auto"
+                height: "100vh",
+                [theme.breakpoints.md]: {
+                  marginTop: "auto",
+                  height: "auto",
+                  marginBottom: "auto",
+                  width: "700px",
+                  borderRadius: theme.radii.lg
+                }
               }}
             >
               <Switch location={item}>

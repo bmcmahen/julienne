@@ -22,7 +22,7 @@ export const Recipe: React.FunctionComponent<RecipeProps> = ({ match }) => {
   );
 
   if (loading) {
-    return <Spinner css={{ padding: theme.spaces.lg }} center />;
+    return null;
   }
 
   if (!loading && !value.exists) {
