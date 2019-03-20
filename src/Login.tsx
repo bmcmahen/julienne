@@ -403,7 +403,9 @@ export const Login: React.FunctionComponent<LoginProps> = ({ location }) => {
 						 M95 100 Q 100 15 105 100 Z"
           />
         </svg>
-        <Text css={{ fontSize: theme.sizes[0] }}>
+        <Text
+          css={{ position: "relative", zIndex: 10, fontSize: theme.sizes[0] }}
+        >
           Made by <Link href="http://www.benmcmahen.com">Ben McMahen</Link>
           <br />
           <Link href="mailto:ben.mcmahen@gmail.com">Email me</Link> with
