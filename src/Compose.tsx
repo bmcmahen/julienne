@@ -19,7 +19,8 @@ import {
   MenuItem,
   theme,
   InputBaseProps,
-  toast
+  toast,
+  LayerLoading
 } from "sancho";
 import { getUserFields, createEntry, deleteEntry, updateEntry } from "./db";
 import { useSession } from "./auth";
@@ -41,14 +42,15 @@ export const Compose: React.FunctionComponent<ComposeProps> = ({
   readOnly,
   id,
   editable,
-  defaultCredit,
+  defaultCredit = "",
   defaultDescription,
   defaultImage,
   defaultIngredients,
-  defaultTitle
+  defaultTitle = ""
 }) => {
   const ref = React.useRef(null);
   const user = useSession();
+  const [loading, setLoading] = React.useState(false);
   const { history } = useReactRouter();
   const [editing, setEditing] = React.useState(!readOnly);
   const [image, setImage] = React.useState(defaultImage);
@@ -94,7 +96,9 @@ export const Compose: React.FunctionComponent<ComposeProps> = ({
     author: string;
     image: string;
   }) {
+    log("create entry");
     try {
+      setLoading(true);
       const entry = await createEntry({
         title,
         plain,
@@ -108,6 +112,7 @@ export const Compose: React.FunctionComponent<ComposeProps> = ({
       history.replace("/" + entry.id);
     } catch (err) {
       console.error(err);
+      setLoading(false);
       toast({
         title: "An error occurred. Please try again",
         subtitle: err.message,
@@ -134,6 +139,8 @@ export const Compose: React.FunctionComponent<ComposeProps> = ({
       image: string;
     }
   ) {
+    log("update entry: %s", id);
+    setLoading(true);
     try {
       await updateEntry(id, {
         title,
@@ -153,14 +160,17 @@ export const Compose: React.FunctionComponent<ComposeProps> = ({
         intent: "danger"
       });
     }
+    setLoading(false);
   }
 
   async function handleDelete(id: string) {
     try {
+      setLoading(true);
       await deleteEntry(id);
       history.replace("/");
     } catch (err) {
       console.error(err);
+      setLoading(false);
       toast({
         title: "An error occurred. Please try again",
         subtitle: err.message,
@@ -276,7 +286,7 @@ export const Compose: React.FunctionComponent<ComposeProps> = ({
                     image
                   };
 
-                  id ? saveRecipe(toSave) : updateRecipe(id, toSave);
+                  id ? updateRecipe(id, toSave) : saveRecipe(toSave);
                 }}
               >
                 Save
@@ -327,7 +337,6 @@ export const Compose: React.FunctionComponent<ComposeProps> = ({
                           >
                             <TransparentInput
                               autoFocus={!readOnly && ingredients.length > 1}
-                              readOnly={readOnly}
                               placeholder="Name"
                               value={ingredient.name}
                               onChange={e => {
@@ -338,7 +347,6 @@ export const Compose: React.FunctionComponent<ComposeProps> = ({
                               }}
                             />
                             <TransparentInput
-                              readOnly={readOnly}
                               placeholder="Amount"
                               value={ingredient.amount}
                               onChange={e => {
@@ -441,14 +449,19 @@ export const Compose: React.FunctionComponent<ComposeProps> = ({
                 </>
               ) : (
                 <>
-                  <Text variant="h5">Original author</Text>
-                  <Text>{credit}</Text>
+                  {credit && (
+                    <>
+                      <Text variant="h5">Original author</Text>
+                      <Text>{credit}</Text>
+                    </>
+                  )}
                 </>
               )}
             </div>
           </div>
         </div>
       </div>
+      <LayerLoading loading={loading} />
     </div>
   );
 };

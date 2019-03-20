@@ -48,12 +48,12 @@ export interface Recipe {
 export type ActionType =
   | Action<"LOAD-MORE">
   | Action<"QUERY", { value: string }>
-  | Action<"LOADED", { value: firebase.firestore.QueryDocumentSnapshot[] }>
+  | Action<"LOADED", { value: firebase.firestore.QuerySnapshot }>
   | Action<"SEARCH", { value: algoliasearch.Response }>;
 
 interface StateType {
   hasMore: boolean;
-  recipes: Recipe[];
+  recipes: Map<string, Recipe>;
   after: firebase.firestore.QueryDocumentSnapshot | null;
   lastLoaded: firebase.firestore.QueryDocumentSnapshot | null;
   searchResponse: algoliasearch.Response | null;
@@ -67,7 +67,7 @@ interface StateType {
 const initialState = {
   hasMore: false,
   after: null,
-  recipes: [],
+  recipes: new Map(),
   lastLoaded: null,
   searchResponse: null,
   loadingMore: false,
@@ -82,25 +82,39 @@ const INITIAL_LOAD_SIZE = 25;
 function reducer(state: StateType, action: ActionType) {
   switch (action.type) {
     case "LOADED": {
-      const hasMore = action.value.length >= INITIAL_LOAD_SIZE;
+      const hasMore = action.value.docs.length >= INITIAL_LOAD_SIZE;
+
+      // todo:
+      // maintain a key:value collection of recipes
+      // use docChanges() to determine if we should add,
+      // update, or delete entries
+
+      const recipes = new Map(state.recipes);
+
+      action.value.docChanges().forEach(change => {
+        if (change.type === "added") {
+          recipes.set(change.doc.id, {
+            ...change.doc.data(),
+            id: change.doc.id
+          } as Recipe);
+        } else if (change.type === "modified") {
+          recipes.set(change.doc.id, {
+            ...change.doc.data(),
+            id: change.doc.id
+          } as Recipe);
+        } else if (change.type === "removed") {
+          recipes.delete(change.doc.id);
+        }
+      });
 
       return {
         ...state,
         hasMore,
         loading: false,
         loadingError: null,
-        lastLoaded: action.value[action.value.length - 1],
+        lastLoaded: action.value.docs[action.value.docs.length - 1],
         loadingMore: false,
-        recipes: [
-          ...state.recipes,
-          ...action.value.map(post => {
-            const data = post.data() as Recipe;
-            return {
-              id: post.id,
-              ...data
-            };
-          })
-        ]
+        recipes: recipes
       };
     }
 
@@ -171,9 +185,10 @@ export const RecipeList: React.FunctionComponent<RecipeListProps> = ({
           .limit(INITIAL_LOAD_SIZE);
 
     const unsubscribe = fn.onSnapshot(snap => {
+      log("loaded: %o", snap);
       dispatch({
         type: "LOADED",
-        value: snap.docs
+        value: snap
       });
     });
 
@@ -200,7 +215,7 @@ export const RecipeList: React.FunctionComponent<RecipeListProps> = ({
         <div>
           {state.loading && <Spinner center />}
 
-          {!state.loading && state.recipes.length === 0 && (
+          {!state.loading && state.recipes.size === 0 && (
             <Text>
               You have no recipes listed. Create your first by clicking the plus
               arrow above.
@@ -208,14 +223,11 @@ export const RecipeList: React.FunctionComponent<RecipeListProps> = ({
           )}
 
           <List>
-            {state.recipes.map(recipe => (
-              <RecipeListItem
-                id={recipe.id}
-                key={recipe.id}
-                editable
-                recipe={recipe}
-              />
-            ))}
+            {Array.from(state.recipes)
+              .sort((a, b) => (a[1].updatedAt > b[1].updatedAt ? -1 : 1))
+              .map(([id, recipe]) => (
+                <RecipeListItem id={id} key={id} editable recipe={recipe} />
+              ))}
           </List>
 
           {state.loadingMore && <Spinner />}

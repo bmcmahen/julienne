@@ -233,6 +233,7 @@ export const Main: React.FunctionComponent<MainProps> = props => {
               elevation="xl"
               key={key}
               css={{
+                position: "relative",
                 width: "700px",
                 overflow: "hidden",
                 marginTop: "auto",
