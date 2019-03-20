@@ -15,7 +15,8 @@ import {
   Text,
   theme,
   Icon,
-  toast
+  toast,
+  Toolbar
 } from "sancho";
 import { SearchBox } from "./SearchBox";
 import debug from "debug";
@@ -25,6 +26,8 @@ import { useSession } from "./auth";
 import find from "lodash.find";
 import { deleteRequestFollow, requestFollow } from "./db";
 import SwipeableViews from "react-swipeable-views";
+import { FollowingRecipes } from "./FollowingRecipes";
+import { User } from "firebase";
 
 const client = algoliasearch(
   config.ALGOLIA_APP_ID,
@@ -123,6 +126,12 @@ export const FollowingList: React.FunctionComponent<
   const noUsers = !query && (!userList || (userList && userList.length === 0));
 
   const [index, setIndex] = React.useState(0);
+  const [relation, setRelation] = React.useState(null);
+
+  function showRelation(user: User) {
+    setRelation(user);
+    setIndex(1);
+  }
 
   return (
     <div>
@@ -181,7 +190,10 @@ export const FollowingList: React.FunctionComponent<
               return (
                 <ListItem
                   key={user.uid}
-                  interactive={false}
+                  interactive={relation.confirmed ? true : false}
+                  onClick={() =>
+                    showRelation({ id: relation.toUserId, ...relation.toUser })
+                  }
                   contentBefore={
                     <Avatar
                       size="sm"
@@ -227,8 +239,48 @@ export const FollowingList: React.FunctionComponent<
           </List>
         </div>
         <div>
-          <div>Provide back button</div>
-          <div>Show individual user's recipes</div>
+          {relation && (
+            <React.Fragment>
+              <Toolbar
+                css={{
+                  // background: theme.colors.background.tint1,
+                  paddingTop: theme.spaces.lg,
+                  paddingBottom: theme.spaces.lg,
+                  borderBottom: `1px solid ${theme.colors.border.muted}`,
+                  display: "flex",
+                  justifyContent: "space-between",
+                  alignItems: "flex-start"
+                }}
+              >
+                <IconButton
+                  variant="ghost"
+                  icon="arrow-left"
+                  label="Show all followers"
+                  onClick={() => setIndex(0)}
+                />
+                <div
+                  css={{
+                    display: "flex",
+                    flexDirection: "column",
+                    alignItems: "center",
+                    textAlign: "center"
+                  }}
+                >
+                  <Avatar
+                    size="md"
+                    src={relation.photoURL}
+                    css={{ marginBottom: theme.spaces.sm }}
+                    name={relation.displayName || relation.email}
+                  />
+                  <Text variant="h6" gutter={false}>
+                    {relation.displayName || relation.email}
+                  </Text>
+                </div>
+                <div css={{ width: "33.5px" }} />
+              </Toolbar>
+              <FollowingRecipes id={relation.id} />
+            </React.Fragment>
+          )}
         </div>
       </SwipeableViews>
     </div>

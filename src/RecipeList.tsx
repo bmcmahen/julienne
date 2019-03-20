@@ -193,7 +193,7 @@ interface RecipeListItemProps {
   highlight?: any;
 }
 
-function RecipeListItem({
+export function RecipeListItem({
   editable,
   recipe,
   id,
@@ -207,7 +207,7 @@ function RecipeListItem({
         backgroundColor: theme.colors.background.tint1
       }}
       component={NavLink}
-      to={`/${recipe.id}`}
+      to={`/${id}`}
       css={{
         "& em": {
           fontStyle: "normal",
