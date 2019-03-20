@@ -1261,9 +1261,10 @@ firebase-admin@~5.12.1:
     jsonwebtoken "8.1.0"
     node-forge "0.7.4"
 
-firebase-functions@^1.0.3:
-  version "1.1.0"
-  resolved "https://registry.yarnpkg.com/firebase-functions/-/firebase-functions-1.1.0.tgz#f6419b860fdbec6302c351ff5b0020e68936e097"
+firebase-functions@^2.2.1:
+  version "2.2.1"
+  resolved "https://registry.yarnpkg.com/firebase-functions/-/firebase-functions-2.2.1.tgz#f5b6de47860819eb8d41b969c8d6d2c1000dc422"
+  integrity sha512-k2FA3j8XFGPOGBjgKoBUQQc4Hfqe4PdcG8hfS/RHireW1vQhkplx8XhzaknJNqsBCIoglMFuUsXpuAh9pbhtxw==
   dependencies:
     "@types/cors" "^2.8.1"
     "@types/express" "^4.11.1"
