@@ -19,6 +19,7 @@ import {
 } from "sancho";
 import { Image, useFirebaseImage } from "./Image";
 import { Link, NavLink } from "react-router-dom";
+import { usePaginateQuery } from "./hooks/paginate-fb";
 
 const log = debug("app:RecipeList");
 
@@ -46,78 +47,21 @@ export interface Recipe {
 }
 
 export type ActionType =
-  | Action<"LOAD-MORE">
   | Action<"QUERY", { value: string }>
-  | Action<"LOADED", { value: firebase.firestore.QuerySnapshot }>
   | Action<"SEARCH", { value: algoliasearch.Response }>;
 
 interface StateType {
-  hasMore: boolean;
-  recipes: Map<string, Recipe>;
-  after: firebase.firestore.QueryDocumentSnapshot | null;
-  lastLoaded: firebase.firestore.QueryDocumentSnapshot | null;
   searchResponse: algoliasearch.Response | null;
-  loadingMore: boolean;
-  loadingMoreError: null | Error;
-  loading: boolean;
-  loadingError: null | Error;
   query: string;
 }
 
 const initialState = {
-  hasMore: false,
-  after: null,
-  recipes: new Map(),
-  lastLoaded: null,
   searchResponse: null,
-  loadingMore: false,
-  loadingMoreError: null,
-  loading: true,
-  loadingError: null,
   query: ""
 };
 
-const INITIAL_LOAD_SIZE = 25;
-
 function reducer(state: StateType, action: ActionType) {
   switch (action.type) {
-    case "LOADED": {
-      const hasMore = action.value.docs.length >= INITIAL_LOAD_SIZE;
-
-      // todo:
-      // maintain a key:value collection of recipes
-      // use docChanges() to determine if we should add,
-      // update, or delete entries
-
-      const recipes = new Map(state.recipes);
-
-      action.value.docChanges().forEach(change => {
-        if (change.type === "added") {
-          recipes.set(change.doc.id, {
-            ...change.doc.data(),
-            id: change.doc.id
-          } as Recipe);
-        } else if (change.type === "modified") {
-          recipes.set(change.doc.id, {
-            ...change.doc.data(),
-            id: change.doc.id
-          } as Recipe);
-        } else if (change.type === "removed") {
-          recipes.delete(change.doc.id);
-        }
-      });
-
-      return {
-        ...state,
-        hasMore,
-        loading: false,
-        loadingError: null,
-        lastLoaded: action.value.docs[action.value.docs.length - 1],
-        loadingMore: false,
-        recipes: recipes
-      };
-    }
-
     case "QUERY":
       return {
         ...state,
@@ -128,13 +72,6 @@ function reducer(state: StateType, action: ActionType) {
       return {
         ...state,
         searchResponse: action.value
-      };
-
-    case "LOAD-MORE":
-      return {
-        ...state,
-        loadingMore: true,
-        after: state.lastLoaded
       };
   }
 }
@@ -148,6 +85,23 @@ export const RecipeList: React.FunctionComponent<RecipeListProps> = ({
 }) => {
   const [state, dispatch] = React.useReducer(reducer, initialState);
   const user = useSession();
+
+  const {
+    loading,
+    loadingError,
+    loadingMore,
+    loadingMoreError,
+    hasMore,
+    items,
+    loadMore
+  } = usePaginateQuery(
+    firebase
+      .firestore()
+      .collection("recipes")
+      .where("userId", "==", user!.uid)
+      .orderBy("updatedAt", "desc")
+      .limit(25)
+  );
 
   // perform an algolia query when query changes
   React.useEffect(() => {
@@ -168,33 +122,6 @@ export const RecipeList: React.FunctionComponent<RecipeListProps> = ({
     algolia.getIndex();
   }, []);
 
-  React.useEffect(() => {
-    let fn = state.after
-      ? firebase
-          .firestore()
-          .collection("recipes")
-          .where("userId", "==", user!.uid)
-          .orderBy("updatedAt", "desc")
-          .startAfter(state.after)
-          .limit(INITIAL_LOAD_SIZE)
-      : firebase
-          .firestore()
-          .collection("recipes")
-          .where("userId", "==", user!.uid)
-          .orderBy("updatedAt", "desc")
-          .limit(INITIAL_LOAD_SIZE);
-
-    const unsubscribe = fn.onSnapshot(snap => {
-      log("loaded: %o", snap);
-      dispatch({
-        type: "LOADED",
-        value: snap
-      });
-    });
-
-    return () => unsubscribe();
-  }, [state.after, user]);
-
   return (
     <div>
       {query && state.searchResponse ? (
@@ -213,32 +140,40 @@ export const RecipeList: React.FunctionComponent<RecipeListProps> = ({
         </div>
       ) : (
         <div>
-          {state.loading && <Spinner center />}
-
-          {!state.loading && state.recipes.size === 0 && (
-            <Text>
+          {loading && <Spinner center />}
+          {!loading && items.length === 0 && (
+            <Text
+              muted
+              css={{
+                display: "block",
+                fontSize: theme.sizes[0],
+                margin: theme.spaces.lg
+              }}
+            >
               You have no recipes listed. Create your first by clicking the plus
               arrow above.
             </Text>
           )}
 
           <List>
-            {Array.from(state.recipes)
-              .sort((a, b) => (a[1].updatedAt > b[1].updatedAt ? -1 : 1))
-              .map(([id, recipe]) => (
-                <RecipeListItem id={id} key={id} editable recipe={recipe} />
-              ))}
+            {items.map(([id, recipe]) => (
+              <RecipeListItem
+                id={id}
+                key={id}
+                editable
+                recipe={recipe as Recipe}
+              />
+            ))}
           </List>
 
-          {state.loadingMore && <Spinner />}
-          {state.loadingError && <div>Loading error...</div>}
-          {state.hasMore && !state.loadingMore && (
+          {loadingMore && <Spinner />}
+          {loadingError || (loadingMoreError && <div>Loading error...</div>)}
+
+          {hasMore && !loadingMore && (
             <div css={{ textAlign: "center" }}>
               <Button
                 onClick={() => {
-                  dispatch({
-                    type: "LOAD-MORE"
-                  });
+                  loadMore();
                 }}
               >
                 Load more
