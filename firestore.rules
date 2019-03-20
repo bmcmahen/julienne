@@ -1,0 +1,37 @@
+service cloud.firestore {
+  match /databases/{database}/documents {
+  
+  function isSignedIn() {
+  	return request.auth != null;
+  }
+  
+  function isOwnedByUser() {
+  	return resource.data.userId == request.auth.uid;
+  }
+  
+  function isCreatingWithUserId() {
+  	return request.auth.uid == request.resource.data.userId;
+  }
+  
+    match /recipes/{recipe} {
+    	allow update: if isOwnedByUser() && isCreatingWithUserId();
+      allow delete: if isOwnedByUser();
+    	allow create: if isCreatingWithUserId();
+      allow read: if true;
+    }
+
+    match /relations/{relation} {
+    	allow create: if isSignedIn() && (request.auth.uid == request.resource.data.fromUserId) && request.resource.data.confirmed == false;
+      allow update, delete: if isSignedIn() && (request.auth.uid == resource.data.fromUserId || request.auth.uid == resource.data.toUserId);
+      allow read: if isSignedIn() && (request.auth.uid == resource.data.fromUserId || request.auth.uid == resource.data.toUserId); 
+    }
+
+    match /users/{user} {
+      allow update: if isSignedIn() && user == request.auth.uid;
+      allow delete: if false;
+      allow create: if false;
+      allow read: if isSignedIn();
+    }
+
+  }
+}
