@@ -36,7 +36,7 @@
     "react-scripts": "2.1.8",
     "react-spring": "^8.0.15",
     "react-swipeable-views": "^0.13.1",
-    "sancho": "^1.0.0-beta.5",
+    "sancho": "file:../sancho",
     "shortid": "^2.2.14",
     "slate": "^0.44.12",
     "slate-plain-serializer": "^0.6.36",

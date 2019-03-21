@@ -83,6 +83,7 @@ export const FollowersList: React.FunctionComponent<
         return (
           <ListItem
             key={relation.id}
+            interactive={false}
             contentBefore={
               <Avatar
                 size="sm"

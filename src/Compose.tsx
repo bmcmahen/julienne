@@ -21,8 +21,7 @@ import {
   toast,
   LayerLoading,
   Container,
-  ResponsivePopover,
-  responsiveBodyPadding
+  ResponsivePopover
 } from "sancho";
 import { getUserFields, createEntry, deleteEntry, updateEntry } from "./db";
 import { useSession } from "./auth";
@@ -251,8 +250,7 @@ export const Compose: React.FunctionComponent<ComposeProps> = ({
         <Toolbar
           css={{
             alignItems: "center",
-            display: "flex",
-            justifyContent: "space-between"
+            display: "flex"
           }}
         >
           <IconButton
@@ -285,7 +283,7 @@ export const Compose: React.FunctionComponent<ComposeProps> = ({
               />
             </div>
           ) : (
-            <Text wrap={false} variant="h5" gutter={false}>
+            <Text css={{ flex: 1 }} wrap={false} variant="h5" gutter={false}>
               {title}
             </Text>
           )}
@@ -316,6 +314,21 @@ export const Compose: React.FunctionComponent<ComposeProps> = ({
                   label="Show options"
                 />
               </ResponsivePopover>
+            )}
+            {editing && id && (
+              <Button
+                variant="ghost"
+                css={{
+                  display: "none",
+                  [theme.breakpoints.md]: {
+                    display: "inline-flex"
+                  },
+                  marginLeft: theme.spaces.sm
+                }}
+                onClick={() => setEditing(false)}
+              >
+                Cancel
+              </Button>
             )}
             {editing && (
               <Button
@@ -370,9 +383,7 @@ export const Compose: React.FunctionComponent<ComposeProps> = ({
               }
             />
           ) : image ? (
-            <div>
-              <Image id={image} />
-            </div>
+            <Image alt={title} id={image} />
           ) : null}
 
           <Container>

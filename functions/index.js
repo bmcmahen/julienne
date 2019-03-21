@@ -137,7 +137,6 @@ exports.onRecipeUpdated = functions.firestore
 
 function indexEntry(entry) {
   const post = entry.data();
-  console.log("post", post);
   post.objectID = entry.id;
   const index = client.initIndex(ALGOLIA_INDEX_NAME);
   index.setSettings({
@@ -251,7 +250,7 @@ function createThumnail(object, prefix = "thumb@", width = 1000, height = 700) {
         .toFile(thumbPath)
         .then(() =>
           bucket.upload(thumbPath, {
-            desintation: path.join(bucketDir, thumbName)
+            destination: path.join(bucketDir, thumbName)
           })
         );
     })

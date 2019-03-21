@@ -2,24 +2,15 @@
 import { jsx } from "@emotion/core";
 import * as React from "react";
 import algoliasearch from "algoliasearch";
-import algolia, { following } from "./Search";
+import algolia from "./Search";
 import debug from "debug";
 import { useSession } from "./auth";
 import firebase from "firebase/app";
-import {
-  Text,
-  List,
-  ListItem,
-  Spinner,
-  Button,
-  Icon,
-  theme,
-  MenuLabel,
-  Embed
-} from "sancho";
-import { Image, useFirebaseImage } from "./Image";
-import { Link, NavLink } from "react-router-dom";
+import { Text, List, ListItem, Spinner, Button, theme, Embed } from "sancho";
+import { useFirebaseImage } from "./Image";
+import { NavLink } from "react-router-dom";
 import { usePaginateQuery } from "./hooks/paginate-fb";
+import { FadeImage } from "./FadeImage";
 
 const log = debug("app:RecipeList");
 
@@ -199,7 +190,7 @@ export function RecipeListItem({
   id,
   highlight
 }: RecipeListItemProps) {
-  const { src, error } = useFirebaseImage("thumb@", recipe.image);
+  const { src, error } = useFirebaseImage("thumb-sm@", recipe.image);
 
   return (
     <ListItem
@@ -216,20 +207,11 @@ export function RecipeListItem({
         }
       }}
       contentAfter={
-        recipe.image ? (
-          <Embed css={{ width: "80px" }} width={16} height={9}>
-            {src ? (
-              <img src={src} aria-hidden />
-            ) : (
-              <div css={{ background: theme.colors.background.tint1 }} />
-            )}
+        recipe.image && !error ? (
+          <Embed css={{ width: "80px" }} width={150} height={100}>
+            <FadeImage src={src} hidden />
           </Embed>
         ) : null
-        // <Icon
-        //   icon="chevron-right"
-        //   aria-hidden
-        //   color={theme.colors.text.muted}
-        // />
       }
       secondary={
         highlight ? (
