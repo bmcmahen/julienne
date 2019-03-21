@@ -14,7 +14,6 @@ import {
   Text,
   Button,
   IconButton,
-  Popover,
   MenuList,
   MenuItem,
   theme,
@@ -22,7 +21,8 @@ import {
   toast,
   LayerLoading,
   Container,
-  ResponsivePopover
+  ResponsivePopover,
+  responsiveBodyPadding
 } from "sancho";
 import { getUserFields, createEntry, deleteEntry, updateEntry } from "./db";
 import { useSession } from "./auth";
@@ -186,9 +186,6 @@ export const Compose: React.FunctionComponent<ComposeProps> = ({
   return (
     <div
       css={{
-        height: "100%",
-        display: "flex",
-        flexDirection: "column",
         [theme.breakpoints.md]: {
           height: "auto",
           display: "block"
@@ -243,11 +240,21 @@ export const Compose: React.FunctionComponent<ComposeProps> = ({
         css={{
           zIndex: theme.zIndex.sticky,
           backgroundColor: "white",
-          boxShadow: theme.shadows.sm
+          boxShadow: theme.shadows.sm,
+          position: "sticky",
+          top: 0,
+          [theme.breakpoints.md]: {
+            position: "static"
+          }
         }}
-        position="static"
       >
-        <Toolbar css={{ display: "flex", justifyContent: "space-between" }}>
+        <Toolbar
+          css={{
+            alignItems: "center",
+            display: "flex",
+            justifyContent: "space-between"
+          }}
+        >
           <IconButton
             icon="arrow-left"
             component={Link}
@@ -255,6 +262,7 @@ export const Compose: React.FunctionComponent<ComposeProps> = ({
             label="Go back"
             variant="ghost"
             css={{
+              marginTop: "5px",
               display: "block",
               marginRight: theme.spaces.sm,
               [theme.breakpoints.md]: {
@@ -338,10 +346,7 @@ export const Compose: React.FunctionComponent<ComposeProps> = ({
       <div
         css={{
           flex: 1,
-          overflowY: "scroll",
-          WebkitOverflowScrolling: "touch",
           [theme.breakpoints.md]: {
-            overflowY: "visible",
             flex: "none"
           }
         }}
