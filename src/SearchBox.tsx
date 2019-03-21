@@ -1,7 +1,15 @@
 /** @jsx jsx */
 import { jsx } from "@emotion/core";
 import * as React from "react";
-import { InputGroup, Input, theme, VisuallyHidden, Button, Icon } from "sancho";
+import {
+  InputGroup,
+  Input,
+  theme,
+  VisuallyHidden,
+  Button,
+  Icon,
+  responsiveContainerPadding
+} from "sancho";
 
 export interface SearchBoxProps {
   setQuery: React.Dispatch<React.SetStateAction<string>>;
@@ -15,7 +23,13 @@ export const SearchBox: React.FunctionComponent<SearchBoxProps> = ({
   setQuery
 }) => {
   return (
-    <form css={{ position: "relative" }} onSubmit={e => e.preventDefault()}>
+    <form
+      css={{
+        margin: 0,
+        position: "relative"
+      }}
+      onSubmit={e => e.preventDefault()}
+    >
       <InputGroup
         css={{ margin: 0, position: "relative" }}
         hideLabel
@@ -25,19 +39,25 @@ export const SearchBox: React.FunctionComponent<SearchBoxProps> = ({
           type="search"
           inputSize="md"
           autoComplete="off"
-          css={{
-            padding: theme.spaces.md,
-            paddingLeft: theme.spaces.lg,
-            paddingRight: theme.spaces.lg,
-            textAlign: "left",
-            border: "none",
-            background: "transparent",
-            boxShadow: "none",
-            ":focus": {
+          css={[
+            {
+              paddingTop: theme.spaces.md + " !important",
+              paddingBottom: theme.spaces.md + " !important",
+              textAlign: "left",
+              border: "none",
+              borderBottom: "1px solid",
+              borderColor: theme.colors.border.default,
+              borderRadius: 0,
+              WebkitAppearance: "none",
+              // background: "transparent",
               boxShadow: "none",
-              backgroundColor: theme.colors.background.tint1
-            }
-          }}
+              ":focus": {
+                boxShadow: "none",
+                backgroundColor: theme.colors.background.tint1
+              }
+            },
+            responsiveContainerPadding
+          ]}
           value={query}
           onChange={e => setQuery(e.target.value)}
           placeholder={label}

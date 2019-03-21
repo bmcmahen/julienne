@@ -65,7 +65,8 @@ export const Login: React.FunctionComponent<LoginProps> = ({ location }) => {
             variant="h5"
             css={{
               alignItems: "center",
-              display: "flex"
+              display: "flex",
+              color: "#43596c"
             }}
             gutter={false}
           >
@@ -100,8 +101,13 @@ export const Login: React.FunctionComponent<LoginProps> = ({ location }) => {
             flexDirection: "column",
             overflow: "hidden",
             position: "relative",
-            backgroundSize: "cover",
-            backgroundImage: `url(${require("./images/cutting-board-knife.jpg")})`
+            // backgroundSize: "cover",
+            background: "white",
+
+            [theme.breakpoints.md]: {
+              backgroundSize: "cover",
+              backgroundImage: `url(${require("./images/cutting-board-knife.jpg")})`
+            }
           },
           responsiveBodyPadding
         ]}
@@ -110,28 +116,33 @@ export const Login: React.FunctionComponent<LoginProps> = ({ location }) => {
           css={{
             paddingTop: theme.spaces.lg,
             maxWidth: "36rem",
+            paddingLeft: theme.spaces.md,
+            paddingRight: theme.spaces.md,
             marginBottom: theme.spaces.lg,
             textAlign: "center",
+            fontWeight: 900,
+            marginTop: theme.spaces.lg,
+            marginBotttom: theme.spaces.xl,
             color: theme.colors.palette.gray.base
           }}
-          variant="h1"
+          variant="h2"
         >
           Build a database of shared recipes with family and friends
         </Text>
 
         <div
           css={{
-            marginTop: theme.spaces.sm,
             fontSize: theme.sizes[0],
-            background: "white",
             maxWidth: "34rem",
             position: "relative",
             padding: "8px 15px",
+            background: theme.colors.background.tint1,
             marginLeft: theme.spaces.md,
             marginRight: theme.spaces.md,
             borderRadius: theme.radii.lg,
             display: "inline-block",
-            [theme.breakpoints.sm]: {
+            [theme.breakpoints.md]: {
+              background: "white",
               marginLeft: "60px"
             }
           }}
@@ -141,22 +152,29 @@ export const Login: React.FunctionComponent<LoginProps> = ({ location }) => {
               content: "",
               position: "absolute",
               zIndex: 0,
+              display: "none",
               bottom: 0,
               left: "-7px",
               height: "20px",
               width: "20px",
               background: "white",
               backgroundAttachment: "fixed",
-              borderBottomRightRadius: "15px"
+              borderBottomRightRadius: "15px",
+              [theme.breakpoints.md]: {
+                display: "block"
+              }
             }}
           />
           <Text
             css={{
               fontSize: theme.sizes[0],
               display: "flex",
-
+              textAlign: "center",
               justifyContent: "center",
-              alignItems: "flex-end"
+              alignItems: "flex-end",
+              [theme.breakpoints.md]: {
+                textAlign: "left"
+              }
             }}
           >
             <img
@@ -169,7 +187,7 @@ export const Login: React.FunctionComponent<LoginProps> = ({ location }) => {
                 display: "none",
                 bottom: "-25px",
                 left: "-80px",
-                [theme.breakpoints.sm]: {
+                [theme.breakpoints.md]: {
                   display: "block"
                 }
               }}
@@ -191,6 +209,10 @@ export const Login: React.FunctionComponent<LoginProps> = ({ location }) => {
               left: "-10px",
               height: "20px",
               width: "10px",
+              display: "none",
+              [theme.breakpoints.md]: {
+                display: "block"
+              },
               background: "#e0dbd8d1",
               borderBottomRightRadius: "10px"
             }}
@@ -199,6 +221,8 @@ export const Login: React.FunctionComponent<LoginProps> = ({ location }) => {
 
         <div
           css={{
+            paddingLeft: theme.spaces.md,
+            paddingRight: theme.spaces.md,
             paddingBottom: theme.spaces.xl,
             textAlign: "center",
             marginTop: theme.spaces.lg
@@ -268,8 +292,8 @@ export const Login: React.FunctionComponent<LoginProps> = ({ location }) => {
       <div
         css={{
           background: theme.colors.background.tint1,
-          paddingTop: `${theme.spaces.xl}`,
-          paddingBottom: theme.spaces.xl,
+          paddingTop: theme.spaces.lg,
+          paddingBottom: theme.spaces.lg,
           width: "100%",
           overflow: "hidden"
         }}
@@ -339,7 +363,7 @@ export const Login: React.FunctionComponent<LoginProps> = ({ location }) => {
                 height="34"
                 viewBox="0 0 24 24"
               >
-                <path d="M23.111 20.058l-4.977-4.977c.965-1.52 1.523-3.322 1.523-5.251 0-5.42-4.409-9.83-9.829-9.83-5.42 0-9.828 4.41-9.828 9.83s4.408 9.83 9.829 9.83c1.834 0 3.552-.505 5.022-1.383l5.021 5.021c2.144 2.141 5.384-1.096 3.239-3.24zm-20.064-10.228c0-3.739 3.043-6.782 6.782-6.782s6.782 3.042 6.782 6.782-3.043 6.782-6.782 6.782-6.782-3.043-6.782-6.782zm2.01-1.764c1.984-4.599 8.664-4.066 9.922.749-2.534-2.974-6.993-3.294-9.922-.749z" />
+                <path d="M13 8h-8v-1h8v1zm0 2h-8v-1h8v1zm-3 2h-5v-1h5v1zm11.172 12l-7.387-7.387c-1.388.874-3.024 1.387-4.785 1.387-4.971 0-9-4.029-9-9s4.029-9 9-9 9 4.029 9 9c0 1.761-.514 3.398-1.387 4.785l7.387 7.387-2.828 2.828zm-12.172-8c3.859 0 7-3.14 7-7s-3.141-7-7-7-7 3.14-7 7 3.141 7 7 7z" />
               </svg>
               <Text variant="h4">Search</Text>
               <Text>

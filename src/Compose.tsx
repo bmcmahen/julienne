@@ -258,6 +258,7 @@ export const Compose: React.FunctionComponent<ComposeProps> = ({
             component={Link}
             to="/"
             label="Go back"
+            replace
             variant="ghost"
             css={{
               marginTop: "5px",

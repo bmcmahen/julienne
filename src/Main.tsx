@@ -14,7 +14,6 @@ import {
   Popover,
   MenuList,
   MenuItem,
-  Badge,
   Tooltip
 } from "sancho";
 import { RecipeList } from "./RecipeList";
@@ -26,7 +25,7 @@ import { Route, Switch } from "react-router";
 import { Compose } from "./Compose";
 import { Recipe } from "./Recipe";
 import useReactRouter from "use-react-router";
-import { useTransition, animated, config } from "react-spring";
+import { useTransition, animated } from "react-spring";
 import { SearchBox } from "./SearchBox";
 import { Link } from "react-router-dom";
 import { useMedia } from "use-media";
@@ -52,7 +51,6 @@ export const Main: React.FunctionComponent<MainProps> = props => {
   const showingRecipe = params.id;
 
   const renderList = isLarge || !showingRecipe;
-  const renderRecipe = isLarge || showingRecipe;
 
   return (
     <div
@@ -176,7 +174,12 @@ export const Main: React.FunctionComponent<MainProps> = props => {
               dark
               variant="evenly-spaced"
             >
-              <Tab id="recipes">Recipes</Tab>
+              <Tab
+                css={{ "& span": { fontSize: theme.sizes[1] } }}
+                id="recipes"
+              >
+                Recipes
+              </Tab>
               <Tab id="following">Following</Tab>
               <Tab
                 badge={
@@ -204,9 +207,7 @@ export const Main: React.FunctionComponent<MainProps> = props => {
           >
             <div
               css={{
-                flex: "0 0 auto",
-                borderBottom: "1px solid",
-                borderColor: theme.colors.border.default
+                flex: "0 0 auto"
               }}
             >
               <SearchBox query={query} setQuery={setQuery} />
