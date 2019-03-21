@@ -276,6 +276,7 @@ export const Main: React.FunctionComponent<MainProps> = props => {
                   justifyContent: "center",
                   alignItems: "center",
                   padding: theme.spaces.lg,
+                  minHeight: "100vh",
                   paddingLeft: "calc(330px + 3rem)"
                 },
                 [theme.breakpoints.lg]: {
