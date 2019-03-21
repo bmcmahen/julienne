@@ -85,6 +85,7 @@ export const Login: React.FunctionComponent<LoginProps> = ({ location }) => {
             intent="primary"
             size="md"
             onClick={login}
+            disabled={loading}
             css={{ marginLeft: "auto" }}
           >
             Sign in
@@ -244,6 +245,7 @@ export const Login: React.FunctionComponent<LoginProps> = ({ location }) => {
               marginTop: theme.spaces.md
             }}
             disabled={loading}
+            loading={loading}
           >
             Sign in with Google
           </Button>

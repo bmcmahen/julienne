@@ -131,7 +131,7 @@ export const RecipeList: React.FunctionComponent<RecipeListProps> = ({
         </div>
       ) : (
         <div>
-          {loading && <Spinner center />}
+          {loading && <Spinner css={{ marginTop: theme.spaces.md }} center />}
           {!loading && items.length === 0 && (
             <Text
               muted
