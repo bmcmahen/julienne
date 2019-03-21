@@ -208,7 +208,7 @@ export function RecipeListItem({
       }}
       contentAfter={
         recipe.image && !error ? (
-          <Embed css={{ width: "80px" }} width={150} height={100}>
+          <Embed css={{ width: "70px" }} width={150} height={100}>
             <FadeImage src={src} hidden />
           </Embed>
         ) : null

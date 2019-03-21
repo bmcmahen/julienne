@@ -174,12 +174,7 @@ export const Main: React.FunctionComponent<MainProps> = props => {
               dark
               variant="evenly-spaced"
             >
-              <Tab
-                css={{ "& span": { fontSize: theme.sizes[1] } }}
-                id="recipes"
-              >
-                Recipes
-              </Tab>
+              <Tab id="recipes">Recipes</Tab>
               <Tab id="following">Following</Tab>
               <Tab
                 badge={

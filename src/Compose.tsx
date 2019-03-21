@@ -284,7 +284,12 @@ export const Compose: React.FunctionComponent<ComposeProps> = ({
               />
             </div>
           ) : (
-            <Text css={{ flex: 1 }} wrap={false} variant="h5" gutter={false}>
+            <Text
+              css={{ flex: 1, textAlign: "center" }}
+              wrap={false}
+              variant="h5"
+              gutter={false}
+            >
               {title}
             </Text>
           )}

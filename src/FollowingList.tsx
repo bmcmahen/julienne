@@ -137,9 +137,7 @@ export const FollowingList: React.FunctionComponent<
     <div>
       <SwipeableViews index={index} disabled>
         <div>
-          <div
-            css={{ borderBottom: `1px solid ${theme.colors.border.default}` }}
-          >
+          <div>
             <SearchBox
               label="Search for users to follow"
               query={query}
