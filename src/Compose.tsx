@@ -285,7 +285,13 @@ export const Compose: React.FunctionComponent<ComposeProps> = ({
             </div>
           ) : (
             <Text
-              css={{ flex: 1, textAlign: "center" }}
+              css={{
+                flex: 1,
+                textAlign: "center",
+                [theme.breakpoints.md]: {
+                  textAlign: "left"
+                }
+              }}
               wrap={false}
               variant="h5"
               gutter={false}

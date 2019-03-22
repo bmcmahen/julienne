@@ -128,6 +128,12 @@ export const FollowingList: React.FunctionComponent<
   const [index, setIndex] = React.useState(0);
   const [relation, setRelation] = React.useState(null);
 
+  function unfollow(id: string) {
+    deleteRequest(id);
+    setRelation(null);
+    setIndex(0);
+  }
+
   function showRelation(user: User) {
     setRelation(user);
     setIndex(1);
@@ -204,20 +210,11 @@ export const FollowingList: React.FunctionComponent<
                   primary={relation.toUser.displayName || relation.toUser.email}
                   contentAfter={
                     relation.confirmed ? (
-                      <Popover
-                        content={
-                          <MenuList>
-                            <MenuItem>Remove user</MenuItem>
-                          </MenuList>
-                        }
-                      >
-                        <IconButton
-                          onClick={e => e.stopPropagation()}
-                          variant="ghost"
-                          icon="more"
-                          label="Options"
-                        />
-                      </Popover>
+                      <Icon
+                        color={theme.colors.text.muted}
+                        icon="chevron-right"
+                        aria-hidden
+                      />
                     ) : (
                       <Button
                         onClick={e => {
@@ -274,7 +271,22 @@ export const FollowingList: React.FunctionComponent<
                     {relation.displayName || relation.email}
                   </Text>
                 </div>
-                <div css={{ width: "33.5px" }} />
+                <Popover
+                  content={
+                    <MenuList>
+                      <MenuItem onClick={() => unfollow(relation.id)}>
+                        Unfollow user
+                      </MenuItem>
+                    </MenuList>
+                  }
+                >
+                  <IconButton
+                    onClick={e => e.stopPropagation()}
+                    variant="ghost"
+                    icon="more"
+                    label="Options"
+                  />
+                </Popover>
               </Toolbar>
               <FollowingRecipes id={relation.id} />
             </React.Fragment>

@@ -2,8 +2,7 @@
 import { jsx, Global } from "@emotion/core";
 import * as React from "react";
 import { Location } from "history";
-import { loginWithGoogle } from "./auth";
-import { Redirect } from "react-router";
+import { Link as RouterLink } from "react-router-dom";
 import food from "./images/food.svg";
 import {
   Navbar,
@@ -16,33 +15,13 @@ import {
   Link
 } from "sancho";
 
-export interface LoginProps {
+export interface BrandingProps {
   location: Location;
 }
 
-export const Login: React.FunctionComponent<LoginProps> = ({ location }) => {
-  const { from } = location.state || { from: "/" };
-  const [loading, setLoading] = React.useState(false);
-  const [redirect, setRedirect] = React.useState(false);
-  // const [password, setPassword] = React.useState("");
-  // const [email, setEmail] = React.useState("");
-
-  const login = async () => {
-    setLoading(true);
-
-    try {
-      await loginWithGoogle();
-      setRedirect(true);
-    } catch (err) {
-      console.error(err);
-      setLoading(false);
-    }
-  };
-
-  if (redirect) {
-    return <Redirect to={from} />;
-  }
-
+export const Branding: React.FunctionComponent<BrandingProps> = ({
+  location
+}) => {
   return (
     <main>
       <Global
@@ -84,8 +63,8 @@ export const Login: React.FunctionComponent<LoginProps> = ({ location }) => {
           <Button
             intent="primary"
             size="md"
-            onClick={login}
-            disabled={loading}
+            component={RouterLink}
+            to="/login"
             css={{ marginLeft: "auto" }}
           >
             Sign in
@@ -238,16 +217,13 @@ export const Login: React.FunctionComponent<LoginProps> = ({ location }) => {
             size="lg"
             intent="primary"
             iconAfter="arrow-right"
-            onClick={login}
+            component={RouterLink}
+            to="/new"
             css={{
-              // borderColor: "white",
-              // color: "white",
               marginTop: theme.spaces.md
             }}
-            disabled={loading}
-            loading={loading}
           >
-            Sign in with Google
+            Create your first recipe
           </Button>
         </div>
 
