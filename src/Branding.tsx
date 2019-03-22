@@ -82,9 +82,7 @@ export const Branding: React.FunctionComponent<BrandingProps> = ({
             flexDirection: "column",
             overflow: "hidden",
             position: "relative",
-            // backgroundSize: "cover",
             background: "white",
-
             [theme.breakpoints.md]: {
               backgroundSize: "cover",
               backgroundImage: `url(${require("./images/cutting-board-knife.jpg")})`
@@ -95,26 +93,17 @@ export const Branding: React.FunctionComponent<BrandingProps> = ({
       >
         <Text
           css={{
-            // fontSize: theme.sizes[4],
             paddingTop: theme.spaces.lg,
-
             paddingLeft: theme.spaces.md,
             paddingRight: theme.spaces.md,
             marginBottom: theme.spaces.lg,
             textAlign: "center",
-            // fontWeight: 900,
             marginTop: theme.spaces.lg,
             marginBotttom: theme.spaces.xl,
             color: theme.colors.palette.gray.base,
-            // letterSpacing: "-0.02em",
             [theme.breakpoints.sm]: {
               maxWidth: "46rem"
-              // fontSize: theme.sizes[5]
             }
-            // [theme.breakpoints.md]: {
-            //   maxWidth: "42rem",
-            //   fontSize: theme.sizes[6]
-            // }
           }}
           variant="display2"
         >
@@ -124,7 +113,7 @@ export const Branding: React.FunctionComponent<BrandingProps> = ({
         <div
           css={{
             fontSize: theme.sizes[0],
-            maxWidth: "30rem",
+            maxWidth: "34rem",
             position: "relative",
             padding: "8px 15px",
             background: theme.colors.background.tint1,
@@ -134,7 +123,10 @@ export const Branding: React.FunctionComponent<BrandingProps> = ({
             display: "inline-block",
             [theme.breakpoints.md]: {
               background: "white",
-              marginLeft: "60px"
+              padding: "12px 18px",
+              marginLeft: "60px",
+              marginTop: theme.spaces.md,
+              marginBottom: theme.spaces.md
             }
           }}
         >
@@ -158,7 +150,7 @@ export const Branding: React.FunctionComponent<BrandingProps> = ({
           />
           <Text
             css={{
-              fontSize: theme.sizes[0],
+              fontSize: theme.sizes[1],
               display: "flex",
               textAlign: "center",
               justifyContent: "center",
@@ -346,7 +338,6 @@ export const Branding: React.FunctionComponent<BrandingProps> = ({
           position: "relative",
           paddingBottom: theme.spaces.lg,
           paddingTop: "4rem",
-
           background: theme.colors.background.tint2,
           width: "100%",
           overflow: "hidden"

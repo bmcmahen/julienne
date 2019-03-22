@@ -300,33 +300,31 @@ export const Compose: React.FunctionComponent<ComposeProps> = ({
             </Text>
           )}
           <div>
-            {!editing && editable && (
-              <ResponsivePopover
-                content={
-                  <MenuList>
-                    <MenuItem
-                      onSelect={() => {
-                        setEditing(true);
-                      }}
-                    >
-                      Edit
-                    </MenuItem>
-                    <MenuItem onSelect={() => handleDelete(id)}>
-                      Delete
-                    </MenuItem>
-                  </MenuList>
-                }
-              >
-                <IconButton
-                  css={{
-                    marginLeft: theme.spaces.sm
-                  }}
-                  variant="ghost"
-                  icon="more"
-                  label="Show options"
-                />
-              </ResponsivePopover>
-            )}
+            <ResponsivePopover
+              content={
+                <MenuList>
+                  <MenuItem
+                    onSelect={() => {
+                      setEditing(true);
+                    }}
+                  >
+                    Edit
+                  </MenuItem>
+                  <MenuItem onSelect={() => handleDelete(id)}>Delete</MenuItem>
+                </MenuList>
+              }
+            >
+              <IconButton
+                css={{
+                  display: !editing && editable ? undefined : "none",
+                  marginLeft: theme.spaces.sm
+                }}
+                variant="ghost"
+                icon="more"
+                label="Show options"
+              />
+            </ResponsivePopover>
+
             {editing && id && (
               <Button
                 variant="ghost"
