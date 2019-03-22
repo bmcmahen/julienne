@@ -8,6 +8,7 @@ import {
   Layer,
   Text,
   Button,
+  Link as StyledLink,
   Input,
   InputGroup,
   LayerLoading,
@@ -147,36 +148,29 @@ export const Login: React.FunctionComponent<LoginProps> = props => {
               >
                 {isRegistering ? (
                   <Text css={{ fontSize: theme.sizes[0] }}>
-                    Already have an account? <br />
-                    <Button
-                      size="sm"
-                      css={{
-                        marginTop: theme.spaces.sm
-                      }}
-                      variant="outline"
+                    Already have an account?{" "}
+                    <StyledLink
+                      href="#"
                       onClick={e => {
+                        e.preventDefault();
                         setIsRegistering(false);
                       }}
                     >
-                      Log in
-                    </Button>
+                      Log in.
+                    </StyledLink>
                   </Text>
                 ) : (
                   <Text css={{ fontSize: theme.sizes[0] }}>
-                    Don't have an account? <br />
-                    <Button
-                      size="sm"
-                      css={{
-                        marginTop: theme.spaces.sm
-                      }}
-                      variant="outline"
+                    Don't have an account?{" "}
+                    <StyledLink
+                      href="#"
                       onClick={e => {
                         e.preventDefault();
                         setIsRegistering(true);
                       }}
                     >
-                      Register here.
-                    </Button>
+                      Register.
+                    </StyledLink>
                   </Text>
                 )}
               </div>

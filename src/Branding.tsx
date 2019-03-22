@@ -60,15 +60,16 @@ export const Branding: React.FunctionComponent<BrandingProps> = ({
             />
             <span>Julienne.app</span>
           </Text>
-          <Button
-            intent="primary"
-            size="md"
-            component={RouterLink}
-            to="/login"
-            css={{ marginLeft: "auto" }}
-          >
-            Sign in
-          </Button>
+          <div css={{ marginLeft: "auto" }}>
+            <Button
+              intent="primary"
+              size="md"
+              component={RouterLink}
+              to="/login"
+            >
+              Sign in
+            </Button>
+          </div>
         </Toolbar>
       </Navbar>
       <div
@@ -94,20 +95,30 @@ export const Branding: React.FunctionComponent<BrandingProps> = ({
       >
         <Text
           css={{
+            fontSize: theme.sizes[4],
             paddingTop: theme.spaces.lg,
-            maxWidth: "36rem",
+
             paddingLeft: theme.spaces.md,
             paddingRight: theme.spaces.md,
             marginBottom: theme.spaces.lg,
             textAlign: "center",
-            // fontWeight: 900,
+            fontWeight: 900,
             marginTop: theme.spaces.lg,
             marginBotttom: theme.spaces.xl,
-            color: theme.colors.palette.gray.base
+            color: theme.colors.palette.gray.base,
+            letterSpacing: "-0.02em",
+            [theme.breakpoints.sm]: {
+              maxWidth: "38rem",
+              fontSize: theme.sizes[5]
+            },
+            [theme.breakpoints.md]: {
+              maxWidth: "42rem",
+              fontSize: theme.sizes[6]
+            }
           }}
-          variant="display3"
+          variant="h3"
         >
-          Build a database of shared recipes with family and friends
+          The easiest way to share recipes with family and friends
         </Text>
 
         <div
@@ -208,20 +219,12 @@ export const Branding: React.FunctionComponent<BrandingProps> = ({
             marginTop: theme.spaces.lg
           }}
         >
-          <Text css={{ fontSize: theme.sizes[0], display: "block" }}>
-            Get started by signing in using your google account. It's{" "}
-            <strong>totally free!</strong>
-          </Text>
-
           <Button
             size="lg"
             intent="primary"
             iconAfter="arrow-right"
             component={RouterLink}
-            to="/new"
-            css={{
-              marginTop: theme.spaces.md
-            }}
+            to="/login?register=true"
           >
             Create your first recipe
           </Button>
@@ -333,7 +336,14 @@ export const Branding: React.FunctionComponent<BrandingProps> = ({
               </Text>
             </div>
 
-            <div>
+            <div
+              css={{
+                marginBottom: "0 !important",
+                [theme.breakpoints.md]: {
+                  marginBottom: theme.breakpoints.xl
+                }
+              }}
+            >
               <svg
                 css={{ marginBottom: theme.spaces.md }}
                 xmlns="http://www.w3.org/2000/svg"
@@ -405,36 +415,38 @@ export const Branding: React.FunctionComponent<BrandingProps> = ({
 						 M95 100 Q 100 15 105 100 Z"
           />
         </svg>
-        <Text
-          css={{ position: "relative", zIndex: 10, fontSize: theme.sizes[0] }}
-        >
-          Made by <Link href="http://www.benmcmahen.com">Ben McMahen</Link>
-          <br />
-          <Link href="mailto:ben.mcmahen@gmail.com">Email me</Link> with
-          questions or whatevs!
-          <br />
-          <div>
-            Icons made by{" "}
-            <Link
-              href="https://www.flaticon.com/authors/smashicons"
-              title="Smashicons"
-            >
-              Smashicons
-            </Link>{" "}
-            from{" "}
-            <Link href="https://www.flaticon.com/" title="Flaticon">
-              www.flaticon.com
-            </Link>{" "}
-            is licensed by{" "}
-            <Link
-              href="http://creativecommons.org/licenses/by/3.0/"
-              title="Creative Commons BY 3.0"
-              target="_blank"
-            >
-              CC 3.0 BY
-            </Link>
-          </div>
-        </Text>
+        <Container>
+          <Text
+            css={{ position: "relative", zIndex: 10, fontSize: theme.sizes[0] }}
+          >
+            Made by <Link href="http://www.benmcmahen.com">Ben McMahen</Link>
+            <br />
+            <Link href="mailto:ben.mcmahen@gmail.com">Email me</Link> with
+            questions or whatevs!
+            <br />
+            <div>
+              Icons made by{" "}
+              <Link
+                href="https://www.flaticon.com/authors/smashicons"
+                title="Smashicons"
+              >
+                Smashicons
+              </Link>{" "}
+              from{" "}
+              <Link href="https://www.flaticon.com/" title="Flaticon">
+                www.flaticon.com
+              </Link>{" "}
+              is licensed by{" "}
+              <Link
+                href="http://creativecommons.org/licenses/by/3.0/"
+                title="Creative Commons BY 3.0"
+                target="_blank"
+              >
+                CC 3.0 BY
+              </Link>
+            </div>
+          </Text>
+        </Container>
       </div>
     </main>
   );
