@@ -234,6 +234,7 @@ export const Branding: React.FunctionComponent<BrandingProps> = ({
           css={{
             position: "absolute",
             bottom: 0,
+            pointerEvents: "none",
             fill: theme.colors.background.tint1
           }}
           fill-rule="evenodd"
@@ -355,6 +356,7 @@ export const Branding: React.FunctionComponent<BrandingProps> = ({
           css={{
             position: "absolute",
             top: "-1px",
+            pointerEvents: "none",
             transform: "rotate(180deg)",
             left: 0,
             fill: theme.colors.background.tint1
