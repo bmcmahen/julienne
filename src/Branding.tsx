@@ -58,7 +58,7 @@ export const Branding: React.FunctionComponent<BrandingProps> = ({
               src={food}
               aria-hidden
             />
-            <span>Julienne</span>
+            <span>Julienne.app</span>
           </Text>
           <Button
             intent="primary"
@@ -100,12 +100,12 @@ export const Branding: React.FunctionComponent<BrandingProps> = ({
             paddingRight: theme.spaces.md,
             marginBottom: theme.spaces.lg,
             textAlign: "center",
-            fontWeight: 900,
+            // fontWeight: 900,
             marginTop: theme.spaces.lg,
             marginBotttom: theme.spaces.xl,
             color: theme.colors.palette.gray.base
           }}
-          variant="h2"
+          variant="display3"
         >
           Build a database of shared recipes with family and friends
         </Text>
