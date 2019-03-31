@@ -5,10 +5,11 @@ const log = debug("app:paginate-fb");
 
 type StateType = {
   hasMore: boolean;
-  items: Map<string, firebase.firestore.DocumentData>;
+  items: firebase.firestore.DocumentData[];
   after: firebase.firestore.QueryDocumentSnapshot | null;
   lastLoaded: firebase.firestore.QueryDocumentSnapshot | null;
   loadingMore: boolean;
+  limit: number;
   loadingMoreError: null | Error;
   loading: boolean;
   loadingError: null | Error;
@@ -18,12 +19,19 @@ type Action<K, V = void> = V extends void ? { type: K } : { type: K } & V;
 
 export type ActionType =
   | Action<"LOAD-MORE">
-  | Action<"LOADED", { value: firebase.firestore.QuerySnapshot }>;
+  | Action<
+      "LOADED",
+      {
+        value: firebase.firestore.QuerySnapshot;
+        limit: number;
+      }
+    >;
 
 const initialState = {
   hasMore: false,
   after: null,
-  items: new Map(),
+  limit: 0,
+  items: [],
   lastLoaded: null,
   loading: true,
   loadingError: null,
@@ -31,37 +39,31 @@ const initialState = {
   loadingMoreError: null
 };
 
-const INITIAL_LOAD_SIZE = 25;
-
 function reducer(state: StateType, action: ActionType): StateType {
   switch (action.type) {
     case "LOADED": {
-      const hasMore = action.value.docs.length >= INITIAL_LOAD_SIZE;
-
-      /**
-       * Maintain a key/value store of items to make
-       * handling changes a bit easier.
-       *
-       * Unfortunately, this necessitates that we convert our
-       * map into an array and sort it using the same criteria
-       * as the original query. Not the best solution...
-       */
-
-      const items = new Map(state.items);
+      let items = [...state.items];
+      let isAdding = false;
 
       action.value.docChanges().forEach(change => {
         if (change.type === "added") {
-          items.set(change.doc.id, change.doc.data());
+          isAdding = true;
+          addItem(change.doc, items);
         } else if (change.type === "modified") {
-          items.set(change.doc.id, change.doc.data());
+          updateItem(change.doc, items);
         } else if (change.type === "removed") {
-          items.delete(change.doc.id);
+          deleteItem(change.doc, items);
         }
       });
 
+      const nextLimit = items.length + action.limit;
+
+      let end = items.length < action.limit || nextLimit === state.limit;
+
       return {
         ...state,
-        hasMore,
+        hasMore: isAdding ? !end : state.hasMore,
+        limit: nextLimit,
         loading: false,
         loadingError: null,
         lastLoaded: action.value.docs[action.value.docs.length - 1],
@@ -80,22 +82,58 @@ function reducer(state: StateType, action: ActionType): StateType {
   }
 }
 
-function sortByUpdatedAt(a: any, b: any) {
-  return a[1].updatedAt > b[1].updatedAt ? -1 : 1;
+function findIndexOfDocument(
+  doc: firebase.firestore.QueryDocumentSnapshot,
+  items: firebase.firestore.DocumentData[]
+) {
+  return items.findIndex(item => {
+    return item.id === doc.id;
+  });
+}
+
+function updateItem(
+  doc: firebase.firestore.QueryDocumentSnapshot,
+  items: firebase.firestore.DocumentData[]
+) {
+  const i = findIndexOfDocument(doc, items);
+  items[i] = doc;
+}
+
+function deleteItem(
+  doc: firebase.firestore.QueryDocumentSnapshot,
+  items: firebase.firestore.DocumentData[]
+) {
+  const i = findIndexOfDocument(doc, items);
+  items.splice(i, 1);
+}
+
+function addItem(
+  doc: firebase.firestore.QueryDocumentSnapshot,
+  items: firebase.firestore.DocumentData[]
+) {
+  const i = findIndexOfDocument(doc, items);
+  if (i === -1) {
+    items.push(doc);
+  }
+}
+
+interface PaginationOptions {
+  // how many documents should we fetch at a time?
+  limit?: number;
 }
 
 export function usePaginateQuery(
   query: firebase.firestore.Query,
-  compareFn = sortByUpdatedAt
+  { limit = 25 }: PaginationOptions = {}
 ) {
   const [state, dispatch] = React.useReducer(reducer, initialState);
 
   // when "after" changes, we update our query
   React.useEffect(() => {
-    let fn = state.after ? query.startAfter(state.after) : query;
+    let fn = query.limit(state.limit || limit);
 
     let unsubscribe = fn.onSnapshot(snap => {
-      dispatch({ type: "LOADED", value: snap });
+      dispatch({ type: "LOADED", value: snap, limit });
     });
 
     return () => unsubscribe();
@@ -112,7 +150,7 @@ export function usePaginateQuery(
     loadingMoreError: state.loadingMoreError,
     loading: state.loading,
     hasMore: state.hasMore,
-    items: Array.from(state.items).sort(compareFn),
+    items: state.items,
     loadMore
   };
 }

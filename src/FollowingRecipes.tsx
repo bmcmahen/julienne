@@ -48,8 +48,13 @@ export const FollowingRecipes: React.FunctionComponent<
       )}
 
       <List>
-        {items.map(([id, recipe]) => (
-          <RecipeListItem id={id} key={id} editable recipe={recipe as Recipe} />
+        {items.map(recipe => (
+          <RecipeListItem
+            id={recipe.id}
+            key={recipe.id}
+            editable
+            recipe={recipe.data() as Recipe}
+          />
         ))}
       </List>
 

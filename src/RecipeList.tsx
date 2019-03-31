@@ -90,8 +90,10 @@ export const RecipeList: React.FunctionComponent<RecipeListProps> = ({
       .firestore()
       .collection("recipes")
       .where("userId", "==", user!.uid)
-      .orderBy("updatedAt", "desc")
-      .limit(25)
+      .orderBy("updatedAt", "desc"),
+    {
+      limit: 25
+    }
   );
 
   // perform an algolia query when query changes
@@ -147,12 +149,12 @@ export const RecipeList: React.FunctionComponent<RecipeListProps> = ({
           )}
 
           <List>
-            {items.map(([id, recipe]) => (
+            {items.map(recipe => (
               <RecipeListItem
-                id={id}
-                key={id}
+                id={recipe.id}
+                key={recipe.id}
                 editable
-                recipe={recipe as Recipe}
+                recipe={recipe.data() as Recipe}
               />
             ))}
           </List>
@@ -161,7 +163,13 @@ export const RecipeList: React.FunctionComponent<RecipeListProps> = ({
           {loadingError || (loadingMoreError && <div>Loading error...</div>)}
 
           {hasMore && !loadingMore && (
-            <div css={{ textAlign: "center" }}>
+            <div
+              css={{
+                textAlign: "center",
+                marginBottom: theme.spaces.md,
+                marginTop: theme.spaces.md
+              }}
+            >
               <Button
                 onClick={() => {
                   loadMore();
