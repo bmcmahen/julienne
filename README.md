@@ -6,6 +6,12 @@ It's built using the [Sancho-UI](https://github.com/bmcmahen/sancho) design syst
 
 [Try it out here](https://julienne.app/).
 
+## How this code works
+
+I'm writing a series of blog posts explaining the code that goes into this project. I'll be adding them here and on my blog when time permits.
+
+__1. [Using Firebase with React Hooks](https://benmcmahen.com/using-firebase-with-react-hooks/)__
+
 ## Running locally
 
 This project is built using `create-react-app`, typescript, and firebase. To get it running properly, you'll need to create your own firebase application and export your firebase configuration in a file at `src/firebase-config.ts`. The config should include algolia configuration, and look something like this:
