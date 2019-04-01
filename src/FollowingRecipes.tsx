@@ -29,7 +29,6 @@ export const FollowingRecipes: React.FunctionComponent<
       .orderBy("updatedAt", "desc")
   );
 
-  console.log(loading, items);
   return (
     <div>
       {loading && <Spinner center />}
