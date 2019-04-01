@@ -5,13 +5,12 @@ import algoliasearch from "algoliasearch";
 import algolia from "./Search";
 import debug from "debug";
 import { useSession } from "./auth";
-import firebase from "firebase/app";
+import * as firebase from "firebase/app";
 import { Text, List, ListItem, Spinner, Button, theme, Embed } from "sancho";
 import { useFirebaseImage } from "./Image";
 import { NavLink } from "react-router-dom";
-import { usePaginateQuery } from "./hooks/paginate-fb";
 import { FadeImage } from "./FadeImage";
-
+import usePaginateQuery from "firestore-pagination-hook";
 const log = debug("app:RecipeList");
 
 export interface Ingredient {

@@ -1,7 +1,7 @@
 /** @jsx jsx */
 import { jsx } from "@emotion/core";
 import * as React from "react";
-import { usePaginateQuery } from "./hooks/paginate-fb";
+import usePaginateQuery from "firestore-pagination-hook";
 import firebase from "firebase/app";
 import { Text, Spinner, theme, List, Button } from "sancho";
 import { RecipeListItem, Recipe } from "./RecipeList";
@@ -27,7 +27,6 @@ export const FollowingRecipes: React.FunctionComponent<
       .collection("recipes")
       .where("userId", "==", id)
       .orderBy("updatedAt", "desc")
-      .limit(25)
   );
 
   console.log(loading, items);
