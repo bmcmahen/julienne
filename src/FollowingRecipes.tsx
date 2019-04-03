@@ -26,7 +26,10 @@ export const FollowingRecipes: React.FunctionComponent<
       .firestore()
       .collection("recipes")
       .where("userId", "==", id)
-      .orderBy("updatedAt", "desc")
+      .orderBy("updatedAt", "desc"),
+    {
+      limit: 25
+    }
   );
 
   return (

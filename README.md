@@ -49,3 +49,7 @@ Use firebase-cli to initalize a project in the root directory. Then build your p
 yarn run build
 firebase deploy
 ```
+
+## License
+
+BSD 3-Clause, see the LICENSE file.
