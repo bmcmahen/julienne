@@ -4,7 +4,7 @@ import * as React from "react";
 import {
   Toolbar,
   Navbar,
-  theme,
+  useTheme,
   IconButton,
   Button,
   Tabs,
@@ -14,7 +14,9 @@ import {
   MenuList,
   MenuItem,
   Tooltip,
-  ResponsivePopover
+  ResponsivePopover,
+  IconChevronDown,
+  IconPlus
 } from "sancho";
 import { RecipeList } from "./RecipeList";
 import { useFollowRequests } from "./hooks/with-follow-request-count";
@@ -34,6 +36,7 @@ import { Layout } from "./Layout";
 export interface MainProps {}
 
 export const Main: React.FunctionComponent<MainProps> = props => {
+  const theme = useTheme();
   const user = useSession();
   const [query, setQuery] = React.useState("");
   const [activeTab, setActiveTab] = React.useState(0);
@@ -73,10 +76,10 @@ export const Main: React.FunctionComponent<MainProps> = props => {
             position: "absolute",
             width: "100%",
             borderRadius: 0,
-            [theme.breakpoints.md]: {
+            [theme.mediaQueries.md]: {
               display: "flex",
               position: "fixed",
-              zIndex: theme.zIndex.fixed,
+              zIndex: theme.zIndices.fixed,
               top: 0,
               boxShadow: theme.shadows.xl,
               overflow: "hidden",
@@ -86,7 +89,7 @@ export const Main: React.FunctionComponent<MainProps> = props => {
               marginRight: 0,
               height: `calc(100vh - ${theme.spaces.lg} - ${theme.spaces.lg})`
             },
-            [theme.breakpoints.lg]: {
+            [theme.mediaQueries.lg]: {
               margin: theme.spaces.xl,
               marginRight: 0,
               width: "400px",
@@ -100,7 +103,7 @@ export const Main: React.FunctionComponent<MainProps> = props => {
                 position: "sticky",
                 width: "100%",
                 top: 0,
-                zIndex: theme.zIndex.sticky,
+                zIndex: theme.zIndices.sticky,
                 background: theme.colors.palette.gray.base
               }
             ]}
@@ -129,7 +132,7 @@ export const Main: React.FunctionComponent<MainProps> = props => {
                 >
                   <Button
                     size="lg"
-                    iconAfter="chevron-down"
+                    iconAfter={<IconChevronDown />}
                     variant="ghost"
                     css={{ color: "white" }}
                   >
@@ -145,7 +148,7 @@ export const Main: React.FunctionComponent<MainProps> = props => {
                       label="Add recipe"
                       size="lg"
                       color="white"
-                      icon="plus"
+                      icon={<IconPlus />}
                       intent="primary"
                     />
                   </div>
@@ -161,7 +164,6 @@ export const Main: React.FunctionComponent<MainProps> = props => {
                 }}
                 onChange={i => setActiveTab(i)}
                 value={activeTab}
-                dark
                 variant="evenly-spaced"
               >
                 <Tab id="recipes">Recipes</Tab>
@@ -201,7 +203,7 @@ export const Main: React.FunctionComponent<MainProps> = props => {
               <div
                 css={{
                   flex: 1,
-                  [theme.breakpoints.md]: {
+                  [theme.mediaQueries.md]: {
                     overflowY: "scroll",
                     WebkitOverflowScrolling: "touch"
                   }
@@ -231,7 +233,7 @@ export const Main: React.FunctionComponent<MainProps> = props => {
             position: "relative",
 
             flex: 1,
-            [theme.breakpoints.md]: {
+            [theme.mediaQueries.md]: {
               display: "flex",
               justifyContent: "center"
             }
@@ -246,7 +248,7 @@ export const Main: React.FunctionComponent<MainProps> = props => {
                 position: "absolute",
                 width: "100%",
                 boxSizing: "border-box",
-                [theme.breakpoints.md]: {
+                [theme.mediaQueries.md]: {
                   display: "flex",
                   justifyContent: "center",
                   alignItems: "center",
@@ -254,7 +256,7 @@ export const Main: React.FunctionComponent<MainProps> = props => {
                   minHeight: "100vh",
                   paddingLeft: "calc(330px + 3rem)"
                 },
-                [theme.breakpoints.lg]: {
+                [theme.mediaQueries.lg]: {
                   // paddingLeft: theme.spaces.xl,
                   paddingRight: theme.spaces.xl,
                   paddingLeft: "calc(400px + 6rem)"
@@ -269,7 +271,7 @@ export const Main: React.FunctionComponent<MainProps> = props => {
                   position: "relative",
                   boxShadow: "none",
                   width: "100%",
-                  [theme.breakpoints.md]: {
+                  [theme.mediaQueries.md]: {
                     marginTop: "auto",
                     height: "auto",
                     overflow: "hidden",

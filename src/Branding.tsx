@@ -9,19 +9,21 @@ import {
   Toolbar,
   Text,
   Button,
-  theme,
-  responsiveBodyPadding,
+  useTheme,
+  useResponsiveBodyPadding,
   Container,
-  Link
+  Link,
+  IconArrowRight
 } from "sancho";
 
 export interface BrandingProps {
   location: Location;
 }
 
-export const Branding: React.FunctionComponent<BrandingProps> = ({
-  location
-}) => {
+export const Branding: React.FunctionComponent<BrandingProps> = () => {
+  const theme = useTheme();
+  const responsiveBodyPadding = useResponsiveBodyPadding();
+
   return (
     <main>
       <Global
@@ -83,7 +85,7 @@ export const Branding: React.FunctionComponent<BrandingProps> = ({
             overflow: "hidden",
             position: "relative",
             background: "white",
-            [theme.breakpoints.md]: {
+            [theme.mediaQueries.md]: {
               backgroundSize: "cover",
               backgroundImage: `url(${require("./images/cutting-board-knife.jpg")})`
             }
@@ -101,7 +103,7 @@ export const Branding: React.FunctionComponent<BrandingProps> = ({
             marginTop: theme.spaces.lg,
             marginBotttom: theme.spaces.xl,
             color: theme.colors.palette.gray.base,
-            [theme.breakpoints.sm]: {
+            [theme.mediaQueries.sm]: {
               maxWidth: "46rem"
             }
           }}
@@ -112,7 +114,7 @@ export const Branding: React.FunctionComponent<BrandingProps> = ({
 
         <div
           css={{
-            fontSize: theme.sizes[0],
+            fontSize: theme.fontSizes[0],
             maxWidth: "34rem",
             position: "relative",
             padding: "8px 15px",
@@ -121,7 +123,7 @@ export const Branding: React.FunctionComponent<BrandingProps> = ({
             marginRight: theme.spaces.md,
             borderRadius: theme.radii.lg,
             display: "inline-block",
-            [theme.breakpoints.md]: {
+            [theme.mediaQueries.md]: {
               background: "white",
               padding: "12px 18px",
               marginLeft: "60px",
@@ -143,19 +145,19 @@ export const Branding: React.FunctionComponent<BrandingProps> = ({
               background: "white",
               backgroundAttachment: "fixed",
               borderBottomRightRadius: "15px",
-              [theme.breakpoints.md]: {
+              [theme.mediaQueries.md]: {
                 display: "block"
               }
             }}
           />
           <Text
             css={{
-              fontSize: theme.sizes[1],
+              fontSize: theme.fontSizes[1],
               display: "flex",
               textAlign: "center",
               justifyContent: "center",
               alignItems: "flex-end",
-              [theme.breakpoints.md]: {
+              [theme.mediaQueries.md]: {
                 textAlign: "left"
               }
             }}
@@ -170,7 +172,7 @@ export const Branding: React.FunctionComponent<BrandingProps> = ({
                 display: "none",
                 bottom: "-25px",
                 left: "-80px",
-                [theme.breakpoints.md]: {
+                [theme.mediaQueries.md]: {
                   display: "block"
                 }
               }}
@@ -193,7 +195,7 @@ export const Branding: React.FunctionComponent<BrandingProps> = ({
               height: "20px",
               width: "10px",
               display: "none",
-              [theme.breakpoints.md]: {
+              [theme.mediaQueries.md]: {
                 display: "block"
               },
               background: "#e0dbd8d1",
@@ -214,7 +216,7 @@ export const Branding: React.FunctionComponent<BrandingProps> = ({
           <Button
             size="lg"
             intent="primary"
-            iconAfter="arrow-right"
+            iconAfter={<IconArrowRight />}
             component={RouterLink}
             to="/login?register=true"
           >
@@ -259,7 +261,7 @@ export const Branding: React.FunctionComponent<BrandingProps> = ({
                 marginLeft: "auto",
                 marginRight: "auto"
               },
-              [theme.breakpoints.lg]: {
+              [theme.mediaQueries.lg]: {
                 display: "flex",
                 justifyContent: "space-between",
                 "& > div": {
@@ -308,8 +310,8 @@ export const Branding: React.FunctionComponent<BrandingProps> = ({
             <div
               css={{
                 marginBottom: "0 !important",
-                [theme.breakpoints.md]: {
-                  marginBottom: theme.breakpoints.xl
+                [theme.mediaQueries.md]: {
+                  marginBottom: theme.mediaQueries.xl
                 }
               }}
             >
@@ -363,7 +365,11 @@ export const Branding: React.FunctionComponent<BrandingProps> = ({
         </svg>
         <Container>
           <Text
-            css={{ position: "relative", zIndex: 10, fontSize: theme.sizes[0] }}
+            css={{
+              position: "relative",
+              zIndex: 10,
+              fontSize: theme.fontSizes[0]
+            }}
           >
             Made by <Link href="http://www.benmcmahen.com">Ben McMahen</Link>
             <br />

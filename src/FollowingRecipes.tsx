@@ -3,7 +3,7 @@ import { jsx } from "@emotion/core";
 import * as React from "react";
 import usePaginateQuery from "firestore-pagination-hook";
 import firebase from "firebase/app";
-import { Text, Spinner, theme, List, Button } from "sancho";
+import { Text, Spinner, useTheme, List, Button } from "sancho";
 import { RecipeListItem, Recipe } from "./RecipeList";
 
 export interface FollowingRecipesProps {
@@ -13,6 +13,7 @@ export interface FollowingRecipesProps {
 export const FollowingRecipes: React.FunctionComponent<
   FollowingRecipesProps
 > = ({ id }) => {
+  const theme = useTheme();
   const {
     loading,
     loadingError,
@@ -40,7 +41,7 @@ export const FollowingRecipes: React.FunctionComponent<
           muted
           css={{
             display: "block",
-            fontSize: theme.sizes[0],
+            fontSize: theme.fontSizes[0],
             margin: theme.spaces.lg
           }}
         >

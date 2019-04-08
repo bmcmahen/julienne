@@ -4,11 +4,11 @@ import * as React from "react";
 import {
   InputGroup,
   Input,
-  theme,
+  useTheme,
   VisuallyHidden,
   Button,
-  Icon,
-  responsiveContainerPadding
+  useResponsiveContainerPadding,
+  IconSearch
 } from "sancho";
 
 export interface SearchBoxProps {
@@ -22,6 +22,8 @@ export const SearchBox: React.FunctionComponent<SearchBoxProps> = ({
   label = "Search all recipes",
   setQuery
 }) => {
+  const theme = useTheme();
+  const responsiveContainerPadding = useResponsiveContainerPadding();
   return (
     <form
       css={{
@@ -66,8 +68,7 @@ export const SearchBox: React.FunctionComponent<SearchBoxProps> = ({
       <VisuallyHidden>
         <Button type="submit">Search</Button>
       </VisuallyHidden>
-      <Icon
-        icon="search"
+      <IconSearch
         aria-hidden
         color={theme.colors.scales.gray[6]}
         css={{

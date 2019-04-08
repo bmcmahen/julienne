@@ -16,12 +16,15 @@ import {
   IconButton,
   MenuList,
   MenuItem,
-  theme,
+  useTheme,
   InputBaseProps,
-  toast,
+  useToast,
   LayerLoading,
   Container,
-  ResponsivePopover
+  ResponsivePopover,
+  IconX,
+  IconArrowRight,
+  IconMoreVertical
 } from "sancho";
 import { getUserFields, createEntry, deleteEntry, updateEntry } from "./db";
 import { useSession } from "./auth";
@@ -51,6 +54,8 @@ export const Compose: React.FunctionComponent<ComposeProps> = ({
   defaultIngredients,
   defaultTitle = ""
 }) => {
+  const theme = useTheme();
+  const toast = useToast();
   const ref = React.useRef(null);
   const user = useSession();
   const [loading, setLoading] = React.useState(false);
@@ -185,7 +190,7 @@ export const Compose: React.FunctionComponent<ComposeProps> = ({
   return (
     <div
       css={{
-        [theme.breakpoints.md]: {
+        [theme.mediaQueries.md]: {
           height: "auto",
           display: "block"
         }
@@ -197,7 +202,7 @@ export const Compose: React.FunctionComponent<ComposeProps> = ({
           ".Editor": {
             fontFamily: theme.fonts.base,
             color: theme.colors.text.default,
-            lineHeight: theme.lineHeight
+            lineHeight: theme.lineHeights.body
           },
           ".filepond--wrapper": {
             padding: theme.spaces.lg,
@@ -237,12 +242,12 @@ export const Compose: React.FunctionComponent<ComposeProps> = ({
       />
       <Navbar
         css={{
-          zIndex: theme.zIndex.sticky,
+          zIndex: theme.zIndices.sticky,
           backgroundColor: "white",
           boxShadow: theme.shadows.sm,
           position: "sticky",
           top: 0,
-          [theme.breakpoints.md]: {
+          [theme.mediaQueries.md]: {
             position: "static"
           }
         }}
@@ -254,7 +259,7 @@ export const Compose: React.FunctionComponent<ComposeProps> = ({
           }}
         >
           <IconButton
-            icon="arrow-left"
+            icon={<IconArrowRight />}
             component={Link}
             to="/"
             label="Go back"
@@ -264,7 +269,7 @@ export const Compose: React.FunctionComponent<ComposeProps> = ({
               marginTop: "5px",
               display: "block",
               marginRight: theme.spaces.sm,
-              [theme.breakpoints.md]: {
+              [theme.mediaQueries.md]: {
                 display: "none"
               }
             }}
@@ -288,7 +293,7 @@ export const Compose: React.FunctionComponent<ComposeProps> = ({
               css={{
                 flex: 1,
                 textAlign: "center",
-                [theme.breakpoints.md]: {
+                [theme.mediaQueries.md]: {
                   textAlign: "left"
                 }
               }}
@@ -320,7 +325,7 @@ export const Compose: React.FunctionComponent<ComposeProps> = ({
                   marginLeft: theme.spaces.sm
                 }}
                 variant="ghost"
-                icon="more"
+                icon={<IconMoreVertical />}
                 label="Show options"
               />
             </ResponsivePopover>
@@ -330,7 +335,7 @@ export const Compose: React.FunctionComponent<ComposeProps> = ({
                 variant="ghost"
                 css={{
                   display: "none",
-                  [theme.breakpoints.md]: {
+                  [theme.mediaQueries.md]: {
                     display: "inline-flex"
                   },
                   marginLeft: theme.spaces.sm
@@ -369,7 +374,7 @@ export const Compose: React.FunctionComponent<ComposeProps> = ({
       <div
         css={{
           flex: 1,
-          [theme.breakpoints.md]: {
+          [theme.mediaQueries.md]: {
             flex: "none"
           }
         }}
@@ -414,7 +419,7 @@ export const Compose: React.FunctionComponent<ComposeProps> = ({
                             <div
                               css={{
                                 display: "flex",
-                                [theme.breakpoints.md]: {
+                                [theme.mediaQueries.md]: {
                                   maxWidth: "400px"
                                 }
                               }}
@@ -449,7 +454,7 @@ export const Compose: React.FunctionComponent<ComposeProps> = ({
                                 {i > 0 && (
                                   <IconButton
                                     variant="ghost"
-                                    icon="cross"
+                                    icon={<IconX />}
                                     label="Delete ingredient"
                                     onClick={() => removeIngredient(i)}
                                   />
@@ -463,7 +468,7 @@ export const Compose: React.FunctionComponent<ComposeProps> = ({
                               display: "flex",
                               marginBottom: theme.spaces.xs,
                               justifyContent: "space-between",
-                              [theme.breakpoints.md]: {
+                              [theme.mediaQueries.md]: {
                                 width: "300px"
                               }
                             }}
@@ -558,6 +563,7 @@ export const Compose: React.FunctionComponent<ComposeProps> = ({
 interface TransparentInputProps extends InputBaseProps {}
 
 const TransparentInput = (props: TransparentInputProps) => {
+  const theme = useTheme();
   return (
     <Input
       css={{

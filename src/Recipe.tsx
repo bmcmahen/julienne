@@ -6,13 +6,14 @@ import firebase from "firebase/app";
 import { Compose } from "./Compose";
 import { useSession } from "./auth";
 import { useDocument } from "react-firebase-hooks/firestore";
-import { Spinner, theme, Text } from "sancho";
+import { useTheme, Text } from "sancho";
 
 export interface RecipeProps extends RouteComponentProps {
   match: any;
 }
 
 export const Recipe: React.FunctionComponent<RecipeProps> = ({ match }) => {
+  const theme = useTheme();
   const user = useSession();
   const { value, loading, error } = useDocument(
     firebase

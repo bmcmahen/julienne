@@ -1,7 +1,7 @@
 /** @jsx jsx */
 import { jsx } from "@emotion/core";
 import * as React from "react";
-import { theme } from "sancho";
+import { useTheme } from "sancho";
 
 /**
  * Fade in an image when it loads. Note, this needs to go
@@ -21,6 +21,7 @@ export const FadeImage: React.FunctionComponent<FadeImageProps> = ({
   hidden,
   ...other
 }) => {
+  const theme = useTheme();
   const [loaded, setLoaded] = React.useState(false);
   const [error, setError] = React.useState(false);
 

@@ -13,10 +13,11 @@ import {
   MenuItem,
   Spinner,
   Text,
-  theme,
-  Icon,
-  toast,
-  Toolbar
+  useTheme,
+  useToast,
+  Toolbar,
+  IconPlus,
+  IconChevronRight
 } from "sancho";
 import { SearchBox } from "./SearchBox";
 import debug from "debug";
@@ -47,6 +48,8 @@ export interface FollowingListProps {}
 export const FollowingList: React.FunctionComponent<
   FollowingListProps
 > = props => {
+  const theme = useTheme();
+  const toast = useToast();
   const user = useSession();
   const { loading, userList } = useFollowers(false);
   const [query, setQuery] = React.useState("");
@@ -155,7 +158,7 @@ export const FollowingList: React.FunctionComponent<
             <Text
               muted
               css={{
-                fontSize: theme.sizes[0],
+                fontSize: theme.fontSizes[0],
                 display: "block",
                 margin: theme.spaces.lg
               }}
@@ -181,9 +184,8 @@ export const FollowingList: React.FunctionComponent<
                   }
                   primary={hit.displayName || hit.email}
                   contentAfter={
-                    <Icon
+                    <IconPlus
                       color={theme.colors.text.muted}
-                      icon="plus"
                       aria-hidden
                       size="lg"
                     />
@@ -210,9 +212,8 @@ export const FollowingList: React.FunctionComponent<
                   primary={relation.toUser.displayName || relation.toUser.email}
                   contentAfter={
                     relation.confirmed ? (
-                      <Icon
+                      <IconChevronRight
                         color={theme.colors.text.muted}
-                        icon="chevron-right"
                         aria-hidden
                       />
                     ) : (

@@ -13,8 +13,8 @@ import {
   MenuItem,
   Spinner,
   Text,
-  theme,
-  toast
+  useToast,
+  useTheme
 } from "sancho";
 import { confirmFollow, deleteRequestFollow } from "./db";
 
@@ -23,6 +23,8 @@ export interface FollowersListProps {}
 export const FollowersList: React.FunctionComponent<
   FollowersListProps
 > = props => {
+  const theme = useTheme();
+  const toast = useToast();
   const { loading, userList } = useFollowers();
 
   if (loading) {
@@ -34,7 +36,7 @@ export const FollowersList: React.FunctionComponent<
       <Text
         muted
         css={{
-          fontSize: theme.sizes[0],
+          fontSize: theme.fontSizes[0],
           display: "block",
           margin: theme.spaces.lg
         }}

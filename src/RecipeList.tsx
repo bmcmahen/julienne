@@ -6,7 +6,7 @@ import algolia from "./Search";
 import debug from "debug";
 import { useSession } from "./auth";
 import * as firebase from "firebase/app";
-import { Text, List, ListItem, Spinner, Button, theme, Embed } from "sancho";
+import { Text, List, ListItem, Spinner, Button, useTheme, Embed } from "sancho";
 import { useFirebaseImage } from "./Image";
 import { NavLink } from "react-router-dom";
 import { FadeImage } from "./FadeImage";
@@ -73,6 +73,7 @@ export interface RecipeListProps {
 export const RecipeList: React.FunctionComponent<RecipeListProps> = ({
   query
 }) => {
+  const theme = useTheme();
   const [state, dispatch] = React.useReducer(reducer, initialState);
   const user = useSession();
 
@@ -138,7 +139,7 @@ export const RecipeList: React.FunctionComponent<RecipeListProps> = ({
               muted
               css={{
                 display: "block",
-                fontSize: theme.sizes[0],
+                fontSize: theme.fontSizes[0],
                 margin: theme.spaces.lg
               }}
             >
@@ -191,12 +192,8 @@ interface RecipeListItemProps {
   highlight?: any;
 }
 
-export function RecipeListItem({
-  editable,
-  recipe,
-  id,
-  highlight
-}: RecipeListItemProps) {
+export function RecipeListItem({ recipe, id, highlight }: RecipeListItemProps) {
+  const theme = useTheme();
   const { src, error } = useFirebaseImage("thumb-sm@", recipe.image);
 
   return (

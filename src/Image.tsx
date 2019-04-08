@@ -3,7 +3,7 @@ import { jsx } from "@emotion/core";
 import * as React from "react";
 import * as firebase from "firebase/app";
 import "firebase/storage";
-import { theme, Embed } from "sancho";
+import { Embed } from "sancho";
 import { FadeImage } from "./FadeImage";
 
 interface ImageProps {

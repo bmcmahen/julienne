@@ -4,7 +4,7 @@ import * as React from "react";
 import { Redirect, Link } from "react-router-dom";
 import food from "./images/food.svg";
 import {
-  theme,
+  useTheme,
   Layer,
   Text,
   Button,
@@ -23,6 +23,7 @@ import { Layout } from "./Layout";
 export interface LoginProps {}
 
 export const Login: React.FunctionComponent<LoginProps> = props => {
+  const theme = useTheme();
   const { location } = useReactRouter();
   const qs = queryString.parse(location.search);
   const [isRegistering, setIsRegistering] = React.useState(
@@ -121,7 +122,7 @@ export const Login: React.FunctionComponent<LoginProps> = props => {
               boxShadow: "none",
 
               background: "white",
-              [theme.breakpoints.md]: {
+              [theme.mediaQueries.md]: {
                 marginTop: theme.spaces.xl,
                 boxShadow: theme.shadows.xl
               }
@@ -147,7 +148,7 @@ export const Login: React.FunctionComponent<LoginProps> = props => {
                 }}
               >
                 {isRegistering ? (
-                  <Text css={{ fontSize: theme.sizes[0] }}>
+                  <Text css={{ fontSize: theme.fontSizes[0] }}>
                     Already have an account?{" "}
                     <StyledLink
                       href="#"
@@ -160,7 +161,7 @@ export const Login: React.FunctionComponent<LoginProps> = props => {
                     </StyledLink>
                   </Text>
                 ) : (
-                  <Text css={{ fontSize: theme.sizes[0] }}>
+                  <Text css={{ fontSize: theme.fontSizes[0] }}>
                     Don't have an account?{" "}
                     <StyledLink
                       href="#"
