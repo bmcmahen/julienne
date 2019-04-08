@@ -24,7 +24,8 @@ import {
   ResponsivePopover,
   IconX,
   IconArrowRight,
-  IconMoreVertical
+  IconMoreVertical,
+  IconArrowLeft
 } from "sancho";
 import { getUserFields, createEntry, deleteEntry, updateEntry } from "./db";
 import { useSession } from "./auth";
@@ -259,15 +260,13 @@ export const Compose: React.FunctionComponent<ComposeProps> = ({
           }}
         >
           <IconButton
-            icon={<IconArrowRight />}
+            icon={<IconArrowLeft />}
             component={Link}
             to="/"
             label="Go back"
             replace
             variant="ghost"
             css={{
-              marginTop: "5px",
-              display: "block",
               marginRight: theme.spaces.sm,
               [theme.mediaQueries.md]: {
                 display: "none"
