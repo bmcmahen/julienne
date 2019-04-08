@@ -16,7 +16,8 @@ import {
   Tooltip,
   ResponsivePopover,
   IconChevronDown,
-  IconPlus
+  IconPlus,
+  DarkMode
 } from "sancho";
 import { RecipeList } from "./RecipeList";
 import { useFollowRequests } from "./hooks/with-follow-request-count";
@@ -130,55 +131,58 @@ export const Main: React.FunctionComponent<MainProps> = props => {
                     </MenuList>
                   }
                 >
-                  <Button
-                    size="lg"
-                    iconAfter={<IconChevronDown />}
-                    variant="ghost"
-                    css={{ color: "white" }}
-                  >
-                    {user.displayName || user.email}
-                  </Button>
+                  <DarkMode>
+                    <Button
+                      size="md"
+                      iconAfter={<IconChevronDown />}
+                      variant="ghost"
+                    >
+                      {user.displayName || user.email}
+                    </Button>
+                  </DarkMode>
                 </ResponsivePopover>
                 <Tooltip content="Add a new recipe">
                   <div>
-                    <IconButton
-                      component={Link}
-                      to="/new"
-                      variant="ghost"
-                      label="Add recipe"
-                      size="lg"
-                      color="white"
-                      icon={<IconPlus />}
-                      intent="primary"
-                    />
+                    <DarkMode>
+                      <IconButton
+                        component={Link}
+                        to="/new"
+                        variant="ghost"
+                        label="Add recipe"
+                        size="md"
+                        icon={<IconPlus />}
+                      />
+                    </DarkMode>
                   </div>
                 </Tooltip>
               </Toolbar>
             </Navbar>
             <div css={{ flex: "0 0 auto", zIndex: 2 }}>
-              <Tabs
-                css={{
-                  position: "sticky",
-                  top: 0,
-                  background: theme.colors.palette.gray.base
-                }}
-                onChange={i => setActiveTab(i)}
-                value={activeTab}
-                variant="evenly-spaced"
-              >
-                <Tab id="recipes">Recipes</Tab>
-                <Tab id="following">Following</Tab>
-                <Tab
-                  badge={
-                    followRequests && followRequests.docs.length
-                      ? followRequests.docs.length
-                      : null
-                  }
-                  id="followers"
+              <DarkMode>
+                <Tabs
+                  css={{
+                    position: "sticky",
+                    top: 0,
+                    background: theme.colors.palette.gray.base
+                  }}
+                  onChange={i => setActiveTab(i)}
+                  value={activeTab}
+                  variant="evenly-spaced"
                 >
-                  Followers
-                </Tab>
-              </Tabs>
+                  <Tab id="recipes">Recipes</Tab>
+                  <Tab id="following">Following</Tab>
+                  <Tab
+                    badge={
+                      followRequests && followRequests.docs.length
+                        ? followRequests.docs.length
+                        : null
+                    }
+                    id="followers"
+                  >
+                    Followers
+                  </Tab>
+                </Tabs>
+              </DarkMode>
             </div>
           </div>
 

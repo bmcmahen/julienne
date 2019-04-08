@@ -43,8 +43,7 @@ export const SearchBox: React.FunctionComponent<SearchBoxProps> = ({
           autoComplete="off"
           css={[
             {
-              paddingTop: theme.spaces.md + " !important",
-              paddingBottom: theme.spaces.md + " !important",
+              height: "60px",
               textAlign: "left",
               border: "none",
               borderBottom: "1px solid",

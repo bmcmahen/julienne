@@ -17,7 +17,9 @@ import {
   useToast,
   Toolbar,
   IconPlus,
-  IconChevronRight
+  IconChevronRight,
+  IconMoreVertical,
+  IconArrowLeft
 } from "sancho";
 import { SearchBox } from "./SearchBox";
 import debug from "debug";
@@ -250,7 +252,7 @@ export const FollowingList: React.FunctionComponent<
               >
                 <IconButton
                   variant="ghost"
-                  icon="arrow-left"
+                  icon={<IconArrowLeft />}
                   label="Show all followers"
                   onClick={() => setIndex(0)}
                 />
@@ -284,7 +286,7 @@ export const FollowingList: React.FunctionComponent<
                   <IconButton
                     onClick={e => e.stopPropagation()}
                     variant="ghost"
-                    icon="more"
+                    icon={<IconMoreVertical />}
                     label="Options"
                   />
                 </Popover>

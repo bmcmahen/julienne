@@ -14,7 +14,8 @@ import {
   Spinner,
   Text,
   useToast,
-  useTheme
+  useTheme,
+  IconMoreVertical
 } from "sancho";
 import { confirmFollow, deleteRequestFollow } from "./db";
 
@@ -108,7 +109,7 @@ export const FollowersList: React.FunctionComponent<
                   <IconButton
                     onClick={e => e.stopPropagation()}
                     variant="ghost"
-                    icon="more"
+                    icon={<IconMoreVertical />}
                     label="Options"
                   />
                 </Popover>
