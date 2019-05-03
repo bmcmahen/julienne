@@ -5,7 +5,6 @@ import Editor from "./Editor";
 import { ImageUpload } from "./ImageUpload";
 import { Image } from "./Image";
 import debug from "debug";
-import useReactRouter from "use-react-router";
 import { Ingredient } from "./RecipeList";
 import {
   Navbar,
@@ -29,7 +28,7 @@ import {
 import { getUserFields, createEntry, deleteEntry, updateEntry } from "./db";
 import { useSession } from "./auth";
 import Helmet from "react-helmet";
-import { Link } from "react-router-dom";
+import { Link, navigate } from "@reach/router";
 
 const log = debug("app:Compose");
 
@@ -59,7 +58,6 @@ export const Compose: React.FunctionComponent<ComposeProps> = ({
   const ref = React.useRef(null);
   const user = useSession();
   const [loading, setLoading] = React.useState(false);
-  const { history } = useReactRouter();
   const [editing, setEditing] = React.useState(!readOnly);
   const [image, setImage] = React.useState(defaultImage);
   const [title, setTitle] = React.useState(defaultTitle);
@@ -117,7 +115,7 @@ export const Compose: React.FunctionComponent<ComposeProps> = ({
         image,
         author
       });
-      history.replace("/" + entry.id);
+      navigate("/" + entry.id, { replace: true });
     } catch (err) {
       console.error(err);
       setLoading(false);
@@ -175,7 +173,7 @@ export const Compose: React.FunctionComponent<ComposeProps> = ({
     try {
       setLoading(true);
       await deleteEntry(id);
-      history.replace("/");
+      navigate("/", { replace: true });
     } catch (err) {
       console.error(err);
       setLoading(false);

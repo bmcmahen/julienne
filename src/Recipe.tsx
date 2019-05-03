@@ -1,25 +1,24 @@
 /** @jsx jsx */
 import { jsx } from "@emotion/core";
 import * as React from "react";
-import { RouteComponentProps } from "react-router";
 import firebase from "firebase/app";
 import { Compose } from "./Compose";
 import { useSession } from "./auth";
 import { useDocument } from "react-firebase-hooks/firestore";
 import { useTheme, Text } from "sancho";
 
-export interface RecipeProps extends RouteComponentProps {
-  match: any;
+export interface RecipeProps {
+  id: string;
 }
 
-export const Recipe: React.FunctionComponent<RecipeProps> = ({ match }) => {
+export const Recipe: React.FunctionComponent<RecipeProps> = ({ id }) => {
   const theme = useTheme();
   const user = useSession();
   const { value, loading, error } = useDocument(
     firebase
       .firestore()
       .collection("recipes")
-      .doc(match.params.id)
+      .doc(id)
   );
 
   if (loading) {
@@ -49,7 +48,7 @@ export const Recipe: React.FunctionComponent<RecipeProps> = ({ match }) => {
     return (
       <Compose
         readOnly
-        id={match.params.id}
+        id={id}
         editable={value.get("userId") === user.uid}
         defaultCredit={value.get("author")}
         defaultDescription={value.get("description")}

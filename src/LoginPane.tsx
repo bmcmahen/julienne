@@ -16,7 +16,6 @@ import {
   Container
 } from "sancho";
 import { loginWithGoogle, loginWithEmail, createUserWithEmail } from "./auth";
-import useReactRouter from "use-react-router";
 import queryString from "query-string";
 import { Layout } from "./Layout";
 

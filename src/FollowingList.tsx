@@ -197,7 +197,7 @@ export const FollowingList: React.FunctionComponent<
             {userList.map(relation => {
               return (
                 <ListItem
-                  key={user.uid}
+                  key={relation.id}
                   interactive={relation.confirmed ? true : false}
                   onPress={() =>
                     showRelation({ id: relation.toUserId, ...relation.toUser })

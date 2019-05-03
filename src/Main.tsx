@@ -24,17 +24,18 @@ import { useFollowRequests } from "./hooks/with-follow-request-count";
 import { FollowersList } from "./FollowersList";
 import { FollowingList } from "./FollowingList";
 import { useSession, signOut } from "./auth";
-import { Route, Switch } from "react-router";
 import { Compose } from "./Compose";
 import { Recipe } from "./Recipe";
-import useReactRouter from "use-react-router";
 import { useTransition, animated } from "react-spring";
 import { SearchBox } from "./SearchBox";
-import { Link } from "react-router-dom";
+import { Link } from "@reach/router";
 import { useMedia } from "use-media";
 import { Layout } from "./Layout";
 
-export interface MainProps {}
+export interface MainProps {
+  path?: string;
+  id?: string;
+}
 
 export const Main: React.FunctionComponent<MainProps> = props => {
   const theme = useTheme();
@@ -42,18 +43,16 @@ export const Main: React.FunctionComponent<MainProps> = props => {
   const [query, setQuery] = React.useState("");
   const [activeTab, setActiveTab] = React.useState(0);
   const { value: followRequests } = useFollowRequests();
-  const { location, match } = useReactRouter();
   const isLarge = useMedia({ minWidth: "768px" });
 
-  const transitions = useTransition(location, location => location.pathname, {
+  const showingRecipe = props.id;
+
+  const transitions = useTransition(showingRecipe, recipeId => recipeId, {
     from: { opacity: 0, transform: "scale(0.95)" },
     enter: { opacity: 1, transform: "scale(1)" },
     leave: { opacity: 0, transform: "scale(1.1)" },
     immediate: !isLarge
   });
-
-  const params = match.params as any;
-  const showingRecipe = params.id;
 
   const renderList = isLarge || !showingRecipe;
 
@@ -229,71 +228,70 @@ export const Main: React.FunctionComponent<MainProps> = props => {
           )}
         </Layer>
 
-        <div
-          css={{
-            display: "block",
-            position: "relative",
+        {showingRecipe && (
+          <div
+            css={{
+              display: "block",
+              position: "relative",
 
-            flex: 1,
-            [theme.mediaQueries.md]: {
-              display: "flex",
-              justifyContent: "center"
-            }
-          }}
-        >
-          {transitions.map(({ item, props, key }) => (
-            <animated.div
-              key={key}
-              style={props}
-              css={{
-                display: "block",
-                position: "absolute",
-                width: "100%",
-                boxSizing: "border-box",
-                [theme.mediaQueries.md]: {
-                  display: "flex",
-                  justifyContent: "center",
-                  alignItems: "center",
-                  padding: theme.spaces.lg,
-                  minHeight: "100vh",
-                  paddingLeft: "calc(330px + 3rem)"
-                },
-                [theme.mediaQueries.lg]: {
-                  // paddingLeft: theme.spaces.xl,
-                  paddingRight: theme.spaces.xl,
-                  paddingLeft: "calc(400px + 6rem)"
-                }
-              }}
-            >
-              <Layer
-                elevation="xl"
+              flex: 1,
+              [theme.mediaQueries.md]: {
+                display: "flex",
+                justifyContent: "center"
+              }
+            }}
+          >
+            {transitions.map(({ item, props, key }) => (
+              <animated.div
                 key={key}
+                style={props}
                 css={{
-                  borderRadius: 0,
-                  position: "relative",
-                  boxShadow: "none",
+                  display: "block",
+                  position: "absolute",
                   width: "100%",
+                  boxSizing: "border-box",
                   [theme.mediaQueries.md]: {
-                    marginTop: "auto",
-                    height: "auto",
-                    overflow: "hidden",
-                    boxSizing: "border-box",
-                    marginBottom: "auto",
-                    width: "100%",
-                    maxWidth: "700px",
-                    borderRadius: theme.radii.lg,
-                    boxShadow: theme.shadows.xl
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "center",
+                    padding: theme.spaces.lg,
+                    minHeight: "100vh",
+                    paddingLeft: "calc(330px + 3rem)"
+                  },
+                  [theme.mediaQueries.lg]: {
+                    // paddingLeft: theme.spaces.xl,
+                    paddingRight: theme.spaces.xl,
+                    paddingLeft: "calc(400px + 6rem)"
                   }
                 }}
               >
-                <Switch location={item}>
-                  <Route path="/new" component={Compose} />
-                  <Route path="/:id" component={Recipe} />
-                </Switch>
-              </Layer>
-            </animated.div>
-          ))}
-        </div>
+                <Layer
+                  elevation="xl"
+                  key={key}
+                  css={{
+                    borderRadius: 0,
+                    position: "relative",
+                    boxShadow: "none",
+                    width: "100%",
+                    [theme.mediaQueries.md]: {
+                      marginTop: "auto",
+                      height: "auto",
+                      overflow: "hidden",
+                      boxSizing: "border-box",
+                      marginBottom: "auto",
+                      width: "100%",
+                      maxWidth: "700px",
+                      borderRadius: theme.radii.lg,
+                      boxShadow: theme.shadows.xl
+                    }
+                  }}
+                >
+                  {key === "new" ? <Compose /> : <Recipe id={item} />}
+                </Layer>
+              </animated.div>
+            ))}
+          </div>
+        )}
       </div>
     </Layout>
   );

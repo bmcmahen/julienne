@@ -4,11 +4,11 @@ import * as React from "react";
 import algoliasearch from "algoliasearch";
 import algolia from "./Search";
 import debug from "debug";
+import { Link } from "@reach/router";
 import { useSession } from "./auth";
 import * as firebase from "firebase/app";
 import { Text, List, ListItem, Spinner, Button, useTheme, Embed } from "sancho";
 import { useFirebaseImage } from "./Image";
-import useReactRouter from "use-react-router";
 import { FadeImage } from "./FadeImage";
 import usePaginateQuery from "firestore-pagination-hook";
 const log = debug("app:RecipeList");
@@ -195,24 +195,19 @@ interface RecipeListItemProps {
 export function RecipeListItem({ recipe, id, highlight }: RecipeListItemProps) {
   const theme = useTheme();
   const { src, error } = useFirebaseImage("thumb-sm@", recipe.image);
-  const { history } = useReactRouter();
 
   return (
     <ListItem
       wrap={false}
-      activeStyle={{
-        backgroundColor: theme.colors.background.tint1
-      }}
-      component={"a"}
-      onPress={e => {
-        e.preventDefault();
-        history.push(`/${id}`);
-      }}
-      href={`/${id}`}
+      component={Link}
+      to={`/${id}`}
       css={{
         "& em": {
           fontStyle: "normal",
           color: theme.colors.text.selected
+        },
+        "&[aria-current]": {
+          background: theme.colors.background.tint2
         }
       }}
       contentAfter={
