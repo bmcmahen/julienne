@@ -19,14 +19,12 @@ const PrivateRoute = ({
   component: Component,
   ...other
 }: PrivateRouteProps) => {
-  console.log("private route?");
   const user = firebase.auth().currentUser;
 
   if (user) {
     return <Component user={user} {...other} />;
   }
 
-  console.log("user?");
   return <Redirect from="" to="login" noThrow />;
 };
 

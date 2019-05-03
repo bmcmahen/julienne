@@ -40,7 +40,7 @@
     "react-scripts": "2.1.8",
     "react-spring": "^8.0.15",
     "react-swipeable-views": "^0.13.1",
-    "sancho": "^2.0.0",
+    "sancho": "^2.0.2",
     "shortid": "^2.2.14",
     "slate": "^0.44.12",
     "slate-plain-serializer": "^0.6.36",

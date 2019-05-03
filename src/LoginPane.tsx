@@ -72,7 +72,7 @@ export const Login: React.FunctionComponent<LoginProps> = props => {
   }
 
   if (redirectToReferrer) {
-    return <Redirect to={from} />;
+    return <Redirect from="" to={from.pathname} noThrow />;
   }
 
   return (

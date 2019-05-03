@@ -100,7 +100,7 @@ export const FollowersList: React.FunctionComponent<
                 <Popover
                   content={
                     <MenuList>
-                      <MenuItem onSelect={() => deleteRelation(relation)}>
+                      <MenuItem onPress={() => deleteRelation(relation)}>
                         Remove user
                       </MenuItem>
                     </MenuList>

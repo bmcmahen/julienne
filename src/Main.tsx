@@ -126,7 +126,7 @@ export const Main: React.FunctionComponent<MainProps> = props => {
                 <ResponsivePopover
                   content={
                     <MenuList>
-                      <MenuItem onSelect={signOut}>Sign out</MenuItem>
+                      <MenuItem onPress={signOut}>Sign out</MenuItem>
                     </MenuList>
                   }
                 >
@@ -233,7 +233,6 @@ export const Main: React.FunctionComponent<MainProps> = props => {
             css={{
               display: "block",
               position: "relative",
-
               flex: 1,
               [theme.mediaQueries.md]: {
                 display: "flex",
@@ -286,7 +285,7 @@ export const Main: React.FunctionComponent<MainProps> = props => {
                     }
                   }}
                 >
-                  {key === "new" ? <Compose /> : <Recipe id={item} />}
+                  {item === "new" ? <Compose /> : <Recipe id={item} />}
                 </Layer>
               </animated.div>
             ))}

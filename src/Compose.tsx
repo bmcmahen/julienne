@@ -305,13 +305,13 @@ export const Compose: React.FunctionComponent<ComposeProps> = ({
               content={
                 <MenuList>
                   <MenuItem
-                    onSelect={() => {
+                    onPress={() => {
                       setEditing(true);
                     }}
                   >
                     Edit
                   </MenuItem>
-                  <MenuItem onSelect={() => handleDelete(id)}>Delete</MenuItem>
+                  <MenuItem onPress={() => handleDelete(id)}>Delete</MenuItem>
                 </MenuList>
               }
             >
