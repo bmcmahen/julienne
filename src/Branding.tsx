@@ -1,8 +1,7 @@
 /** @jsx jsx */
 import { jsx, Global } from "@emotion/core";
 import * as React from "react";
-import { Location } from "history";
-import { Link as RouterLink } from "react-router-dom";
+import { Link as RouterLink } from "@reach/router";
 import food from "./images/food.svg";
 import {
   Navbar,
@@ -17,7 +16,7 @@ import {
 } from "sancho";
 
 export interface BrandingProps {
-  location: Location;
+  path?: string;
 }
 
 export const Branding: React.FunctionComponent<BrandingProps> = () => {
@@ -134,7 +133,7 @@ export const Branding: React.FunctionComponent<BrandingProps> = () => {
         >
           <div
             css={{
-              content: "",
+              content: "''",
               position: "absolute",
               zIndex: 0,
               display: "none",
@@ -187,7 +186,7 @@ export const Branding: React.FunctionComponent<BrandingProps> = () => {
           </Text>
           <div
             css={{
-              content: "",
+              content: "''",
               position: "absolute",
               zIndex: 1,
               bottom: 0,
@@ -231,8 +230,8 @@ export const Branding: React.FunctionComponent<BrandingProps> = () => {
             pointerEvents: "none",
             fill: theme.colors.background.tint1
           }}
-          fill-rule="evenodd"
-          clip-rule="evenodd"
+          fillRule="evenodd"
+          clipRule="evenodd"
           xmlns="http://www.w3.org/2000/svg"
           viewBox="0 0 1920 240"
         >
@@ -354,8 +353,8 @@ export const Branding: React.FunctionComponent<BrandingProps> = () => {
             left: 0,
             fill: theme.colors.background.tint1
           }}
-          fill-rule="evenodd"
-          clip-rule="evenodd"
+          fillRule="evenodd"
+          clipRule="evenodd"
           xmlns="http://www.w3.org/2000/svg"
           viewBox="0 0 1920 240"
         >

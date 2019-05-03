@@ -1,7 +1,7 @@
 /** @jsx jsx */
 import { jsx, Global } from "@emotion/core";
 import * as firebase from "firebase/app";
-import { BrowserRouter, Switch, Redirect, Route } from "react-router-dom";
+import { Router, Redirect } from "@reach/router";
 import { Login } from "./LoginPane";
 import { Branding } from "./Branding";
 import { Spinner } from "sancho";
@@ -19,26 +19,15 @@ const PrivateRoute = ({
   component: Component,
   ...other
 }: PrivateRouteProps) => {
+  console.log("private route?");
   const user = firebase.auth().currentUser;
-  return (
-    <Route
-      {...other}
-      render={(props: any) => {
-        if (user) {
-          return <Component user={user} {...props} />;
-        } else {
-          return (
-            <Redirect
-              to={{
-                pathname: "/login",
-                state: { from: props.location }
-              }}
-            />
-          );
-        }
-      }}
-    />
-  );
+
+  if (user) {
+    return <Component user={user} {...other} />;
+  }
+
+  console.log("user?");
+  return <Redirect from="" to="login" noThrow />;
 };
 
 function App() {
@@ -77,13 +66,13 @@ function App() {
       />
       <div className="App">
         <Helmet titleTemplate="%s | Julienne" defaultTitle="Julienne" />
-        <BrowserRouter>
-          <Switch>
-            {!user && <Route path="/" exact component={Branding} />}
-            <Route path="/login" component={Login} />
-            <PrivateRoute path="/:id?" component={Main} />
-          </Switch>
-        </BrowserRouter>
+        <Router>
+          <Branding path="/" />
+          <Login path="/login" />
+          {/* {!user && <Branding path="/" />}
+          <Login path="/login" />
+          <PrivateRoute path="/:id?" component={Main} /> */}
+        </Router>
       </div>
     </userContext.Provider>
   );

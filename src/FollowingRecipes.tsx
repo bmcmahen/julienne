@@ -66,7 +66,7 @@ export const FollowingRecipes: React.FunctionComponent<
       {hasMore && !loadingMore && (
         <div css={{ textAlign: "center" }}>
           <Button
-            onClick={() => {
+            onPress={() => {
               loadMore();
             }}
           >

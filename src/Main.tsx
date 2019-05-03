@@ -131,17 +131,13 @@ export const Main: React.FunctionComponent<MainProps> = props => {
                     </MenuList>
                   }
                 >
-                  <div>
-                    <DarkMode>
-                      <Button
-                        size="md"
-                        iconAfter={<IconChevronDown />}
-                        variant="ghost"
-                      >
-                        {user.displayName || user.email}
-                      </Button>
-                    </DarkMode>
-                  </div>
+                  <Button
+                    size="md"
+                    iconAfter={<IconChevronDown />}
+                    variant="ghost"
+                  >
+                    {user.displayName || user.email}
+                  </Button>
                 </ResponsivePopover>
                 <Tooltip content="Add a new recipe">
                   <div>

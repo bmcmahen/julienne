@@ -23,7 +23,6 @@ import {
   Container,
   ResponsivePopover,
   IconX,
-  IconArrowRight,
   IconMoreVertical,
   IconArrowLeft
 } from "sancho";
@@ -339,7 +338,7 @@ export const Compose: React.FunctionComponent<ComposeProps> = ({
                   },
                   marginLeft: theme.spaces.sm
                 }}
-                onClick={() => setEditing(false)}
+                onPress={() => setEditing(false)}
               >
                 Cancel
               </Button>
@@ -349,7 +348,7 @@ export const Compose: React.FunctionComponent<ComposeProps> = ({
                 intent="primary"
                 disabled={!title}
                 css={{ marginLeft: theme.spaces.sm }}
-                onClick={() => {
+                onPress={() => {
                   const current = ref.current as any;
                   const { text, content } = current.serialize();
                   const toSave = {
@@ -455,7 +454,7 @@ export const Compose: React.FunctionComponent<ComposeProps> = ({
                                     variant="ghost"
                                     icon={<IconX />}
                                     label="Delete ingredient"
-                                    onClick={() => removeIngredient(i)}
+                                    onPress={() => removeIngredient(i)}
                                   />
                                 )}
                               </div>
@@ -507,7 +506,7 @@ export const Compose: React.FunctionComponent<ComposeProps> = ({
                 <Button
                   css={{ marginTop: theme.spaces.sm }}
                   size="sm"
-                  onClick={addNewIngredient}
+                  onPress={addNewIngredient}
                 >
                   Add another
                 </Button>

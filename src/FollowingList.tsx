@@ -176,7 +176,7 @@ export const FollowingList: React.FunctionComponent<
               queryResults.hits.map(hit => (
                 <ListItem
                   key={hit.objectID}
-                  onClick={() => inviteUser(hit)}
+                  onPress={() => inviteUser(hit)}
                   contentBefore={
                     <Avatar
                       size="sm"
@@ -199,7 +199,7 @@ export const FollowingList: React.FunctionComponent<
                 <ListItem
                   key={user.uid}
                   interactive={relation.confirmed ? true : false}
-                  onClick={() =>
+                  onPress={() =>
                     showRelation({ id: relation.toUserId, ...relation.toUser })
                   }
                   contentBefore={
@@ -220,7 +220,7 @@ export const FollowingList: React.FunctionComponent<
                       />
                     ) : (
                       <Button
-                        onClick={e => {
+                        onPress={e => {
                           e.stopPropagation();
                           e.preventDefault();
                           deleteRequest(relation.id);
@@ -254,7 +254,7 @@ export const FollowingList: React.FunctionComponent<
                   variant="ghost"
                   icon={<IconArrowLeft />}
                   label="Show all followers"
-                  onClick={() => setIndex(0)}
+                  onPress={() => setIndex(0)}
                 />
                 <div
                   css={{
@@ -277,14 +277,14 @@ export const FollowingList: React.FunctionComponent<
                 <Popover
                   content={
                     <MenuList>
-                      <MenuItem onClick={() => unfollow(relation.id)}>
+                      <MenuItem onPress={() => unfollow(relation.id)}>
                         Unfollow user
                       </MenuItem>
                     </MenuList>
                   }
                 >
                   <IconButton
-                    onClick={e => e.stopPropagation()}
+                    onPress={e => e.stopPropagation()}
                     variant="ghost"
                     icon={<IconMoreVertical />}
                     label="Options"

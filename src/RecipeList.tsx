@@ -8,7 +8,7 @@ import { useSession } from "./auth";
 import * as firebase from "firebase/app";
 import { Text, List, ListItem, Spinner, Button, useTheme, Embed } from "sancho";
 import { useFirebaseImage } from "./Image";
-import { NavLink } from "react-router-dom";
+import useReactRouter from "use-react-router";
 import { FadeImage } from "./FadeImage";
 import usePaginateQuery from "firestore-pagination-hook";
 const log = debug("app:RecipeList");
@@ -171,7 +171,7 @@ export const RecipeList: React.FunctionComponent<RecipeListProps> = ({
               }}
             >
               <Button
-                onClick={() => {
+                onPress={() => {
                   loadMore();
                 }}
               >
@@ -195,6 +195,7 @@ interface RecipeListItemProps {
 export function RecipeListItem({ recipe, id, highlight }: RecipeListItemProps) {
   const theme = useTheme();
   const { src, error } = useFirebaseImage("thumb-sm@", recipe.image);
+  const { history } = useReactRouter();
 
   return (
     <ListItem
@@ -202,8 +203,12 @@ export function RecipeListItem({ recipe, id, highlight }: RecipeListItemProps) {
       activeStyle={{
         backgroundColor: theme.colors.background.tint1
       }}
-      component={NavLink}
-      to={`/${id}`}
+      component={"a"}
+      onPress={e => {
+        e.preventDefault();
+        history.push(`/${id}`);
+      }}
+      href={`/${id}`}
       css={{
         "& em": {
           fontStyle: "normal",

@@ -107,7 +107,7 @@ export const FollowersList: React.FunctionComponent<
                   }
                 >
                   <IconButton
-                    onClick={e => e.stopPropagation()}
+                    onPress={e => e.stopPropagation()}
                     variant="ghost"
                     icon={<IconMoreVertical />}
                     label="Options"
@@ -115,7 +115,7 @@ export const FollowersList: React.FunctionComponent<
                 </Popover>
               ) : (
                 <Button
-                  onClick={() => acceptRequest(relation)}
+                  onPress={() => acceptRequest(relation)}
                   intent="primary"
                   size="sm"
                 >

@@ -1,7 +1,7 @@
 /** @jsx jsx */
 import { jsx } from "@emotion/core";
 import * as React from "react";
-import { Redirect, Link } from "react-router-dom";
+import { Redirect, Link } from "@reach/router";
 import food from "./images/food.svg";
 import {
   useTheme,
@@ -20,11 +20,12 @@ import useReactRouter from "use-react-router";
 import queryString from "query-string";
 import { Layout } from "./Layout";
 
-export interface LoginProps {}
+export interface LoginProps {
+  path?: string;
+}
 
 export const Login: React.FunctionComponent<LoginProps> = props => {
   const theme = useTheme();
-  const { location } = useReactRouter();
   const qs = queryString.parse(location.search);
   const [isRegistering, setIsRegistering] = React.useState(
     typeof qs.register === "string"
@@ -33,7 +34,7 @@ export const Login: React.FunctionComponent<LoginProps> = props => {
   const [loading, setLoading] = React.useState(false);
   const [redirectToReferrer, setRedirectToReferrer] = React.useState(false);
 
-  const { from } = location.state || { from: { pathname: "/" } };
+  const { from } = { from: { pathname: "/" } };
 
   // logging in errors
   const [error, setError] = React.useState("");
@@ -190,11 +191,10 @@ export const Login: React.FunctionComponent<LoginProps> = props => {
                 />
               )}
               <Button
-                onClick={login(loginWithGoogle)}
+                onPress={login(loginWithGoogle)}
                 css={{
                   marginBottom: theme.spaces.md,
-                  width: "100%",
-                  display: "block"
+                  width: "100%"
                 }}
                 block
               >
@@ -236,7 +236,7 @@ export const Login: React.FunctionComponent<LoginProps> = props => {
                       css={{
                         textAlign: "center",
                         width: "100%",
-                        display: "block",
+
                         marginTop: theme.spaces.md
                       }}
                       type="submit"
