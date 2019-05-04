@@ -45,7 +45,11 @@ export const Main: React.FunctionComponent<MainProps> = props => {
   const { value: followRequests } = useFollowRequests();
   const isLarge = useMedia({ minWidth: "768px" });
 
+  console.log(props);
+
   const showingRecipe = props["*"];
+
+  console.log("showing recipe", showingRecipe);
 
   const transitions = useTransition(showingRecipe, recipeId => recipeId, {
     from: { opacity: 0, transform: "scale(0.95)" },
@@ -287,7 +291,7 @@ export const Main: React.FunctionComponent<MainProps> = props => {
                     }
                   }}
                 >
-                  {item === "new" ? <Compose /> : <Recipe id={item} />}
+                  <MainContent id={item} />
                 </Layer>
               </animated.div>
             ))}
@@ -297,3 +301,19 @@ export const Main: React.FunctionComponent<MainProps> = props => {
     </Layout>
   );
 };
+
+interface MainContentProps {
+  id?: string;
+}
+
+function MainContent({ id }: MainContentProps) {
+  if (!id) {
+    return null;
+  }
+
+  if (id === "new") {
+    return <Compose />;
+  }
+
+  return <Recipe id={id} />;
+}
