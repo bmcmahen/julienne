@@ -45,7 +45,7 @@ export const Main: React.FunctionComponent<MainProps> = props => {
   const { value: followRequests } = useFollowRequests();
   const isLarge = useMedia({ minWidth: "768px" });
 
-  const showingRecipe = props.id;
+  const showingRecipe = props["*"];
 
   const transitions = useTransition(showingRecipe, recipeId => recipeId, {
     from: { opacity: 0, transform: "scale(0.95)" },
@@ -123,21 +123,23 @@ export const Main: React.FunctionComponent<MainProps> = props => {
                 }}
               >
                 <div css={{ width: "42px" }} />
-                <ResponsivePopover
-                  content={
-                    <MenuList>
-                      <MenuItem onPress={signOut}>Sign out</MenuItem>
-                    </MenuList>
-                  }
-                >
-                  <Button
-                    size="md"
-                    iconAfter={<IconChevronDown />}
-                    variant="ghost"
+                <DarkMode>
+                  <ResponsivePopover
+                    content={
+                      <MenuList>
+                        <MenuItem onPress={signOut}>Sign out</MenuItem>
+                      </MenuList>
+                    }
                   >
-                    {user.displayName || user.email}
-                  </Button>
-                </ResponsivePopover>
+                    <Button
+                      size="md"
+                      iconAfter={<IconChevronDown />}
+                      variant="ghost"
+                    >
+                      {user.displayName || user.email}
+                    </Button>
+                  </ResponsivePopover>
+                </DarkMode>
                 <Tooltip content="Add a new recipe">
                   <div>
                     <DarkMode>

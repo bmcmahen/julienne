@@ -65,9 +65,9 @@ function App() {
       <div className="App">
         <Helmet titleTemplate="%s | Julienne" defaultTitle="Julienne" />
         <Router>
-          {!user ? <Branding path="/" /> : <Main path="/" />}
+          {!user && <Branding path="/" />}
           <Login path="/login" />
-          <PrivateRoute path="/:id" component={Main} />
+          <PrivateRoute path="*" component={Main} />
         </Router>
       </div>
     </userContext.Provider>
