@@ -1,5 +1,15 @@
 # Julienne
 
+<div align="center">
+  <a href="https://julienne.app">
+    <img
+    max-width="600px"
+    alt="Julienne screenshot showing a list of recipes on the left, and a recipe on the right."
+     src="https://raw.githubusercontent.com/bmcmahen/julienne/master/julienne.jpg">
+  </a>
+</div>
+<br />
+
 Julienne is a web app that allows you to share recipes with family and friends.
 
 It's built using the [Sancho-UI](https://github.com/bmcmahen/sancho) design system, Firebase, Typescript, React and Emotion.
@@ -10,9 +20,9 @@ It's built using the [Sancho-UI](https://github.com/bmcmahen/sancho) design syst
 
 I'm writing a series of blog posts explaining the code that goes into this project. I'll be adding them here and on my blog when time permits.
 
-__1. [Introducing Sancho UI](https://benmcmahen.com/introducing-sancho/)__
+**1. [Introducing Sancho UI](https://benmcmahen.com/introducing-sancho/)**
 
-__2. [Using Firebase with React Hooks](https://benmcmahen.com/using-firebase-with-react-hooks/)__
+**2. [Using Firebase with React Hooks](https://benmcmahen.com/using-firebase-with-react-hooks/)**
 
 ## Running locally
 
