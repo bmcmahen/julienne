@@ -1377,7 +1377,7 @@
   resolved "https://registry.yarnpkg.com/@types/node/-/node-11.11.3.tgz#7c6b0f8eaf16ae530795de2ad1b85d34bf2f5c58"
   integrity sha512-wp6IOGu1lxsfnrD+5mX6qwSwWuqsdkKKxTN4aQc4wByHAKZJf9/D4KXPQ1POUjEbnCP5LMggB0OEFNY9OTsMqg==
 
-"@types/prop-types@*", "@types/prop-types@^15.7.0":
+"@types/prop-types@*", "@types/prop-types@15.7.0":
   version "15.7.0"
   resolved "https://registry.yarnpkg.com/@types/prop-types/-/prop-types-15.7.0.tgz#4c48fed958d6dcf9487195a0ef6456d5f6e0163a"
   integrity sha512-eItQyV43bj4rR3JPV0Skpl1SncRCdziTEK9/v8VwXmV6d/qOUO8/EuWeHBbCZcsfSHfzI5UyMJLCSXtxxznyZg==
@@ -1783,11 +1783,6 @@ alphanum-sort@^1.0.0:
   version "1.0.2"
   resolved "https://registry.yarnpkg.com/alphanum-sort/-/alphanum-sort-1.0.2.tgz#97a1119649b211ad33691d9f9f486a8ec9fbe0a3"
   integrity sha1-l6ERlkmyEa0zaR2fn0hqjsn74KM=
-
-animated-scroll-to@^1.2.2:
-  version "1.2.2"
-  resolved "https://registry.yarnpkg.com/animated-scroll-to/-/animated-scroll-to-1.2.2.tgz#d6688e72f3ecec1a296fc2b36fe29290e7fff694"
-  integrity sha512-16ipIWWKvRGAeTfgiqTdXDBLPU0fCIq5sGDMQSdQnIjkxgm3pHzzUZiJ+rT/3xVbOXpTTN72vf2C4y9vepDBHA==
 
 ansi-align@^2.0.0:
   version "2.0.0"
@@ -3342,7 +3337,7 @@ compression@^1.7.0:
     safe-buffer "5.1.2"
     vary "~1.1.2"
 
-compute-scroll-into-view@1.0.11:
+compute-scroll-into-view@^1.0.11:
   version "1.0.11"
   resolved "https://registry.yarnpkg.com/compute-scroll-into-view/-/compute-scroll-into-view-1.0.11.tgz#7ff0a57f9aeda6314132d8994cce7aeca794fecf"
   integrity sha512-uUnglJowSe0IPmWOdDtrlHXof5CTIJitfJEyITHBW6zDVOGu9Pjk5puaLM73SLcwak0L4hEjO7Td88/a6P5i7A==
@@ -9106,15 +9101,6 @@ pako@~1.0.5:
   resolved "https://registry.yarnpkg.com/pako/-/pako-1.0.10.tgz#4328badb5086a426aa90f541977d4955da5c9732"
   integrity sha512-0DTvPVU3ed8+HNXOu5Bs+o//Mbdj9VNQMUOe9oKCwh8l0GNwpTDMKCWbRjgtD291AWnkAgkqA/LOnQS8AmS1tw==
 
-pan-responder-hook@^1.1.4:
-  version "1.1.4"
-  resolved "https://registry.yarnpkg.com/pan-responder-hook/-/pan-responder-hook-1.1.4.tgz#fa6cd1a362dd9df8255115c47c760e566f5c7950"
-  integrity sha512-UaBdl1oSkTkcRf7Fuw8ffNJk+Z6qJUwuCGKsBgZcsjkCXwhcgLS7GGTTNFSrbDRiRrpXXWw2Ubzv99zYaV2h5w==
-  dependencies:
-    "@types/react" "^16.8.10"
-    "@types/react-dom" "^16.8.3"
-    tslib "^1.9.3"
-
 parallel-transform@^1.1.0:
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/parallel-transform/-/parallel-transform-1.1.0.tgz#d410f065b05da23081fcd10f28854c29bda33b06"
@@ -10432,6 +10418,26 @@ react-firebase-hooks@^1.1.0:
   resolved "https://registry.yarnpkg.com/react-firebase-hooks/-/react-firebase-hooks-1.1.0.tgz#8e1853155669026b171e9b6d9fc16898cfa9b8bd"
   integrity sha512-ZdY6vAmv9mwldW9mul8T3lbv45p5qgLhtfADZgD8L58MN6/FfTsLCAPOrYMD7MpRTRdeiMX4ioZ9xQd1BfOWCQ==
 
+react-gesture-responder@^2.0.0:
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/react-gesture-responder/-/react-gesture-responder-2.0.0.tgz#abbfee7d77d65f93567415fccad1b80860d2967a"
+  integrity sha512-oWQSq9YQYKRp8KMu10jj3qySvOTOqgEaqcDVwf3rX7gCx4FG2a/BLQBKb3SEZbZP4DbkG5ULk1/dy2jaoR2Vlw==
+  dependencies:
+    "@types/react" "^16.8.10"
+    "@types/react-dom" "^16.8.3"
+    tslib "^1.9.3"
+
+react-gesture-view@^1.0.2:
+  version "1.0.2"
+  resolved "https://registry.yarnpkg.com/react-gesture-view/-/react-gesture-view-1.0.2.tgz#0a051132b778e0597bfe245000b03c455fc7e48b"
+  integrity sha512-7eIJHdBmwnhbQKAsozSFE6Bp6OiYHELDoSI3hJMMev9IGCKK3kWxiEM2Y2hRiRTJmJ23O+ZyB0C+ZMJ7AZ8RxQ==
+  dependencies:
+    "@types/react" "^16.8.10"
+    "@types/react-dom" "^16.8.3"
+    react-spring "^9.0.0-beta.5"
+    resize-observer-polyfill "^1.5.1"
+    tslib "^1.9.3"
+
 react-helmet@^5.2.0:
   version "5.2.0"
   resolved "https://registry.yarnpkg.com/react-helmet/-/react-helmet-5.2.0.tgz#a81811df21313a6d55c5f058c4aeba5d6f3d97a7"
@@ -10590,12 +10596,13 @@ react-spring@^8.0.18:
   dependencies:
     "@babel/runtime" "^7.3.1"
 
-react-spring@^8.0.19:
-  version "8.0.19"
-  resolved "https://registry.yarnpkg.com/react-spring/-/react-spring-8.0.19.tgz#62f4f396b4b73fa402838200a1c80374338cb12e"
-  integrity sha512-DjrwjXqqVEitj6e6GqdW5dUp1BoVyeFQhEcXvPfoQxwyIVSJ9smNt8CNjSvoQqRujVllE7XKaJRWSZO/ewd1/A==
+react-spring@^9.0.0-beta.5, react-spring@^9.0.0-beta.6:
+  version "9.0.0-beta.6"
+  resolved "https://registry.yarnpkg.com/react-spring/-/react-spring-9.0.0-beta.6.tgz#8081f4c934a75e37ded403011e94aed00b3c9303"
+  integrity sha512-wTN1+rK57QKEomEoekXm2IsBPf6KULaqTPKiyEpnoj0NX1pGI1rrMCwLPSZ7FidwqSL54aZLtlZU28nkWQILiQ==
   dependencies:
     "@babel/runtime" "^7.3.1"
+    prop-types "^15.5.8"
 
 react-style-singleton@^1.1.0:
   version "1.1.1"
@@ -10636,11 +10643,6 @@ react-swipeable-views@^0.13.1:
     react-swipeable-views-core "^0.13.1"
     react-swipeable-views-utils "^0.13.1"
     warning "^4.0.1"
-
-react-with-gesture@^4.0.8:
-  version "4.0.8"
-  resolved "https://registry.yarnpkg.com/react-with-gesture/-/react-with-gesture-4.0.8.tgz#ce6db9e667ef13120797e641f1a00f934aed6c36"
-  integrity sha512-VIJ1K2/UT67m+OnqYIgJUdYEqVmJDPfbZBoqUMYKts6WA0EbEC7YRMBEzxgy/jvVdafg9L2GSuFtUokpskKHag==
 
 react@^16.8.6:
   version "16.8.6"
@@ -11184,10 +11186,10 @@ safe-regex@^1.1.0:
   resolved "https://registry.yarnpkg.com/safer-buffer/-/safer-buffer-2.1.2.tgz#44fa161b0187b9549dd84bb91802f9bd8385cd6a"
   integrity sha512-YZo3K82SD7Riyi0E1EQPojLz7kpepnSQI9IyPbHHg1XXXevb5dJI7tpyN2ADxGcQbHG7vcyRHk0cbwqcQriUtg==
 
-sancho@^2.0.2:
-  version "2.0.2"
-  resolved "https://registry.yarnpkg.com/sancho/-/sancho-2.0.2.tgz#d6f41484b2c932b5ea0cc228db960336df87551b"
-  integrity sha512-ttSNGcpbV9YbBSSonq8j/pfyfApFaE8rj0geonbOQi/A0oecwPCTi7iS0iPUvM1Dx367Q+xTvzG6b3pqghyXWg==
+sancho@^3.0.1:
+  version "3.0.1"
+  resolved "https://registry.yarnpkg.com/sancho/-/sancho-3.0.1.tgz#591f414ae7613a49f6b2a27d3320408bb401de97"
+  integrity sha512-EfhMg+7LBsAEu7C0kTPOzb2xytxWykO1i1owtX+ELweI/BUy5TNRRae2KbUDFAWq3L3dn94JdFKQ/c/KfhSK9g==
   dependencies:
     "@reach/alert" "^0.1.2"
     "@reach/skip-nav" "^0.1.2"
@@ -11195,28 +11197,26 @@ sancho@^2.0.2:
     "@types/classnames" "^2.2.7"
     "@types/color" "^3.0.0"
     "@types/lodash.uniqueid" "^4.0.5"
-    "@types/prop-types" "^15.7.0"
+    "@types/prop-types" "15.7.0"
     "@types/react" "16.8.4"
     "@types/react-dom" "16.8.2"
     "@types/react-swipeable-views" "^0.12.2"
-    animated-scroll-to "^1.2.2"
     classnames "^2.2.6"
     color "^3.1.0"
+    compute-scroll-into-view "^1.0.11"
     focus-trap "5"
     is-mobile "^2.0.0"
     open-color "^1.6.3"
-    pan-responder-hook "^1.1.4"
     popper.js "^1.14.7"
     prop-types "^15.7.2"
+    react-gesture-responder "^2.0.0"
+    react-gesture-view "^1.0.2"
     react-popper "^1.3.3"
     react-remove-scroll "^1.0.4"
-    react-spring "^8.0.19"
-    react-swipeable-views "^0.13.1"
-    react-with-gesture "^4.0.8"
+    react-spring "^9.0.0-beta.6"
     resize-observer-polyfill "^1.5.1"
-    scroll-into-view-if-needed "^2.2.20"
     toasted-notes "^2.1.5"
-    touchable-hook "^1.1.2"
+    touchable-hook "^1.2.1"
     tslib "^1.9.3"
     use-media "^1.2.0"
 
@@ -11277,13 +11277,6 @@ schema-utils@^1.0.0:
     ajv "^6.1.0"
     ajv-errors "^1.0.0"
     ajv-keywords "^3.1.0"
-
-scroll-into-view-if-needed@^2.2.20:
-  version "2.2.20"
-  resolved "https://registry.yarnpkg.com/scroll-into-view-if-needed/-/scroll-into-view-if-needed-2.2.20.tgz#3a46847a72233a3af9770e55df450f2a7f2e2a0e"
-  integrity sha512-P9kYMrhi9f6dvWwTGpO5I3HgjSU/8Mts7xL3lkoH5xlewK7O9Obdc5WmMCzppln7bCVGNmf3qfoZXrpCeyNJXw==
-  dependencies:
-    compute-scroll-into-view "1.0.11"
 
 select-hose@^2.0.0:
   version "2.0.0"
@@ -12391,10 +12384,10 @@ topo@2.x.x:
   dependencies:
     hoek "4.x.x"
 
-touchable-hook@^1.1.2:
-  version "1.1.2"
-  resolved "https://registry.yarnpkg.com/touchable-hook/-/touchable-hook-1.1.2.tgz#b3abcf9ca0da50e2a2e18dce9f978d44c1729fcc"
-  integrity sha512-F7fl5mBq4e/LcHHfrGIZoSh7nsSabgmsxhgqL+KvLY3QhgunQd7dKKWwQpIz/rs8qaMmWMfxNWy3IWmPDIJsMg==
+touchable-hook@^1.2.1:
+  version "1.2.1"
+  resolved "https://registry.yarnpkg.com/touchable-hook/-/touchable-hook-1.2.1.tgz#0791f3e05ff441827470bcd544cd44465344dd21"
+  integrity sha512-bXey/2YFuLtHDkoGoGigfXjUlnM0H5jUHNJUVrNZ5fCD6lNAb3Bkwz2prNUkowa99Ul48MlDOq0do+lQtgThmw==
   dependencies:
     "@types/react" "^16.8.10"
     "@types/react-dom" "^16.8.3"

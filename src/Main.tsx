@@ -17,7 +17,8 @@ import {
   ResponsivePopover,
   IconChevronDown,
   IconPlus,
-  DarkMode
+  DarkMode,
+  LightMode
 } from "sancho";
 import { RecipeList } from "./RecipeList";
 import { useFollowRequests } from "./hooks/with-follow-request-count";
@@ -127,7 +128,7 @@ export const Main: React.FunctionComponent<MainProps> = props => {
                 }}
               >
                 <div css={{ width: "42px" }} />
-                <DarkMode>
+                <LightMode>
                   <ResponsivePopover
                     content={
                       <MenuList>
@@ -135,15 +136,17 @@ export const Main: React.FunctionComponent<MainProps> = props => {
                       </MenuList>
                     }
                   >
-                    <Button
-                      size="md"
-                      iconAfter={<IconChevronDown />}
-                      variant="ghost"
-                    >
-                      {user.displayName || user.email}
-                    </Button>
+                    <DarkMode>
+                      <Button
+                        size="md"
+                        iconAfter={<IconChevronDown />}
+                        variant="ghost"
+                      >
+                        {user.displayName || user.email}
+                      </Button>
+                    </DarkMode>
                   </ResponsivePopover>
-                </DarkMode>
+                </LightMode>
                 <Tooltip content="Add a new recipe">
                   <div>
                     <DarkMode>
