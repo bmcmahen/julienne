@@ -20,7 +20,6 @@ import {
   IconChevronRight,
   IconMoreVertical,
   IconArrowLeft,
-  GestureView,
   StateType
 } from "sancho";
 import { SearchBox } from "./SearchBox";
@@ -30,7 +29,7 @@ import config from "./firebase-config";
 import { useSession } from "./auth";
 import find from "lodash.find";
 import { deleteRequestFollow, requestFollow } from "./db";
-import SwipeableViews from "react-swipeable-views";
+import GestureView from "react-gesture-view";
 import { FollowingRecipes } from "./FollowingRecipes";
 import { User } from "firebase";
 
@@ -148,7 +147,12 @@ export const FollowingList: React.FunctionComponent<
 
   return (
     <div>
-      <GestureView lazyLoad value={index} onRequestChange={i => setIndex(i)}>
+      <GestureView
+        enableGestures={false}
+        lazyLoad
+        value={index}
+        onRequestChange={i => setIndex(i)}
+      >
         <div>
           <div>
             <SearchBox

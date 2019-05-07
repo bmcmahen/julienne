@@ -35,6 +35,7 @@
     "react-dom": "^16.8.6",
     "react-filepond": "^7.0.1",
     "react-firebase-hooks": "^1.1.0",
+    "react-gesture-view": "^1.1.0",
     "react-helmet": "^5.2.0",
     "react-router": "^5.0.0",
     "react-router-dom": "^5.0.0",

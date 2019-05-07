@@ -85,7 +85,8 @@ export const Main: React.FunctionComponent<MainProps> = props => {
               top: 0,
               boxShadow: theme.shadows.xl,
               overflow: "hidden",
-              width: "auto",
+              width: "100%",
+              maxWidth: "325px",
               borderRadius: theme.radii.lg,
               margin: theme.spaces.lg,
               marginRight: 0,
@@ -95,6 +96,7 @@ export const Main: React.FunctionComponent<MainProps> = props => {
               margin: theme.spaces.xl,
               marginRight: 0,
               width: "400px",
+              maxWidth: "400px",
               height: `calc(100vh - ${theme.spaces.xl} - ${theme.spaces.xl})`
             }
           }}
