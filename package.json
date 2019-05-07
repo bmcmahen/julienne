@@ -24,6 +24,7 @@
     "filepond-plugin-image-preview": "^4.0.3",
     "firebase": "^5.9.0",
     "firestore-pagination-hook": "^1.0.0",
+    "focus-visible": "^4.1.5",
     "immutable": "^4.0.0-rc.12",
     "is-hotkey": "^0.1.4",
     "lodash.find": "^4.6.0",

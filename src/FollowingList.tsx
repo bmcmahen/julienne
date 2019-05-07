@@ -19,7 +19,9 @@ import {
   IconPlus,
   IconChevronRight,
   IconMoreVertical,
-  IconArrowLeft
+  IconArrowLeft,
+  GestureView,
+  StateType
 } from "sancho";
 import { SearchBox } from "./SearchBox";
 import debug from "debug";
@@ -146,7 +148,7 @@ export const FollowingList: React.FunctionComponent<
 
   return (
     <div>
-      <SwipeableViews index={index} disabled>
+      <GestureView lazyLoad value={index} onRequestChange={i => setIndex(i)}>
         <div>
           <div>
             <SearchBox
@@ -295,7 +297,7 @@ export const FollowingList: React.FunctionComponent<
             </React.Fragment>
           )}
         </div>
-      </SwipeableViews>
+      </GestureView>
     </div>
   );
 };

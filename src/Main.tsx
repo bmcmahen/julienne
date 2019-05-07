@@ -18,7 +18,8 @@ import {
   IconChevronDown,
   IconPlus,
   DarkMode,
-  LightMode
+  LightMode,
+  GestureView
 } from "sancho";
 import { RecipeList } from "./RecipeList";
 import { useFollowRequests } from "./hooks/with-follow-request-count";
@@ -46,11 +47,7 @@ export const Main: React.FunctionComponent<MainProps> = props => {
   const { value: followRequests } = useFollowRequests();
   const isLarge = useMedia({ minWidth: "768px" });
 
-  console.log(props);
-
   const showingRecipe = props["*"];
-
-  console.log("showing recipe", showingRecipe);
 
   const transitions = useTransition(showingRecipe, recipeId => recipeId, {
     from: { opacity: 0, transform: "scale(0.95)" },
@@ -192,7 +189,11 @@ export const Main: React.FunctionComponent<MainProps> = props => {
             </div>
           </div>
 
-          {activeTab === 0 && (
+          <GestureView
+            value={activeTab}
+            onRequestChange={i => setActiveTab(i)}
+            lazyLoad
+          >
             <TabPanel
               css={{
                 display: "flex",
@@ -222,19 +223,13 @@ export const Main: React.FunctionComponent<MainProps> = props => {
                 <RecipeList query={query} />
               </div>
             </TabPanel>
-          )}
-
-          {activeTab === 1 && (
             <TabPanel id="following">
               <FollowingList />
             </TabPanel>
-          )}
-
-          {activeTab === 2 && (
             <TabPanel id="followers">
               <FollowersList />
             </TabPanel>
-          )}
+          </GestureView>
         </Layer>
 
         {showingRecipe && (
