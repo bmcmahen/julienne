@@ -24,6 +24,10 @@ I'm writing a series of blog posts explaining the code that goes into this proje
 
 **2. [Using Firebase with React Hooks](https://benmcmahen.com/using-firebase-with-react-hooks/)**
 
+**3. [Building React Components with Gesture Support](https://benmcmahen.com/building-react-components-with-gesture-support/)**
+
+**4. [A Beginner's Guide to using Typescript with React](https://benmcmahen.com/beginners-guide-to-typescript-with-react/)**
+
 ## Running locally
 
 This project is built using `create-react-app`, typescript, and firebase. To get it running properly, you'll need to create your own firebase application and export your firebase configuration in a file at `src/firebase-config.ts`. The config should include algolia configuration, and look something like this:
