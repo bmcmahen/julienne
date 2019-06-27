@@ -54,6 +54,7 @@ export const Login: React.FunctionComponent<LoginProps> = props => {
   }
 
   async function loginEmail(e: React.FormEvent) {
+    console.log("WHAT?");
     e.preventDefault();
 
     const { email, password } = form;
@@ -232,6 +233,7 @@ export const Login: React.FunctionComponent<LoginProps> = props => {
                     <Button
                       disabled={!form.email || !form.password}
                       block
+                      component="button"
                       css={{
                         textAlign: "center",
                         width: "100%",
