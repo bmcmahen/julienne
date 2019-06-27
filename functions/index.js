@@ -248,11 +248,13 @@ function createThumnail(object, prefix = "thumb@", width = 1000, height = 700) {
       return sharp(tmpFilePath)
         .resize(width, height)
         .toFile(thumbPath)
-        .then(() =>
-          bucket.upload(thumbPath, {
+        .then(() => {
+          console.log("creating thumb: ", thumbPath, thumbName);
+
+          return bucket.upload(thumbPath, {
             destination: path.join(bucketDir, thumbName)
-          })
-        );
+          });
+        });
     })
     .then(() => {
       return fs.remove(workingDir);

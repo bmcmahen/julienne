@@ -75,7 +75,7 @@ export function useFirebaseImage(prefix: string = "thumb@", id?: string) {
     }
 
     storage
-      .child(key)
+      .child("images/" + key)
       .getDownloadURL()
       .then((url: string) => {
         setImageURL(url);
