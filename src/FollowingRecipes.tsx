@@ -3,7 +3,15 @@ import { jsx } from "@emotion/core";
 import * as React from "react";
 import usePaginateQuery from "firestore-pagination-hook";
 import firebase from "firebase/app";
-import { Text, Spinner, useTheme, List, Button } from "sancho";
+import {
+  Text,
+  Spinner,
+  useTheme,
+  List,
+  Button,
+  ListItem,
+  Skeleton
+} from "sancho";
 import { RecipeListItem, Recipe } from "./RecipeList";
 
 export interface FollowingRecipesProps {
@@ -35,7 +43,6 @@ export const FollowingRecipes: React.FunctionComponent<
 
   return (
     <div>
-      {loading && <Spinner center />}
       {!loading && items.length === 0 && (
         <Text
           muted
@@ -50,6 +57,36 @@ export const FollowingRecipes: React.FunctionComponent<
       )}
 
       <List>
+        {loading && (
+          <React.Fragment>
+            <ListItem
+              interactive={false}
+              contentBefore={
+                <Skeleton
+                  css={{
+                    width: "32px",
+                    height: "32px",
+                    borderRadius: "50%"
+                  }}
+                />
+              }
+              primary={<Skeleton css={{ maxWidth: "160px" }} />}
+            />
+            <ListItem
+              interactive={false}
+              contentBefore={
+                <Skeleton
+                  css={{
+                    width: "32px",
+                    height: "32px",
+                    borderRadius: "50%"
+                  }}
+                />
+              }
+              primary={<Skeleton css={{ maxWidth: "200px" }} />}
+            />
+          </React.Fragment>
+        )}
         {items.map(recipe => (
           <RecipeListItem
             id={recipe.id}

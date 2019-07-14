@@ -15,7 +15,8 @@ import {
   Text,
   useToast,
   useTheme,
-  IconMoreVertical
+  IconMoreVertical,
+  Skeleton
 } from "sancho";
 import { confirmFollow, deleteRequestFollow } from "./db";
 
@@ -28,11 +29,7 @@ export const FollowersList: React.FunctionComponent<
   const toast = useToast();
   const { loading, userList } = useFollowers();
 
-  if (loading) {
-    return <Spinner center css={{ marginTop: theme.spaces.lg }} />;
-  }
-
-  if (!userList || (userList && userList.length === 0)) {
+  if (!loading && (!userList || (userList && userList.length === 0))) {
     return (
       <Text
         muted
@@ -82,6 +79,36 @@ export const FollowersList: React.FunctionComponent<
 
   return (
     <List>
+      {loading && (
+        <React.Fragment>
+          <ListItem
+            interactive={false}
+            contentBefore={
+              <Skeleton
+                css={{
+                  width: "32px",
+                  height: "32px",
+                  borderRadius: "50%"
+                }}
+              />
+            }
+            primary={<Skeleton css={{ maxWidth: "200px" }} />}
+          />
+          <ListItem
+            interactive={false}
+            contentBefore={
+              <Skeleton
+                css={{
+                  width: "32px",
+                  height: "32px",
+                  borderRadius: "50%"
+                }}
+              />
+            }
+            primary={<Skeleton css={{ maxWidth: "200px" }} />}
+          />
+        </React.Fragment>
+      )}
       {userList.map(relation => {
         return (
           <ListItem

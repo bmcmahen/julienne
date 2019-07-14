@@ -20,7 +20,8 @@ export interface SearchBoxProps {
 export const SearchBox: React.FunctionComponent<SearchBoxProps> = ({
   query,
   label = "Search all recipes",
-  setQuery
+  setQuery,
+  ...other
 }) => {
   const theme = useTheme();
   const responsiveContainerPadding = useResponsiveContainerPadding();
@@ -59,6 +60,7 @@ export const SearchBox: React.FunctionComponent<SearchBoxProps> = ({
             },
             responsiveContainerPadding
           ]}
+          {...other}
           value={query}
           onChange={e => setQuery(e.target.value)}
           placeholder={label}

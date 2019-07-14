@@ -227,7 +227,7 @@ export const Main: React.FunctionComponent<MainProps> = props => {
                 <RecipeList query={query} />
               </div>
             </TabPanel>
-            <TabPanel id="following">
+            <TabPanel css={{ height: "100%" }} id="following">
               <FollowingList />
             </TabPanel>
             <TabPanel id="followers">

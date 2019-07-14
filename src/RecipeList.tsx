@@ -7,7 +7,16 @@ import debug from "debug";
 import { Link } from "@reach/router";
 import { useSession } from "./auth";
 import * as firebase from "firebase/app";
-import { Text, List, ListItem, Spinner, Button, useTheme, Embed } from "sancho";
+import {
+  Text,
+  List,
+  ListItem,
+  Spinner,
+  Button,
+  useTheme,
+  Embed,
+  Skeleton
+} from "sancho";
 import { useFirebaseImage } from "./Image";
 import { FadeImage } from "./FadeImage";
 import usePaginateQuery from "firestore-pagination-hook";
@@ -133,7 +142,6 @@ export const RecipeList: React.FunctionComponent<RecipeListProps> = ({
         </div>
       ) : (
         <div>
-          {loading && <Spinner css={{ marginTop: theme.spaces.md }} center />}
           {!loading && items.length === 0 && (
             <Text
               muted
@@ -149,6 +157,36 @@ export const RecipeList: React.FunctionComponent<RecipeListProps> = ({
           )}
 
           <List>
+            {loading && (
+              <React.Fragment>
+                <ListItem
+                  interactive={false}
+                  contentBefore={
+                    <Skeleton
+                      css={{
+                        width: "32px",
+                        height: "32px",
+                        borderRadius: "50%"
+                      }}
+                    />
+                  }
+                  primary={<Skeleton css={{ maxWidth: "160px" }} />}
+                />
+                <ListItem
+                  interactive={false}
+                  contentBefore={
+                    <Skeleton
+                      css={{
+                        width: "32px",
+                        height: "32px",
+                        borderRadius: "50%"
+                      }}
+                    />
+                  }
+                  primary={<Skeleton css={{ maxWidth: "200px" }} />}
+                />
+              </React.Fragment>
+            )}
             {items.map(recipe => (
               <RecipeListItem
                 id={recipe.id}
@@ -194,7 +232,7 @@ interface RecipeListItemProps {
 
 export function RecipeListItem({ recipe, id, highlight }: RecipeListItemProps) {
   const theme = useTheme();
-  const { src, error } = useFirebaseImage("thumb-sm@", recipe.image);
+  // const { src, error } = useFirebaseImage("thumb-sm@", recipe.image);
 
   return (
     <ListItem

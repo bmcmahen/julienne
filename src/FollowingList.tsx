@@ -10,17 +10,16 @@ import {
   Button,
   Popover,
   MenuList,
+  Stack,
   MenuItem,
-  Spinner,
   Text,
   useTheme,
   useToast,
-  Toolbar,
   IconPlus,
   IconChevronRight,
   IconMoreVertical,
-  IconArrowLeft,
-  StateType
+  StackTitle,
+  Skeleton
 } from "sancho";
 import { SearchBox } from "./SearchBox";
 import debug from "debug";
@@ -29,9 +28,10 @@ import config from "./firebase-config";
 import { useSession } from "./auth";
 import find from "lodash.find";
 import { deleteRequestFollow, requestFollow } from "./db";
-import GestureView from "react-gesture-view";
 import { FollowingRecipes } from "./FollowingRecipes";
 import { User } from "firebase";
+import { StackItem, StackContext } from "react-gesture-stack";
+import { animated } from "react-spring";
 
 const client = algoliasearch(
   config.ALGOLIA_APP_ID,
@@ -146,162 +146,217 @@ export const FollowingList: React.FunctionComponent<
   }
 
   return (
-    <div>
-      <GestureView
-        enableGestures={false}
-        lazyLoad
-        value={index}
-        onRequestChange={i => setIndex(i)}
-      >
-        <div>
-          <div>
-            <SearchBox
-              label="Search for users to follow"
-              query={query}
-              setQuery={setQuery}
-            />
-          </div>
-          {loading && <Spinner center css={{ marginTop: theme.spaces.lg }} />}
-          {!loading && noUsers && (
-            <Text
-              muted
-              css={{
-                fontSize: theme.fontSizes[0],
-                display: "block",
-                margin: theme.spaces.lg
-              }}
-            >
-              You currently aren't following anyone. Start following someone by
-              searching for their email in the box above.
-            </Text>
-          )}
-
-          <List>
-            {query &&
-              queryResults &&
-              queryResults.hits.map(hit => (
-                <ListItem
-                  key={hit.objectID}
-                  onPress={() => inviteUser(hit)}
-                  contentBefore={
-                    <Avatar
-                      size="sm"
-                      src={hit.photoURL}
-                      name={hit.displayName || hit.email}
-                    />
-                  }
-                  primary={hit.displayName || hit.email}
-                  contentAfter={
-                    <IconPlus
-                      color={theme.colors.text.muted}
-                      aria-hidden
-                      size="lg"
-                    />
-                  }
-                />
-              ))}
-            {userList.map(relation => {
-              return (
-                <ListItem
-                  key={relation.id}
-                  interactive={relation.confirmed ? true : false}
-                  onPress={() =>
-                    showRelation({ id: relation.toUserId, ...relation.toUser })
-                  }
-                  contentBefore={
-                    <Avatar
-                      size="sm"
-                      src={relation.toUser.photoURL}
-                      name={
-                        relation.toUser.displayName || relation.toUser.email
-                      }
-                    />
-                  }
-                  primary={relation.toUser.displayName || relation.toUser.email}
-                  contentAfter={
-                    relation.confirmed ? (
-                      <IconChevronRight
-                        color={theme.colors.text.muted}
-                        aria-hidden
-                      />
-                    ) : (
-                      <Button
-                        onPress={e => {
-                          e.stopPropagation();
-                          e.preventDefault();
-                          deleteRequest(relation.id);
-                        }}
-                        size="sm"
-                      >
-                        Cancel request
-                      </Button>
-                    )
-                  }
-                />
-              );
-            })}
-          </List>
-        </div>
-        <div>
-          {relation && (
-            <React.Fragment>
-              <Toolbar
-                css={{
-                  // background: theme.colors.background.tint1,
-                  paddingTop: theme.spaces.lg,
-                  paddingBottom: theme.spaces.lg,
-                  borderBottom: `1px solid ${theme.colors.border.muted}`,
-                  display: "flex",
-                  justifyContent: "space-between",
-                  alignItems: "flex-start"
-                }}
-              >
-                <IconButton
-                  variant="ghost"
-                  icon={<IconArrowLeft />}
-                  label="Show all followers"
-                  onPress={() => setIndex(0)}
-                />
-                <div
-                  css={{
-                    display: "flex",
-                    flexDirection: "column",
-                    alignItems: "center",
-                    textAlign: "center"
-                  }}
-                >
-                  <Avatar
-                    size="md"
-                    src={relation.photoURL}
-                    css={{ marginBottom: theme.spaces.sm }}
-                    name={relation.displayName || relation.email}
-                  />
-                  <Text variant="h6" gutter={false}>
-                    {relation.displayName || relation.email}
+    <Stack
+      css={{ height: "100%" }}
+      index={index}
+      navHeight={60}
+      onIndexChange={i => setIndex(i)}
+      items={[
+        {
+          title: (
+            <SearchTitle>
+              <SearchBox
+                css={{ borderBottom: "none" }}
+                label="Search for users to follow"
+                query={query}
+                setQuery={setQuery}
+              />
+            </SearchTitle>
+          ),
+          content: (
+            <StackItem>
+              <div>
+                {!loading && noUsers && (
+                  <Text
+                    muted
+                    css={{
+                      fontSize: theme.fontSizes[0],
+                      display: "block",
+                      margin: theme.spaces.lg
+                    }}
+                  >
+                    You currently aren't following anyone. Start following
+                    someone by searching for their email in the box above.
                   </Text>
-                </div>
-                <Popover
-                  content={
-                    <MenuList>
-                      <MenuItem onPress={() => unfollow(relation.id)}>
-                        Unfollow user
-                      </MenuItem>
-                    </MenuList>
-                  }
-                >
-                  <IconButton
-                    onPress={e => e.stopPropagation()}
-                    variant="ghost"
-                    icon={<IconMoreVertical />}
-                    label="Options"
-                  />
-                </Popover>
-              </Toolbar>
-              <FollowingRecipes id={relation.id} />
-            </React.Fragment>
-          )}
-        </div>
-      </GestureView>
-    </div>
+                )}
+
+                <List>
+                  {loading && (
+                    <React.Fragment>
+                      <ListItem
+                        interactive={false}
+                        contentBefore={
+                          <Skeleton
+                            css={{
+                              width: "32px",
+                              height: "32px",
+                              borderRadius: "50%"
+                            }}
+                          />
+                        }
+                        primary={<Skeleton css={{ maxWidth: "160px" }} />}
+                      />
+                      <ListItem
+                        interactive={false}
+                        contentBefore={
+                          <Skeleton
+                            css={{
+                              width: "32px",
+                              height: "32px",
+                              borderRadius: "50%"
+                            }}
+                          />
+                        }
+                        primary={<Skeleton css={{ maxWidth: "200px" }} />}
+                      />
+                    </React.Fragment>
+                  )}
+                  {query &&
+                    queryResults &&
+                    queryResults.hits.map(hit => (
+                      <ListItem
+                        key={hit.objectID}
+                        onPress={() => inviteUser(hit)}
+                        contentBefore={
+                          <Avatar
+                            size="sm"
+                            src={hit.photoURL}
+                            name={hit.displayName || hit.email}
+                          />
+                        }
+                        primary={hit.displayName || hit.email}
+                        contentAfter={
+                          <IconPlus
+                            color={theme.colors.text.muted}
+                            aria-hidden
+                            size="lg"
+                          />
+                        }
+                      />
+                    ))}
+                  {userList.map(relation => {
+                    return (
+                      <ListItem
+                        key={relation.id}
+                        interactive={relation.confirmed ? true : false}
+                        onPress={() =>
+                          showRelation({
+                            id: relation.toUserId,
+                            ...relation.toUser
+                          })
+                        }
+                        contentBefore={
+                          <Avatar
+                            size="sm"
+                            src={relation.toUser.photoURL}
+                            name={
+                              relation.toUser.displayName ||
+                              relation.toUser.email
+                            }
+                          />
+                        }
+                        primary={
+                          relation.toUser.displayName || relation.toUser.email
+                        }
+                        contentAfter={
+                          relation.confirmed ? (
+                            <IconChevronRight
+                              color={theme.colors.text.muted}
+                              aria-hidden
+                            />
+                          ) : (
+                            <Button
+                              onPress={e => {
+                                e.stopPropagation();
+                                e.preventDefault();
+                                deleteRequest(relation.id);
+                              }}
+                              size="sm"
+                            >
+                              Cancel request
+                            </Button>
+                          )
+                        }
+                      />
+                    );
+                  })}
+                </List>
+              </div>
+            </StackItem>
+          )
+        },
+        {
+          title: (
+            <StackTitle
+              contentAfter={
+                relation && (
+                  <Popover
+                    content={
+                      <MenuList>
+                        <MenuItem onPress={() => unfollow(relation.id)}>
+                          Unfollow user
+                        </MenuItem>
+                      </MenuList>
+                    }
+                  >
+                    <IconButton
+                      onPress={e => e.stopPropagation()}
+                      variant="ghost"
+                      icon={<IconMoreVertical />}
+                      label="Options"
+                    />
+                  </Popover>
+                )
+              }
+              title={relation ? relation.displayName || relation.email : ""}
+            />
+          ),
+          content: (
+            <StackItem>
+              {relation && <FollowingRecipes id={relation.id} />}
+            </StackItem>
+          )
+        }
+      ]}
+    />
   );
 };
+
+function SearchTitle({ children }: { children: React.ReactNode }) {
+  const {
+    navHeight,
+    index,
+    active,
+    changeIndex,
+    opacity,
+    transform
+  } = React.useContext(StackContext);
+
+  return (
+    <div
+      className="StackTitle"
+      aria-hidden={!active}
+      style={{
+        pointerEvents: active ? "auto" : "none",
+        zIndex: 10,
+        position: "absolute",
+        top: 0,
+        left: 0,
+        right: 0
+      }}
+    >
+      <animated.div
+        className="StackTitle__heading"
+        style={{
+          textOverflow: "ellipsis",
+          whiteSpace: "nowrap",
+          overflow: "hidden",
+          opacity,
+          transform: transform.to(x => `translateX(${x * 0.85}%)`)
+        }}
+      >
+        {children}
+      </animated.div>
+    </div>
+  );
+}
