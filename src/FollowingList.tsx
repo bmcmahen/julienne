@@ -147,7 +147,12 @@ export const FollowingList: React.FunctionComponent<
 
   return (
     <Stack
-      css={{ height: "100%" }}
+      css={{
+        height: "calc(100vh - 97px)", // this is lame
+        [theme.breakpoints.lg]: {
+          height: "100%"
+        }
+      }}
       index={index}
       navHeight={60}
       onIndexChange={i => setIndex(i)}

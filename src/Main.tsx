@@ -194,6 +194,7 @@ export const Main: React.FunctionComponent<MainProps> = props => {
           </div>
 
           <GestureView
+            enableScrollLock
             value={activeTab}
             onRequestChange={i => setActiveTab(i)}
             lazyLoad
