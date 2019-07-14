@@ -31,7 +31,7 @@ const isCodeHotkey = isKeyHotkey("mod+`");
  * @type {Component}
  */
 
-function tryValue(str) {
+export function tryValue(str) {
   try {
     const json = JSON.parse(str);
 
@@ -51,17 +51,11 @@ class RichTextExample extends React.Component {
 
   constructor(props) {
     super(props);
-
-    this.state = {
-      value: props.initialValue
-        ? tryValue(props.initialValue)
-        : Value.fromJSON(initialValue)
-    };
   }
 
   serialize = () => {
-    const content = JSON.stringify(this.state.value);
-    const plain = Plain.serialize(this.state.value);
+    const content = JSON.stringify(this.props.value);
+    const plain = Plain.serialize(this.props.value);
     return {
       text: plain,
       content
@@ -76,7 +70,7 @@ class RichTextExample extends React.Component {
    */
 
   hasMark = type => {
-    const { value } = this.state;
+    const { value } = this.props;
     return value.activeMarks.some(mark => mark.type == type);
   };
 
@@ -88,7 +82,7 @@ class RichTextExample extends React.Component {
    */
 
   hasBlock = type => {
-    const { value } = this.state;
+    const { value } = this.props;
     return value.blocks.some(node => node.type == type);
   };
 
@@ -110,17 +104,18 @@ class RichTextExample extends React.Component {
 
   render() {
     return (
-      <div className={"Editor" + (this.state.focus ? " focus" : "")}>
+      <div className={"Editor" + (this.props.focus ? " focus" : "")}>
         <Editor
           spellCheck
           placeholder="Steps to reproduce this recipe..."
           ref={this.ref}
-          value={this.state.value}
+          value={this.props.value}
           readOnly={this.props.readOnly}
           onChange={this.onChange}
           onKeyDown={this.onKeyDown}
           renderNode={this.renderNode}
           renderMark={this.renderMark}
+          renderAnnotation={this.props.renderAnnotation}
         />
       </div>
     );
@@ -169,7 +164,7 @@ class RichTextExample extends React.Component {
     if (["numbered-list", "bulleted-list"].includes(type)) {
       const {
         value: { document, blocks }
-      } = this.state;
+      } = this.props;
 
       if (blocks.size > 0) {
         const parent = document.getParent(blocks.first().key);
@@ -248,7 +243,7 @@ class RichTextExample extends React.Component {
    */
 
   onChange = ({ value }) => {
-    this.setState({ value });
+    this.props.onChange(value);
   };
 
   /**

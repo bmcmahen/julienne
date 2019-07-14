@@ -1,10 +1,12 @@
 /** @jsx jsx */
 import { jsx, Global } from "@emotion/core";
 import * as React from "react";
-import Editor from "./Editor";
+import Editor, { tryValue } from "./Editor";
 import { ImageUpload } from "./ImageUpload";
 import { Image } from "./Image";
+import { Value } from "slate";
 import debug from "debug";
+import initialValue from "./value.json";
 import { Ingredient } from "./RecipeList";
 import {
   Navbar,
@@ -30,6 +32,12 @@ import { useSession } from "./auth";
 import Helmet from "react-helmet";
 import { Link, navigate } from "@reach/router";
 
+let n = 0;
+
+function getHighlightKey() {
+  return `highlight_${n++}`;
+}
+
 const log = debug("app:Compose");
 
 export interface ComposeProps {
@@ -42,6 +50,11 @@ export interface ComposeProps {
   editable?: boolean;
   defaultCredit?: string;
 }
+
+/**
+ * THIS IS A DISASTER. HAHAHhahha.. ugh. Rewrite when i'm not lazy
+ * @param param0
+ */
 
 export const Compose: React.FunctionComponent<ComposeProps> = ({
   readOnly,
@@ -59,6 +72,11 @@ export const Compose: React.FunctionComponent<ComposeProps> = ({
   const user = useSession();
   const [loading, setLoading] = React.useState(false);
   const [editing, setEditing] = React.useState(!readOnly);
+  const [content, setContent] = React.useState(() => {
+    return defaultDescription
+      ? tryValue(defaultDescription)
+      : Value.fromJSON(initialValue);
+  });
   const [image, setImage] = React.useState(defaultImage);
   const [title, setTitle] = React.useState(defaultTitle);
   const [credit, setCredit] = React.useState(defaultCredit);
@@ -70,6 +88,13 @@ export const Compose: React.FunctionComponent<ComposeProps> = ({
       }
     ]
   );
+
+  const [hoverIngredient, setHoverIngredient] = React.useState(null);
+  const hoverIngredientRef = React.useRef(hoverIngredient);
+
+  React.useEffect(() => {
+    hoverIngredientRef.current = hoverIngredient;
+  }, [hoverIngredient]);
 
   function onIngredientChange(i: number, value: Ingredient) {
     ingredients[i] = value;
@@ -167,6 +192,86 @@ export const Compose: React.FunctionComponent<ComposeProps> = ({
       });
     }
     setLoading(false);
+  }
+
+  // this is horribly inefficient...
+  React.useEffect(() => {
+    const slate = ref.current;
+    if (!slate) {
+      return;
+    }
+
+    const { editor } = slate;
+
+    const { value } = editor;
+    const { document, annotations } = value;
+
+    editor.withoutSaving(() => {
+      annotations.forEach((ann: any) => {
+        if (ann.type === "highlight") {
+          editor.removeAnnotation(ann);
+        }
+      });
+
+      for (const [node, path] of document.texts()) {
+        const { key, text } = node;
+
+        ingredients.forEach(ing => {
+          const normalized = ing.name.toLowerCase();
+          const parts = text.toLowerCase().split(normalized);
+          let offset = 0;
+
+          parts.forEach((part, i) => {
+            if (i !== 0) {
+              editor.addAnnotation({
+                key: getHighlightKey(),
+                type: "highlight",
+                data: { id: ing },
+                anchor: { path, key, offset: offset - normalized.length },
+                focus: { path, key, offset }
+              });
+            }
+
+            offset = offset + part.length + normalized.length;
+          });
+        });
+      }
+    });
+  });
+
+  function renderAnnotation(props, editor, next) {
+    const { children, annotation, attributes } = props;
+    const annotationId = annotation.get("data").get("id");
+    const isHovering = hoverIngredientRef.current === annotationId;
+
+    switch (annotation.type) {
+      case "highlight":
+        return (
+          <span
+            onMouseEnter={() => {
+              const id = annotation.get("data").get("id");
+              setHoverIngredient(id);
+            }}
+            onMouseLeave={() => {
+              setHoverIngredient(null);
+            }}
+            {...attributes}
+            style={{
+              borderRadius: "0.5rem",
+              padding: "0 0.25rem",
+              cursor: "default",
+
+              backgroundColor: isHovering
+                ? theme.colors.intent.primary.lightest
+                : theme.colors.background.tint2
+            }}
+          >
+            {children}
+          </span>
+        );
+      default:
+        return next();
+    }
   }
 
   async function handleDelete(id: string) {
@@ -408,12 +513,18 @@ export const Compose: React.FunctionComponent<ComposeProps> = ({
                 <div>
                   <Text variant="h5">Ingredients</Text>
                   {ingredients.map((ingredient, i) => {
+                    const activeHover = ingredient == hoverIngredient;
+
                     return (
                       <div key={i}>
                         {editing ? (
                           <Contain>
                             <div
                               css={{
+                                borderRadius: "0.25rem",
+                                backgroundColor: activeHover
+                                  ? theme.colors.intent.primary.lightest
+                                  : "transparent",
                                 display: "flex",
                                 [theme.mediaQueries.md]: {
                                   maxWidth: "400px"
@@ -461,7 +572,15 @@ export const Compose: React.FunctionComponent<ComposeProps> = ({
                         ) : (
                           <div
                             css={{
+                              backgroundColor: activeHover
+                                ? theme.colors.intent.primary.lightest
+                                : "transparent",
                               display: "flex",
+                              marginLeft: "-0.25rem",
+                              paddingLeft: "0.25rem",
+                              marginRight: "-0.25rem",
+                              paddingRight: "0.25rem",
+                              borderRadius: "0.25rem",
                               marginBottom: theme.spaces.xs,
                               justifyContent: "space-between",
                               [theme.mediaQueries.md]: {
@@ -472,7 +591,9 @@ export const Compose: React.FunctionComponent<ComposeProps> = ({
                             <Text
                               css={{
                                 paddingRight: theme.spaces.xs,
-                                background: "white"
+                                backgroundColor: activeHover
+                                  ? theme.colors.intent.primary.lightest
+                                  : "white"
                               }}
                             >
                               {ingredient.name}
@@ -480,14 +601,18 @@ export const Compose: React.FunctionComponent<ComposeProps> = ({
                             <div
                               css={{
                                 flex: 1,
-                                borderBottom: "1px dashed #eee",
+                                borderBottom: `1px dashed ${
+                                  theme.colors.border.muted
+                                }`,
                                 marginBottom: "6px"
                               }}
                             />
                             <Text
                               css={{
                                 paddingLeft: theme.spaces.xs,
-                                background: "white"
+                                backgroundColor: activeHover
+                                  ? theme.colors.intent.primary.lightest
+                                  : "white"
                               }}
                             >
                               {ingredient.amount}
@@ -515,6 +640,9 @@ export const Compose: React.FunctionComponent<ComposeProps> = ({
                 <div>
                   <Editor
                     ref={ref}
+                    value={content}
+                    onChange={value => setContent(value)}
+                    renderAnnotation={renderAnnotation}
                     initialValue={
                       defaultDescription ? defaultDescription : null
                     }
@@ -566,8 +694,8 @@ const TransparentInput = (props: TransparentInputProps) => {
         background: "none",
         border: "none",
         boxShadow: "none",
-        paddingTop: theme.spaces.xs,
-        paddingBottom: theme.spaces.xs,
+        // paddingTop: theme.spaces.xs,
+        // paddingBottom: theme.spaces.xs,
         ":focus": {
           outline: "none",
           boxShadow: "none",
