@@ -526,7 +526,7 @@ export const Compose: React.FunctionComponent<ComposeProps> = ({
                               onMouseLeave={() => setHoverIngredient(null)}
                               css={{
                                 backgroundColor: activeHover
-                                  ? theme.colors.palette.yellow.light
+                                  ? theme.colors.palette.blue.lightest
                                   : "transparent",
                                 display: "flex",
                                 [theme.mediaQueries.md]: {
