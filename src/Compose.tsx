@@ -262,7 +262,7 @@ export const Compose: React.FunctionComponent<ComposeProps> = ({
               cursor: "default",
 
               backgroundColor: isHovering
-                ? theme.colors.intent.primary.lightest
+                ? theme.colors.palette.yellow.light
                 : theme.colors.background.tint2
             }}
           >
@@ -520,10 +520,14 @@ export const Compose: React.FunctionComponent<ComposeProps> = ({
                         {editing ? (
                           <Contain>
                             <div
+                              onMouseEnter={() =>
+                                setHoverIngredient(ingredient)
+                              }
+                              onMouseLeave={() => setHoverIngredient(null)}
                               css={{
                                 borderRadius: "0.25rem",
                                 backgroundColor: activeHover
-                                  ? theme.colors.intent.primary.lightest
+                                  ? theme.colors.palette.yellow.light
                                   : "transparent",
                                 display: "flex",
                                 [theme.mediaQueries.md]: {
@@ -571,9 +575,11 @@ export const Compose: React.FunctionComponent<ComposeProps> = ({
                           </Contain>
                         ) : (
                           <div
+                            onMouseEnter={() => setHoverIngredient(ingredient)}
+                            onMouseLeave={() => setHoverIngredient(null)}
                             css={{
                               backgroundColor: activeHover
-                                ? theme.colors.intent.primary.lightest
+                                ? theme.colors.palette.yellow.light
                                 : "transparent",
                               display: "flex",
                               marginLeft: "-0.25rem",
@@ -592,7 +598,7 @@ export const Compose: React.FunctionComponent<ComposeProps> = ({
                               css={{
                                 paddingRight: theme.spaces.xs,
                                 backgroundColor: activeHover
-                                  ? theme.colors.intent.primary.lightest
+                                  ? theme.colors.palette.yellow.light
                                   : "white"
                               }}
                             >
@@ -611,7 +617,7 @@ export const Compose: React.FunctionComponent<ComposeProps> = ({
                               css={{
                                 paddingLeft: theme.spaces.xs,
                                 backgroundColor: activeHover
-                                  ? theme.colors.intent.primary.lightest
+                                  ? theme.colors.palette.yellow.light
                                   : "white"
                               }}
                             >
