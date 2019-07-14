@@ -232,7 +232,7 @@ interface RecipeListItemProps {
 
 export function RecipeListItem({ recipe, id, highlight }: RecipeListItemProps) {
   const theme = useTheme();
-  // const { src, error } = useFirebaseImage("thumb-sm@", recipe.image);
+  const { src, error } = useFirebaseImage("thumb-sm@", recipe.image);
 
   return (
     <ListItem
@@ -240,21 +240,31 @@ export function RecipeListItem({ recipe, id, highlight }: RecipeListItemProps) {
       component={Link}
       to={`/${id}`}
       css={{
+        paddingTop: 0,
+        paddingBottom: 0,
+        height: "56px",
+        alignItems: "center",
+        display: "flex",
+        justifyContent: "space-between",
         "& em": {
           fontStyle: "normal",
           color: theme.colors.text.selected
         },
         "&[aria-current]": {
           background: theme.colors.background.tint1
+        },
+        "& > *": {
+          flex: 1,
+          overflow: "hidden"
         }
       }}
-      // contentAfter={
-      //   recipe.image && !error ? (
-      //     <Embed css={{ width: "70px" }} width={150} height={100}>
-      //       <FadeImage src={src} hidden />
-      //     </Embed>
-      //   ) : null
-      // }
+      contentAfter={
+        recipe.image && !error ? (
+          <Embed css={{ width: "60px" }} width={75} height={50}>
+            <FadeImage src={src} hidden />
+          </Embed>
+        ) : null
+      }
       // secondary={
       //   highlight ? (
       //     <span dangerouslySetInnerHTML={{ __html: highlight.author.value }} />
