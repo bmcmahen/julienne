@@ -106,7 +106,7 @@ class RichTextExample extends React.Component {
     return (
       <div className={"Editor" + (this.props.focus ? " focus" : "")}>
         <Editor
-          spellCheck
+          spellCheck={false}
           placeholder="Steps to reproduce this recipe..."
           ref={this.ref}
           value={this.props.value}
