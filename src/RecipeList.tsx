@@ -207,23 +207,23 @@ export function RecipeListItem({ recipe, id, highlight }: RecipeListItemProps) {
           color: theme.colors.text.selected
         },
         "&[aria-current]": {
-          background: theme.colors.background.tint2
+          background: theme.colors.background.tint1
         }
       }}
-      contentAfter={
-        recipe.image && !error ? (
-          <Embed css={{ width: "70px" }} width={150} height={100}>
-            <FadeImage src={src} hidden />
-          </Embed>
-        ) : null
-      }
-      secondary={
-        highlight ? (
-          <span dangerouslySetInnerHTML={{ __html: highlight.author.value }} />
-        ) : (
-          recipe.author
-        )
-      }
+      // contentAfter={
+      //   recipe.image && !error ? (
+      //     <Embed css={{ width: "70px" }} width={150} height={100}>
+      //       <FadeImage src={src} hidden />
+      //     </Embed>
+      //   ) : null
+      // }
+      // secondary={
+      //   highlight ? (
+      //     <span dangerouslySetInnerHTML={{ __html: highlight.author.value }} />
+      //   ) : (
+      //     recipe.author
+      //   )
+      // }
       primary={
         highlight ? (
           <span dangerouslySetInnerHTML={{ __html: highlight.title.value }} />

@@ -257,12 +257,12 @@ export const Compose: React.FunctionComponent<ComposeProps> = ({
             }}
             {...attributes}
             style={{
-              borderRadius: "0.5rem",
-              padding: "0 0.25rem",
+              // borderRadius: "0.5rem",
+              // padding: "0 0.25rem",
               cursor: "default",
 
               backgroundColor: isHovering
-                ? theme.colors.palette.yellow.light
+                ? theme.colors.palette.blue.lightest
                 : theme.colors.background.tint2
             }}
           >
@@ -525,7 +525,6 @@ export const Compose: React.FunctionComponent<ComposeProps> = ({
                               }
                               onMouseLeave={() => setHoverIngredient(null)}
                               css={{
-                                borderRadius: "0.25rem",
                                 backgroundColor: activeHover
                                   ? theme.colors.palette.yellow.light
                                   : "transparent",
@@ -579,14 +578,14 @@ export const Compose: React.FunctionComponent<ComposeProps> = ({
                             onMouseLeave={() => setHoverIngredient(null)}
                             css={{
                               backgroundColor: activeHover
-                                ? theme.colors.palette.yellow.light
+                                ? theme.colors.palette.blue.lightest
                                 : "transparent",
                               display: "flex",
                               marginLeft: "-0.25rem",
                               paddingLeft: "0.25rem",
                               marginRight: "-0.25rem",
                               paddingRight: "0.25rem",
-                              borderRadius: "0.25rem",
+                              // borderRadius: "0.25rem",
                               marginBottom: theme.spaces.xs,
                               justifyContent: "space-between",
                               [theme.mediaQueries.md]: {
@@ -598,7 +597,7 @@ export const Compose: React.FunctionComponent<ComposeProps> = ({
                               css={{
                                 paddingRight: theme.spaces.xs,
                                 backgroundColor: activeHover
-                                  ? theme.colors.palette.yellow.light
+                                  ? theme.colors.palette.blue.lightest
                                   : "white"
                               }}
                             >
@@ -617,7 +616,7 @@ export const Compose: React.FunctionComponent<ComposeProps> = ({
                               css={{
                                 paddingLeft: theme.spaces.xs,
                                 backgroundColor: activeHover
-                                  ? theme.colors.palette.yellow.light
+                                  ? theme.colors.palette.blue.lightest
                                   : "white"
                               }}
                             >
