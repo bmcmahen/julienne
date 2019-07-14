@@ -259,7 +259,7 @@ export const Compose: React.FunctionComponent<ComposeProps> = ({
             style={{
               // borderRadius: "0.5rem",
               // padding: "0 0.25rem",
-              cursor: "default",
+              // cursor: "default",
 
               backgroundColor: isHovering
                 ? theme.colors.palette.blue.lightest
