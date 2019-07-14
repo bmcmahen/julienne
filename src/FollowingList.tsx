@@ -318,7 +318,9 @@ export const FollowingList: React.FunctionComponent<
           ),
           content: (
             <StackItem>
-              {relation && <FollowingRecipes id={relation.id} />}
+              {relation && (
+                <FollowingRecipes key={relation.id} id={relation.id} />
+              )}
             </StackItem>
           )
         }
