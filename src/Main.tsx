@@ -49,12 +49,14 @@ export const Main: React.FunctionComponent<MainProps> = props => {
 
   const showingRecipe = props["*"];
 
-  const transitions = useTransition(showingRecipe, recipeId => recipeId, {
-    from: { opacity: 0, transform: "scale(0.95)" },
-    enter: { opacity: 1, transform: "scale(1)" },
-    leave: { opacity: 0, transform: "scale(1.1)" },
-    immediate: !isLarge
-  });
+  // console.log(showingRecipe);
+
+  // const transitions = useTransition(false, recipeId => null, {
+  //   from: { opacity: 0, transform: "scale(0.95)" },
+  //   enter: { opacity: 1, transform: "scale(1)" },
+  //   leave: { opacity: 0, transform: "scale(1.1)" },
+  //   immediate: !isLarge
+  // });
 
   const renderList = isLarge || !showingRecipe;
 
@@ -246,55 +248,50 @@ export const Main: React.FunctionComponent<MainProps> = props => {
               }
             }}
           >
-            {transitions.map(({ item, props, key }) => (
-              <animated.div
-                key={key}
-                style={props}
+            <div
+              css={{
+                display: "block",
+                position: "absolute",
+                width: "100%",
+                boxSizing: "border-box",
+                [theme.mediaQueries.md]: {
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
+                  padding: theme.spaces.lg,
+                  minHeight: "100vh",
+                  paddingLeft: "calc(330px + 3rem)"
+                },
+                [theme.mediaQueries.lg]: {
+                  // paddingLeft: theme.spaces.xl,
+                  paddingRight: theme.spaces.xl,
+                  paddingLeft: "calc(400px + 6rem)"
+                }
+              }}
+            >
+              <Layer
+                elevation="xl"
                 css={{
-                  display: "block",
-                  position: "absolute",
+                  borderRadius: 0,
+                  position: "relative",
+                  boxShadow: "none",
                   width: "100%",
-                  boxSizing: "border-box",
                   [theme.mediaQueries.md]: {
-                    display: "flex",
-                    justifyContent: "center",
-                    alignItems: "center",
-                    padding: theme.spaces.lg,
-                    minHeight: "100vh",
-                    paddingLeft: "calc(330px + 3rem)"
-                  },
-                  [theme.mediaQueries.lg]: {
-                    // paddingLeft: theme.spaces.xl,
-                    paddingRight: theme.spaces.xl,
-                    paddingLeft: "calc(400px + 6rem)"
+                    marginTop: "auto",
+                    height: "auto",
+                    overflow: "hidden",
+                    boxSizing: "border-box",
+                    marginBottom: "auto",
+                    width: "100%",
+                    maxWidth: "700px",
+                    borderRadius: theme.radii.lg,
+                    boxShadow: theme.shadows.xl
                   }
                 }}
               >
-                <Layer
-                  elevation="xl"
-                  key={key}
-                  css={{
-                    borderRadius: 0,
-                    position: "relative",
-                    boxShadow: "none",
-                    width: "100%",
-                    [theme.mediaQueries.md]: {
-                      marginTop: "auto",
-                      height: "auto",
-                      overflow: "hidden",
-                      boxSizing: "border-box",
-                      marginBottom: "auto",
-                      width: "100%",
-                      maxWidth: "700px",
-                      borderRadius: theme.radii.lg,
-                      boxShadow: theme.shadows.xl
-                    }
-                  }}
-                >
-                  <MainContent id={item} />
-                </Layer>
-              </animated.div>
-            ))}
+                <MainContent id={showingRecipe} />
+              </Layer>
+            </div>
           </div>
         )}
       </div>
