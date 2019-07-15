@@ -10061,19 +10061,6 @@ react-gesture-view@^1.1.0:
     resize-observer-polyfill "^1.5.1"
     tslib "^1.9.3"
 
-react-gesture-view@^2.1.3:
-  version "2.1.3"
-  resolved "https://registry.yarnpkg.com/react-gesture-view/-/react-gesture-view-2.1.3.tgz#c0bfa29d7425bfe21dbe046d9ef07d076fdcc94c"
-  integrity sha512-yoBsFZ6JYpD/FjosPT5YaN6qzmkQSVH4V36GB1FkbY304eQ/iDXzrPCRA1jdvIppLdhfoJfxK4Z8bp1NWMUjiQ==
-  dependencies:
-    "@types/classnames" "^2.2.7"
-    "@types/react" "^16.8.10"
-    "@types/react-dom" "^16.8.3"
-    react-remove-scroll "^2.0.4"
-    react-spring "^9.0.0-beta.31"
-    resize-observer-polyfill "^1.5.1"
-    tslib "^1.9.3"
-
 react-helmet@^5.2.0:
   version "5.2.1"
   resolved "https://registry.yarnpkg.com/react-helmet/-/react-helmet-5.2.1.tgz#16a7192fdd09951f8e0fe22ffccbf9bb3e591ffa"
@@ -10098,6 +10085,19 @@ react-lifecycles-compat@^3.0.4:
   version "3.0.4"
   resolved "https://registry.yarnpkg.com/react-lifecycles-compat/-/react-lifecycles-compat-3.0.4.tgz#4f1a273afdfc8f3488a8c516bfda78f872352362"
   integrity sha512-fBASbA6LnOU9dOU2eW7aQ8xmYBSXUIWr+UmF9b1efZBazGNO+rcXT/icdKnYm2pTwcRylVUYwW7H1PHfLekVzA==
+
+react-page-controller@^3.0.1:
+  version "3.0.2"
+  resolved "https://registry.yarnpkg.com/react-page-controller/-/react-page-controller-3.0.2.tgz#78efabe3744cde8b8d93364bd1b9e65f64ddd5c7"
+  integrity sha512-PQ+TMXFUsJg30W9OVA/iGyJMJP59j/w4JBOJRaXatwiF38z4cUJoT2AJGN+y28GNGCqk/RBvvz3OTdNv40uq4A==
+  dependencies:
+    "@types/classnames" "^2.2.7"
+    "@types/react" "^16.8.10"
+    "@types/react-dom" "^16.8.3"
+    react-spring "^9.0.0-beta.31"
+    resize-observer-polyfill "^1.5.1"
+    tslib "^1.9.3"
+    use-scroll-lock "^1.0.0"
 
 react-popper@^1.3.3:
   version "1.3.3"
@@ -10805,10 +10805,10 @@ safe-regex@^1.1.0:
   resolved "https://registry.yarnpkg.com/safer-buffer/-/safer-buffer-2.1.2.tgz#44fa161b0187b9549dd84bb91802f9bd8385cd6a"
   integrity sha512-YZo3K82SD7Riyi0E1EQPojLz7kpepnSQI9IyPbHHg1XXXevb5dJI7tpyN2ADxGcQbHG7vcyRHk0cbwqcQriUtg==
 
-sancho@^3.3.3:
-  version "3.3.3"
-  resolved "https://registry.yarnpkg.com/sancho/-/sancho-3.3.3.tgz#330cff9249ea202cca6df2d0d98f18c83fa821d6"
-  integrity sha512-KgYzb/Gke88SOplo7NmJbQAzyp1A9WyDD9CaqdsAJRtOv0xlE/nIdtNCHrvV5IX/d1odMnTE6DuY4+RQyyIT+A==
+sancho@^3.4.2:
+  version "3.4.2"
+  resolved "https://registry.yarnpkg.com/sancho/-/sancho-3.4.2.tgz#812abf3ba2fb65638c2be762519a150193c69fab"
+  integrity sha512-zj92qeX/gD7fzN3ZMSP8YVHg6Nh85rnRH63Mi3ibZ3rthWs1K3UBcwfVQlJAzBqJTMLh6Nr5v7Dkg9TpQB/+GA==
   dependencies:
     "@reach/alert" "^0.1.2"
     "@reach/skip-nav" "^0.1.2"
@@ -10831,7 +10831,7 @@ sancho@^3.3.3:
     raf-schd "^4.0.1"
     react-gesture-responder "^2.1.0"
     react-gesture-stack "^1.3.1"
-    react-gesture-view "^2.1.3"
+    react-page-controller "^3.0.1"
     react-popper "^1.3.3"
     react-remove-scroll "^2.0.4"
     react-spring "^9.0.0-beta.31"
@@ -10840,6 +10840,7 @@ sancho@^3.3.3:
     touchable-hook "^1.2.1"
     tslib "^1.9.3"
     use-media "^1.2.0"
+    use-scroll-lock "^1.0.0"
 
 sane@^2.0.0:
   version "2.5.2"
@@ -10898,6 +10899,11 @@ schema-utils@^1.0.0:
     ajv "^6.1.0"
     ajv-errors "^1.0.0"
     ajv-keywords "^3.1.0"
+
+scroll-lock@^2.1.2:
+  version "2.1.2"
+  resolved "https://registry.yarnpkg.com/scroll-lock/-/scroll-lock-2.1.2.tgz#f550a2985bf38365b1cba314e3132d23956e6c21"
+  integrity sha512-m/gjn3+bOtyc4jS9fE4FYOLypzRDoV3vICnA0kz6TVUL4gQWUVqPT9cqaU2FbMo9doNDBKiBV2pP8L2+98We5g==
 
 select-hose@^2.0.0:
   version "2.0.0"
@@ -12321,6 +12327,16 @@ use-react-router@^1.0.4:
   integrity sha512-huk5DhGio0RYjCngZ+DyTOQ4NqC+hsZ6N78KABkgT6Y2BSJYQkBpqob3gxZBlt+h7Q7YMkH5QZo7mYIW14jhOg==
   dependencies:
     use-force-update "^1.0.4"
+
+use-scroll-lock@^1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/use-scroll-lock/-/use-scroll-lock-1.0.0.tgz#0e3fdab6bc8fe0b9868381cac55811d6b1763b88"
+  integrity sha512-XqxZI0DFsEBJ7IBwhQg5pn9UXJezYmkQN7Hqo4mxAJ0XNKaRVZjY+NVnxsjjKZD0Ze6gVu8naTrkTOPyC7Y3bA==
+  dependencies:
+    "@types/react" "^16.8.10"
+    "@types/react-dom" "^16.8.3"
+    scroll-lock "^2.1.2"
+    tslib "^1.9.3"
 
 use-sidecar@^1.0.1:
   version "1.0.1"

@@ -19,7 +19,7 @@ import {
   IconPlus,
   DarkMode,
   LightMode,
-  GestureView
+  Pager
 } from "sancho";
 import { RecipeList } from "./RecipeList";
 import { useFollowRequests } from "./hooks/with-follow-request-count";
@@ -107,11 +107,15 @@ export const Main: React.FunctionComponent<MainProps> = props => {
           <div
             css={[
               {
-                position: "sticky",
+                position: "fixed",
                 width: "100%",
                 top: 0,
-                zIndex: theme.zIndices.sticky,
-                background: theme.colors.palette.gray.base
+                zIndex: theme.zIndices.fixed,
+                background: theme.colors.palette.gray.base,
+                [theme.mediaQueries.md]: {
+                  zIndex: theme.zIndices.sticky,
+                  position: "sticky"
+                }
               }
             ]}
           >
@@ -193,8 +197,16 @@ export const Main: React.FunctionComponent<MainProps> = props => {
               </DarkMode>
             </div>
           </div>
-
-          <GestureView
+          <div
+            css={{
+              background: theme.colors.palette.gray.base,
+              height: "100px",
+              [theme.mediaQueries.md]: {
+                display: "none"
+              }
+            }}
+          />
+          <Pager
             enableScrollLock
             value={activeTab}
             onRequestChange={i => setActiveTab(i)}
@@ -235,7 +247,7 @@ export const Main: React.FunctionComponent<MainProps> = props => {
             <TabPanel id="followers">
               <FollowersList />
             </TabPanel>
-          </GestureView>
+          </Pager>
         </Layer>
 
         {showingRecipe && (
