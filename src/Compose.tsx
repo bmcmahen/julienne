@@ -25,7 +25,8 @@ import {
   ResponsivePopover,
   IconX,
   IconMoreVertical,
-  IconArrowLeft
+  IconArrowLeft,
+  Tooltip
 } from "sancho";
 import { getUserFields, createEntry, deleteEntry, updateEntry } from "./db";
 import { useSession } from "./auth";
@@ -249,27 +250,27 @@ export const Compose: React.FunctionComponent<ComposeProps> = ({
     switch (annotation.type) {
       case "highlight":
         return (
-          <span
-            onMouseEnter={() => {
-              const id = annotation.get("data").get("id");
-              setHoverIngredient(id);
-            }}
-            onMouseLeave={() => {
-              setHoverIngredient(null);
-            }}
-            {...attributes}
-            style={{
-              // borderRadius: "0.5rem",
-              // padding: "0 0.25rem",
-              // cursor: "default",
-
-              backgroundColor: isHovering
-                ? theme.colors.palette.blue.lightest
-                : theme.colors.background.tint2
-            }}
-          >
-            {children}
-          </span>
+          <Tooltip placement="top" content={annotationId.amount}>
+            <span
+              {...attributes}
+              // onMouseEnter={() => {
+              //   setHoverIngredient(annotation);
+              // }}
+              // onMouseLeave={() => {
+              //   setHoverIngredient(null);
+              // }}
+              style={{
+                transition: "background 0.3s ease",
+                backgroundColor: isHovering
+                  ? theme.colors.palette.blue.lightest
+                  : hoverIngredientRef.current
+                  ? "transparent"
+                  : theme.colors.background.tint2
+              }}
+            >
+              {children}
+            </span>
+          </Tooltip>
         );
       default:
         return next();
