@@ -262,9 +262,7 @@ export function RecipeListItem({ recipe, id, highlight }: RecipeListItemProps) {
           fontStyle: "normal",
           color: theme.colors.text.selected
         },
-
-        background: isActive ? theme.colors.background.tint1 : "transparent",
-
+        backgroundColor: isActive ? theme.colors.background.tint1 : null,
         "& > *": {
           flex: 1,
           overflow: "hidden"
