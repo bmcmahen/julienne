@@ -1,7 +1,7 @@
 /** @jsx jsx */
 import { jsx, Global } from "@emotion/core";
 import * as React from "react";
-import { Link as RouterLink } from "@reach/router";
+import { Link as RouterLink } from "wouter";
 import food from "./images/food.svg";
 import {
   Navbar,

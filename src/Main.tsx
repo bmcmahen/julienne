@@ -1,5 +1,5 @@
 /** @jsx jsx */
-import { jsx, css, Global } from "@emotion/core";
+import { jsx, css } from "@emotion/core";
 import * as React from "react";
 import {
   Toolbar,
@@ -28,9 +28,8 @@ import { FollowingList } from "./FollowingList";
 import { useSession, signOut } from "./auth";
 import { Compose } from "./Compose";
 import { Recipe } from "./Recipe";
-import { useTransition, animated } from "react-spring";
 import { SearchBox } from "./SearchBox";
-import { Link } from "@reach/router";
+import { Link, useRoute } from "wouter";
 import { useMedia } from "use-media";
 import { Layout } from "./Layout";
 
@@ -47,9 +46,11 @@ export const Main: React.FunctionComponent<MainProps> = props => {
   const { value: followRequests } = useFollowRequests();
   const isLarge = useMedia({ minWidth: "768px" });
 
-  const showingRecipe = props["*"];
+  const [, params] = useRoute("/:recipe*");
+  const showingRecipe = params.recipe;
 
-  // console.log(showingRecipe);
+  // i'm disabling this for now, since it was running really poorly. unsure
+  // whats up here.
 
   // const transitions = useTransition(false, recipeId => null, {
   //   from: { opacity: 0, transform: "scale(0.95)" },

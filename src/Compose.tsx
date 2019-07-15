@@ -30,7 +30,7 @@ import {
 import { getUserFields, createEntry, deleteEntry, updateEntry } from "./db";
 import { useSession } from "./auth";
 import Helmet from "react-helmet";
-import { Link, navigate } from "@reach/router";
+import { Link, useLocation } from "wouter";
 
 let n = 0;
 
@@ -88,6 +88,7 @@ export const Compose: React.FunctionComponent<ComposeProps> = ({
       }
     ]
   );
+  const [, setLocation] = useLocation();
 
   const [hoverIngredient, setHoverIngredient] = React.useState(null);
   const hoverIngredientRef = React.useRef(hoverIngredient);
@@ -128,6 +129,7 @@ export const Compose: React.FunctionComponent<ComposeProps> = ({
     image: string;
   }) {
     log("create entry");
+
     try {
       setLoading(true);
       const entry = await createEntry({
@@ -140,7 +142,7 @@ export const Compose: React.FunctionComponent<ComposeProps> = ({
         image,
         author
       });
-      navigate("/" + entry.id, { replace: true });
+      setLocation("/" + entry.id, { replace: true });
     } catch (err) {
       console.error(err);
       setLoading(false);
@@ -278,7 +280,7 @@ export const Compose: React.FunctionComponent<ComposeProps> = ({
     try {
       setLoading(true);
       await deleteEntry(id);
-      navigate("/", { replace: true });
+      setLocation("/", { replace: true });
     } catch (err) {
       console.error(err);
       setLoading(false);

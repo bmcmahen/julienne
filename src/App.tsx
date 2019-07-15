@@ -1,7 +1,7 @@
 /** @jsx jsx */
 import { jsx, Global } from "@emotion/core";
 import * as firebase from "firebase/app";
-import { Router, Redirect } from "@reach/router";
+import { Route, Redirect, useRoute } from "wouter";
 import { Login } from "./LoginPane";
 import { Branding } from "./Branding";
 import { Spinner } from "sancho";
@@ -17,15 +17,21 @@ interface PrivateRouteProps {
 
 const PrivateRoute = ({
   component: Component,
+  path,
   ...other
 }: PrivateRouteProps) => {
   const user = firebase.auth().currentUser;
+  const [match, params] = useRoute(path);
 
-  if (user) {
-    return <Component user={user} {...other} />;
+  if (!user && params.rest) {
+    return <Redirect to="login" />;
   }
 
-  return <Redirect from="" to="login" noThrow />;
+  if (!user) {
+    return null;
+  }
+
+  return <Component />;
 };
 
 function App() {
@@ -64,11 +70,10 @@ function App() {
       />
       <div className="App">
         <Helmet titleTemplate="%s | Julienne" defaultTitle="Julienne" />
-        <Router>
-          {!user && <Branding path="/" />}
-          <Login path="/login" />
-          <PrivateRoute path="*" component={Main} />
-        </Router>
+
+        {!user && <Route path="/" component={Branding} />}
+        <Route path="/login" component={Login} />
+        <PrivateRoute path="/:rest*" component={Main} />
       </div>
     </userContext.Provider>
   );

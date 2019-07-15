@@ -4,7 +4,7 @@ import * as React from "react";
 import algoliasearch from "algoliasearch";
 import algolia from "./Search";
 import debug from "debug";
-import { Link } from "@reach/router";
+import { Link, useRoute, useLocation } from "wouter";
 import { useSession } from "./auth";
 import * as firebase from "firebase/app";
 import orderBy from "lodash.orderby";
@@ -105,8 +105,6 @@ export const RecipeList: React.FunctionComponent<RecipeListProps> = ({
       limit: 25
     }
   );
-
-  console.log(items);
 
   // perform an algolia query when query changes
   React.useEffect(() => {
@@ -240,12 +238,19 @@ interface RecipeListItemProps {
 export function RecipeListItem({ recipe, id, highlight }: RecipeListItemProps) {
   const theme = useTheme();
   const { src, error } = useFirebaseImage("thumb-sm@", recipe.image);
+  const href = `/${id}`;
+  const [isActive] = useRoute(href);
+  const [, setLocation] = useLocation();
 
   return (
     <ListItem
       wrap={false}
-      component={Link}
-      to={`/${id}`}
+      onClick={e => {
+        e.preventDefault();
+        setLocation(href);
+      }}
+      aria-current={isActive}
+      href={`/${id}`}
       css={{
         paddingTop: 0,
         paddingBottom: 0,
@@ -257,9 +262,9 @@ export function RecipeListItem({ recipe, id, highlight }: RecipeListItemProps) {
           fontStyle: "normal",
           color: theme.colors.text.selected
         },
-        "&[aria-current]": {
-          background: theme.colors.background.tint1
-        },
+
+        background: isActive ? theme.colors.background.tint1 : "transparent",
+
         "& > *": {
           flex: 1,
           overflow: "hidden"

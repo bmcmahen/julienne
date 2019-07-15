@@ -1,7 +1,7 @@
 /** @jsx jsx */
 import { jsx } from "@emotion/core";
 import * as React from "react";
-import { Redirect, Link } from "@reach/router";
+import { Redirect, Link } from "wouter";
 import food from "./images/food.svg";
 import {
   useTheme,
@@ -54,7 +54,6 @@ export const Login: React.FunctionComponent<LoginProps> = props => {
   }
 
   async function loginEmail(e: React.FormEvent) {
-    console.log("WHAT?");
     e.preventDefault();
 
     const { email, password } = form;
