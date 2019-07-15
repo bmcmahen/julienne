@@ -7,6 +7,7 @@ import debug from "debug";
 import { Link } from "@reach/router";
 import { useSession } from "./auth";
 import * as firebase from "firebase/app";
+import orderBy from "lodash.orderby";
 import {
   Text,
   List,
@@ -105,6 +106,8 @@ export const RecipeList: React.FunctionComponent<RecipeListProps> = ({
     }
   );
 
+  console.log(items);
+
   // perform an algolia query when query changes
   React.useEffect(() => {
     if (query) {
@@ -187,7 +190,11 @@ export const RecipeList: React.FunctionComponent<RecipeListProps> = ({
                 />
               </React.Fragment>
             )}
-            {items.map(recipe => (
+            {orderBy(
+              items,
+              item => item.get("updatedAt").toMillis(),
+              "desc"
+            ).map(recipe => (
               <RecipeListItem
                 id={recipe.id}
                 key={recipe.id}

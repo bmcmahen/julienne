@@ -83,7 +83,7 @@ export const createEntry = (options: RecipeOptions) => {
   log("save recipe: %o", options);
   return db.collection("recipes").add({
     ...omitBy(options, isNil),
-    updatedAt: new Date()
+    updatedAt: firebase.firestore.Timestamp.fromDate(new Date())
   });
 };
 
@@ -104,7 +104,10 @@ export const updateEntry = (id: string, options: RecipeUpdateOptions) => {
   return db
     .collection("recipes")
     .doc(id)
-    .update(omitBy(options, isNil));
+    .update({
+      ...omitBy(options, isNil),
+      image: options.image
+    });
 };
 
 export const deleteEntry = (id: string) => {
