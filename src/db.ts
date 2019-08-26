@@ -106,7 +106,7 @@ export const updateEntry = (id: string, options: RecipeUpdateOptions) => {
     .doc(id)
     .update({
       ...omitBy(options, isNil),
-      image: options.image
+      image: options.image || firebase.firestore.FieldValue.delete()
     });
 };
 
